@@ -1,0 +1,57 @@
+#include <iostream>
+#include <vector>
+#include <string>
+
+using namespace std;
+
+typedef vector< vector<bool> > Tablero;
+
+struct Coord {
+	int fila, columna;
+};
+
+Coord leer_coord() {
+	Coord resultado;
+	char f; cin >> f;
+	resultado.fila = f - 'a';
+
+	int c; cin >> c;
+	resultado.columna = c - 1;
+	return resultado;
+}
+
+
+void leer_barco(Tablero& t) {
+	// Lee de cin
+	Coord c = leer_coord();
+	cout << "El barco esta en la fila " << c.fila << " y en la columna " << c.columna << endl;
+
+	int longitud; cin >> longitud;
+	char direccion; cin >> direccion;
+
+	if (direccion == 'h') {
+		for (int i = c.columna; i < longitud + c.columna; ++i) {
+			t[c.fila][i] = true;
+		}
+	}
+	else
+ {
+		for (int i = ) {
+		}
+	}
+
+
+}
+
+
+
+int main() {
+
+	Tablero t(10, vector<bool>(10, false));
+	for (int i = 0; i < 10; ++i) {
+		leer_barco(t);
+	}
+
+}
+
+
