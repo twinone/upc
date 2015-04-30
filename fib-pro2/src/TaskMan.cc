@@ -1,6 +1,7 @@
 #include "TaskMan.hh"
-#include "DateTime.hh"
-#include "comanda.hh"
+
+/** Set to true or false to enable/disable debug messages */
+#define DEBUG true
 
 using namespace std;
 
@@ -26,11 +27,12 @@ Post:
 */
 void TaskMan::run() {
 	bool ok;
-	bool is_exit = false;
 	while (comanda.llegir(&ok)) {
+		if (DEBUG and not ok) {
+			cerr << "W:"  << endl;
+		}
 		if (comanda.es_insercio()) do_insert();
 		if (comanda.es_consulta()) do_query();
 		if (comanda.es_esborrat()) do_delete();
-		else is_exit = true;
 	}
 }
