@@ -30,13 +30,12 @@ void TaskMan::run() {
 
 void TaskMan::process_clock() {
 	if (command.es_consulta()) {
-		now.print();
-		cout << endl;
+		cout << now.to_string() << endl;
 	}
 	else {
-		Clock tmp = target_clock();
-		if (now < tmp) now = tmp;
-		else cout << ERR_NOT_DONE << endl;
+		Clock target = target_clock();
+		if (target < now) cout << ERR_NOT_DONE << endl;
+ 		else now = target;
 	}
 }
 
@@ -48,25 +47,28 @@ void TaskMan::process_task() {
 }
 
 void TaskMan::query_task() {
-	
+	int i = 1;
+	for (Agenda::iterator it = agenda.begin(); it != agenda.end(); ++it) {
+		cout << i++ << " " << it->second.get_title() << " " << it->first.to_string() << endl;
+	}
 }
 
 void TaskMan::insert_task() {
 	Clock target = target_clock();
 	if (not (now < target)) {
 		if (DEBUG) cout << "Task is in the past" << endl;
-		cout << ERR_NOT_DONE;
+		cout << ERR_NOT_DONE << endl;
 		return;
 	}
 
-	if (agenda.find(target) == agenda.end()) {
+	if (agenda.find(target) != agenda.end()) {
 		if (DEBUG) cout << "Task clock already present in map" << endl;
-		cout << ERR_NOT_DONE;
+		cout << ERR_NOT_DONE << endl;
 		return;
 	}
 
 	Task task(command.titol());
-	agenda.insert(pair<Clock,Task>(target, task));
+	agenda.insert(pair<Clock, Task>(target, task));
 }
 
 void TaskMan::edit_task() {

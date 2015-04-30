@@ -32,8 +32,8 @@ void Clock::set_time(string time) {
 	ss >> hour >> c >> minute;
 }
 
-void Clock::print() {
-	cout << date() << ' ' << time();
+string Clock::to_string() const {
+	return date() + " " + time();
 }
 
 string Clock::time() const {
@@ -53,7 +53,13 @@ bool Clock::operator<(Clock const& c) const {
 	if (month != c.month) return month < c.month;
 	if (day != c.day) return day < c.day;
 	if (hour != c.hour) return hour < c.hour;
-	return minute <= c.minute;
+	return minute < c.minute;
 }
 
-
+bool Clock::operator==(Clock const& c) const {
+	return year == c.year
+	and	month == c.month
+	and	day == c.day
+	and	hour == c.hour
+	and	minute == c.minute;
+}

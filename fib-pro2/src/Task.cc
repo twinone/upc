@@ -4,6 +4,10 @@ Task::Task(string title) {
 	this->title = title;
 }
 
+string Task::get_title() {
+	return title;
+}
+
 void Task::set_title(string title) {
 	this->title = title;
 }

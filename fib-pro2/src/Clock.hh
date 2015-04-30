@@ -17,8 +17,8 @@ public:
 
 	void set_date(string date);
 	void set_time(string time);
-	// Prints the date and time
-	void print();
+	// Returns a human readable representation of this object
+	string to_string() const;
 	// Returns the time of this clock
 	string time() const;
 	// Returns the date of this clock
@@ -26,6 +26,7 @@ public:
 
 	bool is_future(const Clock& c);
 	bool operator<(Clock const& rhv) const;	
+	bool operator==(Clock const& rhv) const;	
 
 };
 
