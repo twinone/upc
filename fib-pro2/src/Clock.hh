@@ -26,8 +26,7 @@ public:
 
 	bool is_future(const Clock& c);
 	bool operator<(Clock const& rhv) const;	
-	bool operator==(Clock const& rhv) const;	
-
+	bool operator==(Clock const& rhv) const;
 };
 
 #endif

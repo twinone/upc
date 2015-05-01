@@ -1,5 +1,7 @@
 #include "Task.hh"
 
+
+Task::Task() {}
 Task::Task(string title) {
 	this->title = title;
 }

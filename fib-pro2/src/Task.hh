@@ -14,6 +14,8 @@ private:
 	set<string> tags;
 
 public:
+
+	Task();
 	/** @brief Default constructor for a Task
 	Pre: what is the title of the task, when is the date and time of the task
 	Post: The task is created
