@@ -21,8 +21,7 @@ void Clock::set_time(string time) {
 
 string Clock::to_string() const {
 	// for debugging
-	if (eot) return "end_of_time";
-	if (bot) return "beginning_of_time";
+	if (bot) return "bot"; if (eot) return "eot";
 	return date() + " " + time();
 }
 
@@ -50,8 +49,7 @@ string Clock::date() const {
 }
 
 bool Clock::operator<(Clock const& c) const {
-	if (bot and not c.bot) return true;
-	if (eot and not c.eot) return false;
+	if (bot != c.bot or eot != c.eot) return (bot or c.eot);
 	if (year != c.year) return year < c.year;
 	if (month != c.month) return month < c.month;
 	if (day != c.day) return day < c.day;
@@ -72,10 +70,8 @@ bool Clock::operator<=(Clock const& c) const { return c < *this or c == *this; }
 
 
 void Clock::to_origin() {
-	year = 15;
-	month = 04;
-	day = 20;
-	hour = minute = 00;
+	set_date("20.04.15");
+	set_time("00:00");
 }
 
 void Clock::to_bot() {

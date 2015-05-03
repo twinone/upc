@@ -56,7 +56,6 @@ bool TaskMan::build_menu() {
 		add_interval_to_menu(now, upper, false);
 	}
 	else if (dates == 1) {
-
 		string date = command.data(1);
 		Clock begin(date, "00:00");
 		Clock end(date, "23:59");
