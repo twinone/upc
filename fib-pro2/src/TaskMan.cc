@@ -11,54 +11,48 @@ TaskMan::TaskMan() {
 }
 
 
-/** Runs the task manager
-Pre:
-Post:
-*/
 void TaskMan::run() {
 	bool ok;
-	// if llegir() == false, we exit
 	while (command.llegir(ok)) {
 		if (not ok) continue;
-		if (command.es_rellotge()) process_clock();
-		else process_task();
+		if (command.es_rellotge()) {
+			if (command.es_consulta()) cout << now.to_string() << endl;
+			else edit_clock();
+		}
+		else if (command.es_consulta()) query_tasks();
+		else if (command.es_insercio()) insert_task();
+		else if (command.es_modificacio()) edit_task();
+		else if (command.es_esborrat()) delete_task();
 	}
 }
 
-void TaskMan::process_clock() {
-	if (command.es_consulta()) cout << now.to_string() << endl;
-	else {
-		Clock target = target_clock(now);
-		if (target < now) cout << ERR_NOT_DONE << endl;
-		else now = target;
-	}
-}
 
-void TaskMan::process_task() {
-	if (command.es_consulta()) {
-		build_menu();
-		print_menu();
-	}
-	else if (command.es_insercio()) insert_task();
-	else if (command.es_modificacio()) edit_task();
-	else if (command.es_esborrat()) delete_task();
-}
-
-void TaskMan::build_menu() {
+void TaskMan::query_tasks() {
 	menu.clear();
-	if (calendar.empty()) return;
+	if (build_menu()) filter_menu();
+	print_menu();
+}
+
+void TaskMan::edit_clock() {
+	Clock target = target_clock(now);
+	if (target < now) cout << ERR_NOT_DONE << endl;
+	else now = target;
+}
+
+bool TaskMan::build_menu() {
+	if (calendar.empty()) return false;
 
 	// past
 	// can't add any filters
 	if (command.es_passat()) {
-		Clock begin; begin.to_lower_bound();
+		Clock begin; begin.to_bot();
 		add_interval_to_menu(begin, now, false);
-		return;
+		return false;
 	}
 	// present, future
 	int dates = command.nombre_dates();
 	if (dates == 0) {
-		Clock upper; upper.to_upper_bound();
+		Clock upper; upper.to_eot();
 		add_interval_to_menu(now, upper, false);
 	}
 	else if (dates == 1) {
@@ -74,7 +68,7 @@ void TaskMan::build_menu() {
 		add_interval_to_menu(begin, end, true);	
 	}
 
-	filter_menu();
+	return true;
 }
 
 void TaskMan::filter_menu() {
