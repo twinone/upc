@@ -5,7 +5,6 @@
 #include <string>
 #include "Clock.hh"
 
-using namespace std;
 
 // Task may not depend on Comanda.hh
 class Task {
@@ -40,6 +39,11 @@ public:
 	// Pre:
 	// Post: true if this task contains the tag
 	bool has_tag(string tag);
+
+	// Pre:
+	// Post: the tags of this Task are printed in chronological order
+	// delimited by delim
+	void print_tags(string delim);
 
 };
 

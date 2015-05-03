@@ -1,5 +1,7 @@
+#include <iostream>
 #include "Task.hh"
 
+using namespace std;
 
 Task::Task() {}
 Task::Task(string title) {
@@ -26,3 +28,11 @@ bool Task::delete_tag(string tag) {
 bool Task::has_tag(string tag) {
 	return tags.find(tag) != tags.end();
 }
+
+void Task::print_tags(string delim) {
+	set<string>::iterator it;
+	for (it = tags.begin(); it != tags.end(); ++it) {
+		cout << delim << *it;
+	}
+}
+

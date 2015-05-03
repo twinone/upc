@@ -3,49 +3,51 @@
 #include <iostream>
 
 
-// Ugly function to pad an int with a leading zero if needed
-string pad2(int n) {
-	stringstream ss;
-	if (n < 10) {
-		ss << 0;
-	}
-	ss << n;
-	return ss.str();
+Clock::Clock() {
+	to_lower_bound();
 }
 
-Clock::Clock() {
-	year = 15;
-	month = 04;
-	day = 20;
-	hour = minute = 00;
+Clock::Clock(string date, string time) {
+	set_date(date); set_time(time);
 }
 
 void Clock::set_date(string date) {
-	char c;
-	stringstream ss(date);
-	ss >> day >> c >> month >> c >> year;
+	day   = 10 * int(date[0]-'0') + int(date[1]-'0');
+	month = 10 * int(date[3]-'0') + int(date[4]-'0');
+	year  = 10 * int(date[6]-'0') + int(date[7]-'0');
 }
 
 void Clock::set_time(string time) {
-	char c;
-	stringstream ss(time);
-	ss >> hour >> c >> minute;
+	hour = 10 * int(time[0]-'0') + int(time[1]-'0');
+	minute   = 10 * int(time[3]-'0') + int(time[4]-'0');
 }
 
 string Clock::to_string() const {
+	if (year == 100) return "end_of_time";
 	return date() + " " + time();
 }
 
 string Clock::time() const {
-	stringstream ss;
-	ss << pad2(hour) << ":" << pad2(minute);
-	return ss.str();
+	string s;
+	s += char((hour / 10) +'0');
+	s += char((hour % 10) +'0');
+	s += ':';
+	s += char((minute / 10) +'0');
+	s += char((minute % 10) +'0');
+	return s;
 }
 
 string Clock::date() const {
-	stringstream ss;
-	ss << pad2(day) << "." << pad2(month) << "." << pad2(year);
-	return ss.str();
+	string s;
+	s += char((day / 10) +'0');
+	s += char((day % 10) +'0');
+	s += '.';
+	s += char((month / 10) +'0');
+	s += char((month % 10) +'0');
+	s += '.';
+	s += char((year / 10) +'0');
+	s += char((year % 10) +'0');
+	return s;
 }
 
 bool Clock::operator<(Clock const& c) const {
@@ -62,4 +64,18 @@ bool Clock::operator==(Clock const& c) const {
 	and	day == c.day
 	and	hour == c.hour
 	and	minute == c.minute;
+}
+bool Clock::operator<=(Clock const& c) const { return c < *this or c == *this; }
+
+
+
+void Clock::to_lower_bound() {
+	year = 15;
+	month = 04;
+	day = 20;
+	hour = minute = 00;
+}
+
+void Clock::to_upper_bound() {
+	year = 100;
 }

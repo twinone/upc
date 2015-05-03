@@ -1,7 +1,6 @@
 // classe Comanda
 
 #include "comanda.hh"
-#include "debug.hh"
 
 Comanda::Comanda() {
     i_data = vector<string> (MAX_i_data);
@@ -231,7 +230,7 @@ bool Comanda::llegir(bool& be) {
         be = be and not error;
     }
     if (be) {
-        if (!DEBUG) cout << endl << entrada << endl;
+        cout << endl << entrada << endl;
     }
     else
         cout << "Error de format" << endl;
