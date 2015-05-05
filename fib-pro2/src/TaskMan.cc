@@ -40,7 +40,7 @@ void TaskMan::edit_clock() {
 }
 
 bool TaskMan::build_menu() {
-	if (calendar.empty()) return false;
+	if (agenda.empty()) return false;
 
 	// past
 	// can't add any filters
@@ -77,13 +77,13 @@ void TaskMan::filter_menu() {
 void TaskMan::add_interval_to_menu(Clock begin, Clock end, bool closed) {
 	if (DEBUG) cout << "Interval: " << begin.to_string() << " - " << end.to_string() << endl;
 	if (end < begin) return;
-	Calendar::iterator it = calendar.lower_bound(begin);
-	while (it != calendar.end() and it->first < end) { 
+	Agenda::iterator it = agenda.lower_bound(begin);
+	while (it != agenda.end() and it->first < end) { 
 		menu.push_back(it);
 		++it;
 	}
 	// add last
-	if (closed and it != calendar.end() and it->first == end) menu.push_back(it);
+	if (closed and it != agenda.end() and it->first == end) menu.push_back(it);
 }
 
 void TaskMan::print_menu() const {
@@ -106,7 +106,7 @@ void TaskMan::insert_task() {
 	Task task(command.titol());
 	add_tags(task);
 	
-	calendar.insert(pair<Clock, Task>(target, task));
+	agenda.insert(pair<Clock, Task>(target, task));
 }
 
 void TaskMan::add_tags(Task& task) {
@@ -120,12 +120,16 @@ bool TaskMan::can_insert(const Clock& c) const {
 		return false;
 	}
 
-	if (calendar.find(c) != calendar.end()) {
+	if (agenda.find(c) != agenda.end()) {
 		if (DEBUG) cout << "can_insert(): ERR: exists" << endl;
 		return false;
 	}
 
 	return true;
+}
+
+Menu::iterator can_edit() {
+
 }
 
 void TaskMan::edit_task() {
@@ -136,10 +140,10 @@ void TaskMan::edit_task() {
 		return;		
 	}
 
-	Calendar::iterator target = menu[task];
+	Agenda::iterator target = menu[task];
 
-	if (target == calendar.end()) {
-		if (DEBUG) cout << "Target was deleted from menu" << endl;
+	if (target == agenda.end()) {
+		if (DEBUG) cout << "Target was already deleted from menu" << endl;
 		cout << ERR_NOT_DONE << endl;
 		return;
 	}
@@ -159,9 +163,9 @@ void TaskMan::edit_task() {
 
 		// unfortunately map's keys are const
 		// so we have to erase+insert to change the key
-		calendar.erase(target->first);
+		agenda.erase(target->first);
 		// map::insert returns a pair<iterator, bool>
-		menu[task] = target = calendar.insert(pair<Clock, Task>(c, t)).first;
+		menu[task] = target = agenda.insert(pair<Clock, Task>(c, t)).first;
 	}
 
 	// now change title and or tags
@@ -169,9 +173,9 @@ void TaskMan::edit_task() {
 	add_tags(target->second);
 }
 
-// TODO: Deleted elements will point to calendar.end()
+// TODO: Deleted elements will point to agenda.end()
 void TaskMan::delete_task() {
-
+	
 }
 
 Clock TaskMan::target_clock(Clock c) {

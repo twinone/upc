@@ -1,3 +1,7 @@
+/** @file Clock.hh
+    @brief Clock class
+ */
+
 #ifndef __DATETIME__
 #define __DATETIME__
 
@@ -10,6 +14,8 @@ class Clock
 @brief Clock is is a representation of a date and time
 
 @author Twinone (Luuk Willemsen)
+@author Arnau Badia
+
 */
 class Clock {
 

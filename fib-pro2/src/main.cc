@@ -1,3 +1,7 @@
+/** @file main.cc
+    @brief Main program
+ */
+
 #include "TaskMan.hh"
 
 int main(int argc, char** argv) {

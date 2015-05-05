@@ -3,7 +3,9 @@
 
 using namespace std;
 
-Task::Task() {}
+Task::Task() {
+	set_title("");
+}
 Task::Task(string title) {
 	this->title = title;
 }

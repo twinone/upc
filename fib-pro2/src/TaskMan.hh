@@ -1,3 +1,7 @@
+/** @file TaskMan.hh
+    @brief TaskMan class
+ */
+
 #ifndef __TASKMAN__
 #define __TASKMAN__
 
@@ -7,15 +11,19 @@
 #include "comanda.hh"
 
 
-typedef map<Clock, Task> Calendar;
+typedef map<Clock, Task> Agenda;
+typedef vector<Agenda::iterator> Menu;
 
 /** 
 class TaskMan
-@brief TaskMan is responsible for managing all tasks in the calendar
+@brief TaskMan is responsible for managing all tasks in the agenda
 
 It will take all processed input from Comanda, and take the
 appropriate actions
+
 @author Twinone (Luuk Willemsen)
+@author Arnau Badia
+
 */
 class TaskMan {
 private:
@@ -28,9 +36,9 @@ private:
 	/** @brief Chronologically orderd list of Tasks
 	
 	Tasks are mapped by a Clock, which is unique  - no two clocks can have the
-	same date and time - in the whole Calendar.
+	same date and time - in the whole Agenda.
 	*/
-	Calendar calendar;
+	Agenda agenda;
 
 	/** @brief Ordered Task list, generated after a valid query
 
@@ -38,7 +46,7 @@ private:
 	@warning Comanda's writers use [1, n] range instead of traditional [0,n)
 
 	*/
-	vector<Calendar::iterator> menu;
+	Menu menu;
 
 	/** @brief The current internal time 
 	
@@ -96,7 +104,7 @@ private:
 	@pre true
 	@post
 	if the Clock is in the future and there is no Task at the same Clock
-	the Task is inserted into the Calendar<br>
+	the Task is inserted into the Agenda<br>
 	Otherwise an error message is printed
 	*/
 	void insert_task();
@@ -108,23 +116,24 @@ private:
 	interval, we use [0,n)).<br>
 	
 	@pre true
-	@post The Task is edited or an error message is
+	@post The Task is edited or an error message is printed
 
 	@warning An error message will be shown if:
 	<ul>
 	<li>The Task is already deleted</li>
 	<li>The Task is in the past</li>
 	<li>The Task's new Clock is in the past</li>
-	<li>The Task's new Clock is already in the Calendar</li>
+	<li>The Task's new Clock is already in the Agenda</li>
 	</ul>
-	printed
 	*/
 	void edit_task();
 
 	/** @brief Handles Task removal
 	Task removal is done based on their index.
 	@pre true
-	@post The Task is deleted or an error message is printed
+	@post
+	The Task is deleted or an error message is printed
+
 	@warning An error message will be shown if the Task is part of the past
 	@see edit_task()
 	*/
@@ -152,6 +161,20 @@ private:
 	@return whether the task can be inserted 
 	*/
 	bool can_insert(const Clock& clock) const;
+
+	/** @brief Check if the selected Task can be edited
+	@pre true
+	@post
+	@warning An error message will be shown if:
+	<ul>
+	<li>Task index out of bounds</li>
+	<li>Task is in the past</li>
+	</ul>
+
+	@return A Menu::iterator pointing to the element to be edited or menu.end()
+	if something went wrong	
+	*/
+	Menu::iterator can_edit();
 
 	/** @brief Add all tags to a Task
 	
