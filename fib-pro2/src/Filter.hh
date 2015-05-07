@@ -5,6 +5,7 @@
 
 class Filter {
 private:
+
 	/** @brief Current token pointer */
 	int ctp;
 	

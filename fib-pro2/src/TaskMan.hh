@@ -1,5 +1,5 @@
 /** @file TaskMan.hh
-    @brief TaskMan class
+@brief TaskMan class
  */
 
 #ifndef __TASKMAN__

@@ -82,14 +82,22 @@ void TaskMan::filter_menu() {
 
 	if (command.te_expressio()) {
 		filter.set_filter(command.expressio());
-		for (int i = 0; i < menu.size(); ++i)
-			if (not filter.match(menu[i]->second)) menu.erase(menu.begin() + i);		
+		for (int i = 0; i < menu.size(); ++i) {
+			if (not filter.match(menu[i]->second)) {
+				menu.erase(menu.begin() + i);
+				--i;
+			}
+		}
 	}
 
 	if (command.nombre_etiquetes() == 1) {
 		filter.set_filter(command.etiqueta(1));
-		for (int i = 0; i < menu.size(); ++i)
-			if (not filter.match(menu[i]->second)) menu.erase(menu.begin() + i);
+		for (int i = 0; i < menu.size(); ++i) {
+			if (not filter.match(menu[i]->second)) {
+				menu.erase(menu.begin() + i);
+				--i;
+			}
+		}
 	}
 }
 

@@ -48,29 +48,21 @@ bool Filter::eval() {
 		char op = filter[ctp];
 		++ctp;
 		if (op == OP_OR) {
-			if (last) {
-				dbg_print_pos("orskip");
-				orskip();
-				continue;
-			} else last = eval_quick();
-		} else if (op == OP_AND) {
-			if (not last) {
-				dbg_print_pos("andskip");
-				andskip();
-				continue;
-			} else last = eval_quick();
+			if (last) orskip();
+			else last = eval_quick();
+		}
+		else if (op == OP_AND) {
+			if (not last) andskip();
+			else last = eval_quick();
 		}
 	}
 	return last;
 }
 
 
-bool Filter::eval_tag() {
-	return filter[ctp] == '#' and task.contains(read_tag());
-}
-
 // used after a "true or" or a "false and", ignores all same-level expressions
 void Filter::orskip() {
+	dbg_print_pos("orskip");
 	int p = 0;
 	while (ctp < filter.size() and p >= 0) {
 		if (filter[ctp] == '(') ++p; if (filter[ctp] == ')') --p;
@@ -81,6 +73,7 @@ void Filter::orskip() {
 }
 
 void Filter::andskip() {
+	dbg_print_pos("andskip");
 	int p = 0;
 	while (ctp < filter.size() and p >= 0) {
 		if (filter[ctp] == '(') ++p; if (filter[ctp] == ')') --p;
@@ -102,10 +95,8 @@ string Filter::read_tag() {
 	string str = "#";
 	++ctp; // read #
 	while (ctp != filter.size() and
-		filter[ctp] != '.' and
-		filter[ctp] != ',' and
-		filter[ctp] != ':' and
-		filter[ctp] != ')' and
+		filter[ctp] != '.' and filter[ctp] != ',' and
+		filter[ctp] != ':' and filter[ctp] != ')' and
 		filter[ctp] != '#') 
 	{
 		str += filter[ctp];
