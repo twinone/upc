@@ -1,5 +1,6 @@
 #include "TaskMan.hh"
 #include "comanda.hh"
+#include "debug.hh"
 /** Set to true or false to enable/disable debug messages */
 
 #define ERR_NOT_DONE "No s'ha realitzat"
@@ -7,7 +8,6 @@
 using namespace std;
 
 TaskMan::TaskMan() {
-	DEBUG = false;
 }
 
 
@@ -61,11 +61,13 @@ bool TaskMan::build_menu() {
 		string date = command.data(1);
 		Clock begin(date, "00:00");
 		Clock end(date, "23:59");
+		if (now < begin) begin = now; // see statement
 		add_interval_to_menu(begin, end, true);
 	}
 	else if (dates == 2) {
 		Clock begin(command.data(1), "00:00");
 		Clock end(command.data(2), "23:59");
+		if (now < begin) begin = now; // see statement
 		add_interval_to_menu(begin, end, true);	
 	}
 
@@ -73,11 +75,26 @@ bool TaskMan::build_menu() {
 }
 
 void TaskMan::filter_menu() {
-	// TODO
+	// TODO:
+	// Comanda reports ? #hi (#hi) as a valid command
+	// Ask about precedence of tags vs expressions
+	// Currently we filter both, just to be sure
+
+	if (command.te_expressio()) {
+		filter.set_filter(command.expressio());
+		for (int i = 0; i < menu.size(); ++i)
+			if (not filter.match(menu[i]->second)) menu.erase(menu.begin() + i);		
+	}
+
+	if (command.nombre_etiquetes() == 1) {
+		filter.set_filter(command.etiqueta(1));
+		for (int i = 0; i < menu.size(); ++i)
+			if (not filter.match(menu[i]->second)) menu.erase(menu.begin() + i);
+	}
 }
 
 void TaskMan::add_interval_to_menu(Clock begin, Clock end, bool closed) {
-	if (DEBUG) cout << "Interval: " << begin.to_string() << " - " << end.to_string() << endl;
+	// if (DEBUG) cout << "Interval: " << begin.to_string() << " - " << end.to_string() << endl;
 	if (end < begin) return;
 	Agenda::iterator it = agenda.lower_bound(begin);
 	while (it != agenda.end() and it->first < end) { 
@@ -107,7 +124,7 @@ void TaskMan::insert_task() {
 
 	Task task(command.titol());
 	add_tags(task);
-	
+
 	agenda.insert(pair<Clock, Task>(target, task));
 }
 
@@ -206,8 +223,6 @@ Clock TaskMan::target_clock(Clock c) {
 	return c;
 }
 
-
 void TaskMan::debug() {
 	DEBUG = true;
 }
-

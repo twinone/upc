@@ -52,7 +52,7 @@ public:
 	@pre true
 	@post the title of this task is title
 	*/
-	string get_title();
+	string get_title() const;
 
 	/** @brief Adds a tag to this Task
 	@pre true
@@ -73,14 +73,14 @@ public:
 	@post
 	@return true if this task contains the tag
 	*/
-	bool has_tag(string tag);
+	bool contains(string tag) const;
 
 	/** @brief print all tags in chronological order
 	@pre true
 	@post tags are printed
 	@param delim The delimiter to be used between tags
 	*/
-	void print_tags(string delim);
+	void print_tags(string delim) const;
 
 	/** @brief clear all tags
 	@pre true

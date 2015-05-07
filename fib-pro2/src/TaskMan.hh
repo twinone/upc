@@ -8,6 +8,7 @@
 #include <map>
 #include "Clock.hh"
 #include "Task.hh"
+#include "Filter.hh"
 #include "comanda.hh"
 
 
@@ -27,8 +28,6 @@ appropriate actions
 */
 class TaskMan {
 private:
-	/**  @brief If true, debugging messages will show */
-	bool DEBUG;
 
 	/** @brief The current command */
 	Comanda command;
@@ -42,9 +41,7 @@ private:
 
 	/** @brief Ordered Task list, generated after a valid query
 
-	Each Task in the Menu can be accessed through it's position
-	@warning Comanda's writers use [1, n] range instead of traditional [0,n)
-
+	Each Task in the Menu can be accessed through it's position: [0,menu.size())
 	*/
 	Menu menu;
 
@@ -53,6 +50,9 @@ private:
 	May only be modified forward
 	*/
 	Clock now;
+
+	/** @brief The filter used to filter tags */
+	Filter filter;
 	
 	/** @brief Sets the clock to the specified date/time by Comanda 
 	@pre true
@@ -87,8 +87,8 @@ private:
 	If there's a boolean-expression-filter in the command,
 	this method removes all Tasks from the Menu that don't match it
 	If there's no expression this method does nothing.
-	@pre build_menu() MUST be called just before this<br>
-	build_menu() SHOULD have returned true
+	@pre a Menu is built using build_menu()<br>
+
 	@post The Menu is ready to print
 	*/
 	void filter_menu();

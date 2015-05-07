@@ -10,7 +10,7 @@ Task::Task(string title) {
 	this->title = title;
 }
 
-string Task::get_title() {
+string Task::get_title() const {
 	return title;
 }
 
@@ -27,11 +27,11 @@ bool Task::delete_tag(string tag) {
 	return tags.erase(tag) == 1;
 }
 
-bool Task::has_tag(string tag) {
+bool Task::contains(string tag) const {
 	return tags.find(tag) != tags.end();
 }
 
-void Task::print_tags(string delim) {
+void Task::print_tags(string delim) const {
 	set<string>::iterator it;
 	for (it = tags.begin(); it != tags.end(); ++it) {
 		cout << delim << *it;
