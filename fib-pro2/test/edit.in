@@ -8,17 +8,21 @@ rellotge 01.06.20 00:06
 1 #bla
 sortir
 
-##############
-Author Twinone
 
-Tests:
-If we query and change the time of an element so that it would come up
-in a different position in the next query, we must still be able to 
-refer to that task by the same id (test if menu is not a set)
+######################################################
+#
+# Author: Twinone
+#
+# Tests:
+#
+# delete from calendar doesn't delete from menu
+# 
+# modify element that was future when the menu was
+# created but is now in the past
+#
+# move a task to the past
+#
+# conflict with existing task
+#
+######################################################
 
-Tests whether you can modify a task that was added to the menu
-when it was in the future but is now part of the past
-
-Tests whether you can edit a task's clock to the past
-
-Test whether you can edit a task's clock to an existing task
