@@ -24,7 +24,7 @@ bool Task::add_tag(string tag) {
 }
 
 bool Task::delete_tag(string tag) {
-	tags.erase(tag);
+	return tags.erase(tag) == 1;
 }
 
 bool Task::has_tag(string tag) {
@@ -38,3 +38,6 @@ void Task::print_tags(string delim) {
 	}
 }
 
+void Task::clear_tags() {
+	tags.clear();
+}

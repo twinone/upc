@@ -46,6 +46,7 @@ bool TaskMan::build_menu() {
 	// can't add any filters
 	if (command.es_passat()) {
 		Clock begin; begin.to_bot();
+		// [ bot , now ) // we don't want now
 		add_interval_to_menu(begin, now, false);
 		return false;
 	}
@@ -53,6 +54,7 @@ bool TaskMan::build_menu() {
 	int dates = command.nombre_dates();
 	if (dates == 0) {
 		Clock upper; upper.to_eot();
+		// [ now, eot )
 		add_interval_to_menu(now, upper, false);
 	}
 	else if (dates == 1) {
@@ -101,7 +103,7 @@ void TaskMan::print_menu() const {
 void TaskMan::insert_task() {
 	Clock target = target_clock(now);
 
-	if (not can_insert(target)) { cout << ERR_NOT_DONE << endl; return; }
+	if (not is_valid_target(target)) { cout << ERR_NOT_DONE << endl; return; }
 
 	Task task(command.titol());
 	add_tags(task);
@@ -114,30 +116,26 @@ void TaskMan::add_tags(Task& task) {
 		task.add_tag(command.etiqueta(i+1));
 }
 
-bool TaskMan::can_insert(const Clock& c) const {
+bool TaskMan::is_valid_target(const Clock& c) const {
 	if (c < now) {
-		if (DEBUG) cout << "can_insert(): ERR: target in past" << endl;
+		if (DEBUG) cout << "is_valid_target(): ERR: target in past" << endl;
 		return false;
 	}
 
 	if (agenda.find(c) != agenda.end()) {
-		if (DEBUG) cout << "can_insert(): ERR: exists" << endl;
+		if (DEBUG) cout << "is_valid_target(): ERR: exists" << endl;
 		return false;
 	}
 
 	return true;
 }
 
-Menu::iterator can_edit() {
-
-}
-
-void TaskMan::edit_task() {
+int TaskMan::can_edit() {
 	int task = command.tasca() - 1;
 	if (task < 0 or task >= menu.size()) {
-		if (DEBUG) cout << "Task (" << task << ") not in range (1-" << menu.size() << ")" << endl;
+		if (DEBUG) cout << "Task (" << task << ") not in range [0-" << menu.size() << ")" << endl;
 		cout << ERR_NOT_DONE << endl;
-		return;		
+		return -1;
 	}
 
 	Agenda::iterator target = menu[task];
@@ -145,37 +143,61 @@ void TaskMan::edit_task() {
 	if (target == agenda.end()) {
 		if (DEBUG) cout << "Target was already deleted from menu" << endl;
 		cout << ERR_NOT_DONE << endl;
-		return;
+		return -1;
 	}
 
 	if (target->first < now) {
 		if (DEBUG) cout << "Target is part of past" << endl;
 		cout << ERR_NOT_DONE << endl;
-		return;
+		return -1;
 	}
+
+	return task;
+}
+
+void TaskMan::edit_task() {
+	int task = can_edit();
+	if (task == -1) return;
+
+	Agenda::iterator it = menu[task];
 
 	// At this point the only thing that can break is an invalid
 	// new time/date. Let's do that first
 	if (command.te_hora() or command.nombre_dates() == 1) {
-		Clock c = target_clock(target->first);
-		Task t = target->second;
-		if (not can_insert(c)) { cout << ERR_NOT_DONE << endl; return; }
+		Clock c = target_clock(it->first);
+		Task t = it->second;
+		if (not is_valid_target(c)) { cout << ERR_NOT_DONE << endl; return; }
 
 		// unfortunately map's keys are const
 		// so we have to erase+insert to change the key
-		agenda.erase(target->first);
+		agenda.erase(it->first);
 		// map::insert returns a pair<iterator, bool>
-		menu[task] = target = agenda.insert(pair<Clock, Task>(c, t)).first;
+		menu[task] = it = agenda.insert(pair<Clock, Task>(c, t)).first;
 	}
 
-	// now change title and or tags
-	if (command.te_titol()) target->second.set_title(command.titol());
-	add_tags(target->second);
+	if (command.te_titol()) it->second.set_title(command.titol());
+	add_tags(it->second);
 }
 
 // TODO: Deleted elements will point to agenda.end()
 void TaskMan::delete_task() {
-	
+	int task = can_edit();
+	if (task == -1) return;
+
+	Agenda::iterator it = menu[task];
+
+	if (command.tipus_esborrat() == "tasca") {
+		agenda.erase(it);
+		menu[task] = agenda.end();
+	}
+	else if (command.tipus_esborrat() == "etiquetes") {
+		it->second.clear_tags();
+	}
+	else { // etiqueta
+		bool ok = it->second.delete_tag(command.etiqueta(1));
+		if (DEBUG and not ok) cout << "No such tag: " << command.etiqueta(1) << endl;
+		if (not ok) cout << ERR_NOT_DONE << endl;
+	}
 }
 
 Clock TaskMan::target_clock(Clock c) {

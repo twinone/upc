@@ -160,7 +160,7 @@ private:
 	@param clock the Clock to test for insertion
 	@return whether the task can be inserted 
 	*/
-	bool can_insert(const Clock& clock) const;
+	bool is_valid_target(const Clock& clock) const;
 
 	/** @brief Check if the selected Task can be edited
 	@pre true
@@ -169,12 +169,13 @@ private:
 	<ul>
 	<li>Task index out of bounds</li>
 	<li>Task is in the past</li>
+	<li>Task is already deleted</li>
 	</ul>
 
-	@return A Menu::iterator pointing to the element to be edited or menu.end()
-	if something went wrong	
+	@return The menu index or -1 if the task cannot be edited for
+	one of the reasons above
 	*/
-	Menu::iterator can_edit();
+	int can_edit();
 
 	/** @brief Add all tags to a Task
 	

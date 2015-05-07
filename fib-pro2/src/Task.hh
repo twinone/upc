@@ -82,6 +82,12 @@ public:
 	*/
 	void print_tags(string delim);
 
+	/** @brief clear all tags
+	@pre true
+	@post tags are empty
+	*/
+	void clear_tags();
+
 };
 
 

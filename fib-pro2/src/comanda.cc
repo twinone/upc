@@ -230,7 +230,7 @@ bool Comanda::llegir(bool& be) {
         be = be and not error;
     }
     if (be) {
-        cout << endl << entrada << endl;
+        // cout << endl << entrada << endl;
     }
     else
         cout << "Error de format" << endl;
