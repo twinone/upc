@@ -61,13 +61,13 @@ bool TaskMan::build_menu() {
 		string date = command.data(1);
 		Clock begin(date, "00:00");
 		Clock end(date, "23:59");
-		if (now < begin) begin = now; // see statement
+		if (begin < now) begin = now; // see statement
 		add_interval_to_menu(begin, end, true);
 	}
 	else if (dates == 2) {
 		Clock begin(command.data(1), "00:00");
 		Clock end(command.data(2), "23:59");
-		if (now < begin) begin = now; // see statement
+		if (begin < now) begin = now; // see statement
 		add_interval_to_menu(begin, end, true);	
 	}
 
@@ -94,7 +94,7 @@ void TaskMan::filter_menu() {
 }
 
 void TaskMan::add_interval_to_menu(Clock begin, Clock end, bool closed) {
-	// if (DEBUG) cout << "Interval: " << begin.to_string() << " - " << end.to_string() << endl;
+	if (DEBUG) cout << "Interval: " << begin.to_string() << " - " << end.to_string() << endl;
 	if (end < begin) return;
 	Agenda::iterator it = agenda.lower_bound(begin);
 	while (it != agenda.end() and it->first < end) { 
