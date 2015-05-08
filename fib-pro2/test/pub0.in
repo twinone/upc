@@ -1,0 +1,56 @@
++ anar al cine 10.05.15 18:00 #lleure #art
++ 11.05.15 18:00 #art #lleure anar al teatre 
++ 08:00 anar a classe #docencia 
++ anar a conferencia 13.05.15 08:00 #docencia #recerca
++ viatge Berlin 09.05.15 08:00 #feina #viatges #recerca
++ 12.05.15 anar a la platja 12:00 
+?
+2 viatge a Berlin 08.05.15 14:30
+4 #amics 19:30
+5 11.05.15 #esport
+? #lleure
+? ((#recerca.#docencia),#art)
+passat?
+? 11.05.15
+? 08.05.15 12.05.15
+? 12.05.15 08.05.15
+? 10.05.15 12.05.15 #lleure
+? 11.05.15 #esport
+? #sport
+? #lleure 10.05.15 12.05.15
+? 11.05.15 (#sport,#lleure)
+? 11.05.15 (#esport,#lleure)
+? (#sport.#lleure)
+? (#esport.#lleure)
+? (#art.#lleure)
+? ((#feina.#esport).(#docencia,#recerca)) 20.04.15 13.05.15
+?
+-3
+?
+1 -etiquetes
+?
+rellotge 11.05.15 22:00
+passat?
+?
+1 anar a reunio
+?
+-6
+?
+rellotge?
+rellotge 22:00
+rellotge 13.05.15 08:00
+passat?
+rellotge 13.05.15 08:01
+passat?
+?
++ anar al cine 14.05.15 18:00 #lleure #art
+?
+rellotge 01.05.15 22:00
+rellotge 09:00 02.05.15
+rellotge 03.05.15
+rellotge 02.05.15
+1 -#art
+?
+1 #amics
+?
+sortir
