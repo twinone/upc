@@ -10,7 +10,13 @@ obj/%.o: src/%.cc
 all: $(OBJ_FILES)
 	g++ $(CC_FLAGS) obj/*.o -o taskman
 
+program.exe: all
+	mv taskman program.exe
+
 clean:
 	rm -f obj/*.o
 	rm -f src/*~
-	rm taskman
+	rm -rf out/*
+	rm -f taskman program.exe
+
+.PHONY: build

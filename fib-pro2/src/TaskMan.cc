@@ -75,30 +75,17 @@ bool TaskMan::build_menu() {
 }
 
 void TaskMan::filter_menu() {
-	// TODO:
-	// Comanda reports ? #hi (#hi) as a valid command
-	// Ask about precedence of tags vs expressions
-	// Currently we filter both, just to be sure
+	if (not command.te_expressio() and command.nombre_etiquetes() != 1) return;
+	if (command.te_expressio()) filter.set_filter(command.expressio());
+	else filter.set_filter(command.etiqueta(1));
 
-	if (command.te_expressio()) {
-		filter.set_filter(command.expressio());
-		for (int i = 0; i < menu.size(); ++i) {
-			if (not filter.match(menu[i]->second)) {
-				menu.erase(menu.begin() + i);
-				--i;
-			}
+	for (int i = 0; i < menu.size(); ++i) {
+		if (not filter.match(menu[i]->second)) {
+			menu.erase(menu.begin() + i);
+			--i;
 		}
 	}
 
-	if (command.nombre_etiquetes() == 1) {
-		filter.set_filter(command.etiqueta(1));
-		for (int i = 0; i < menu.size(); ++i) {
-			if (not filter.match(menu[i]->second)) {
-				menu.erase(menu.begin() + i);
-				--i;
-			}
-		}
-	}
 }
 
 void TaskMan::add_interval_to_menu(Clock begin, Clock end, bool closed) {
