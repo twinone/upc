@@ -1,8 +1,21 @@
+/** @file Filter.hh
+@brief Filter class
+ */
 #ifndef __FILTER__
 #define __FILTER__
 
 #include "Task.hh"
 
+/** 
+class Filter
+@brief This class evaluates a tagfilter on a Task
+
+A tagfilter is a single tag or a boolean expression of tags that
+should be part of the Task.
+
+@author Twinone (Luuk Willemsen)
+@author Arnau Badia
+*/
 class Filter {
 private:
 
@@ -12,20 +25,77 @@ private:
 	/** @brief Current filter */
 	string filter;
 
+	/** @brief Current Task */
 	Task task;
 
-	bool eval();
-	bool eval_quick();
-	bool eval_tag();
+	/** @brief Evaluate an expression completely
 
+	This method evaluates the expression at ctp including ORs and ANDs
+	(in contrast to eval_quick())
+
+	@pre called by match() or eval_quick(), ctp is at the beginning of an expreesion E
+	@post ctp is right after E
+	@return true if the expression pointed at by ctp matches the task
+	@see eval()
+	*/
+	bool eval();
+
+	/** @brief Evaluate a single expression
+
+	This method only evaluates the expression at ctp<br>
+	It stops when it finds an OR or AND.
+
+	@pre called by eval(), ctp is at the beginning of an expreesion E
+	@post ctp is right after E
+	@return true if the expression pointed at by ctp matches the task
+	@see eval()
+	*/
+	bool eval_quick();
+
+	/** @brief Skips unnecessary checks when a true OR is found
+	
+	When evaluating logical OR, we go from left to right until we find a true
+	value. When we find a true value we can skip the remaining checks to the
+	right: ((false...) OR[N] true OR[M] (whatever)) is true.<br>
+	This function should be called right at OR[M], and skips everything after it
+	at the same OR level.
+	@pre ctp points to an OR. The left hand value of that or is true
+	@post ctp is after the OR
+	*/
 	void orskip();
+
+	/** @brief Skips unnecessary checks when a true AND is found
+	
+	When evaluating logical AND, we go from left to right until we find a false
+	value. When we find a false value we can skip the remaining checks to the
+	right: ((true...) AND[N] false AND[M] (whatever)) is false.<br>
+	This function should be called right at AND[M], and skips everything after
+	it at the same AND level. (Since AND takes precedence over OR (the
+	expression "a AND b or C and D" is equivalent to "(a AND b) or (c AND d)",
+	this function stops if it finds an OR) 
+	@pre ctp points to an AND. The left hand value of that AND is false
+	@post ctp is after the AND
+	*/
 	void andskip();
 
+	/** @brief Read a tag
+
+	This function reads a tag, moving ctp after it
+	@pre ctp is at the beginning of a tag
+	@post ctp is after the tag
+	@return the tag that has been read
+	*/
 	string read_tag();
 
-	// for debugging only, prints the filter
-	// and the position of ctp below it
-	// oh, and it also prints a cool message
+	/** @brief ctp positioning
+	
+	This function prints the filter expression and shows where
+	ctp is pointing to with a little '^' sign. Should only be used for testing
+
+	It also prints a nice message
+	<br>
+	When not in debug mode, this function does nothing.
+	*/
 	void dbg_print_pos(string msg);
 
 public:

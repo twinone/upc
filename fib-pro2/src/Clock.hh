@@ -1,5 +1,5 @@
 /** @file Clock.hh
-    @brief Clock class
+@brief Clock class
  */
 
 #ifndef __DATETIME__
