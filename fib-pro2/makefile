@@ -1,22 +1,25 @@
 _ignore:=$(shell mkdir -p obj)
 
-CPP_FILES := $(wildcard src/*.cc)
-OBJ_FILES := $(patsubst src/%.cc,obj/%.o,$(CPP_FILES))
+CC_FILES := $(wildcard src/*.cc)
+OBJ_FILES := $(patsubst src/%.cc,obj/%.o,$(CC_FILES))
 LD_FLAGS := 
-CC_FLAGS := -Werror
+CC_FLAGS := -Werror -D_GLIBCXX_DEBUG
 obj/%.o: src/%.cc
 	g++ -c $(CC_FLAGS) -o $@ $<
 
 all: $(OBJ_FILES)
 	g++ $(CC_FLAGS) obj/*.o -o taskman
 
-program.exe: all
-	mv taskman program.exe
 
 clean:
-	rm -f obj/*.o
-	rm -f src/*~
-	rm -rf out/*
-	rm -f taskman program.exe
+	rm -rf obj src/*~ doc taskman jutge/out
 
-.PHONY: build
+jutge:release
+
+doc:
+	doxygen
+
+release: all doc
+	jutge/build.sh
+
+.PHONY: build release jutge doc
