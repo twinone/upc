@@ -4,7 +4,9 @@ CC_FILES := $(wildcard src/*.cc)
 OBJ_FILES := $(patsubst src/%.cc,obj/%.o,$(CC_FILES))
 LD_FLAGS := 
 CC_FLAGS := -Werror -D_GLIBCXX_DEBUG
+
 obj/%.o: src/%.cc
+	@mkdir -p obj
 	g++ -c $(CC_FLAGS) -o $@ $<
 
 all: $(OBJ_FILES)
@@ -12,14 +14,16 @@ all: $(OBJ_FILES)
 
 
 clean:
-	rm -rf obj src/*~ doc taskman jutge/out
+	rm -rf obj src/*~ doc taskman release/out
 
-jutge:release
 
 doc:
 	doxygen
 
 release: all doc
-	jutge/build.sh
+	release/build.sh
+
+jutge: all doc
+	release/build.sh jutge
 
 .PHONY: build release jutge doc
