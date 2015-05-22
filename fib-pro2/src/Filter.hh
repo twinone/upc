@@ -19,12 +19,11 @@ should be part of the Task.
 class Filter {
 private:
 
+	string::const_iterator begin;
+	string::const_iterator end;
 	/** @brief Current token pointer */
-	int ctp;
+	string::const_iterator ctp;
 	
-	/** @brief Current filter */
-	string filter;
-
 	/** @brief Current Task */
 	Task task;
 

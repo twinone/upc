@@ -12,27 +12,27 @@ Filter::Filter() {}
 // words start with a letter and cannot contain "." "," ":" or "#"
 bool Filter::match(const Task& t) {
 	this->task = t;
-	ctp = 0;
+	ctp = begin;
 	return eval();
 }
 
 void Filter::dbg_print_pos(string msg) {
 	if (!DEBUG) return;
-	cout << endl << msg << " (" << ctp << ")" << endl;
-	cout << filter << endl;
-	for (int i = 0; i < ctp; ++i)
+	cout << endl << msg << " (" << ctp-begin << ")" << endl;
+	for (string::const_iterator it = begin; it != end; ++it) cout << *it;
+	for (int i = 0; i < ctp-begin; ++i)
 		cout << ' ';
 	cout << '^' << endl;
 }
 
 // Evaluate a single element
 bool Filter::eval_quick() {
-	if (filter[ctp] == '(') {
+	if (*ctp == '(') {
 		++ctp;
 		bool ret = eval();
 		++ctp;
 		return ret;
-	} else if (filter[ctp] == '#') {
+	} else if (*ctp == '#') {
 		string tag = read_tag();
 		return task.contains(tag);
 	}
@@ -44,8 +44,8 @@ bool Filter::eval_quick() {
 }
 bool Filter::eval() {
 	bool last = eval_quick();
-	while(ctp < filter.size() and (filter[ctp] == '.' or filter[ctp] == ',')) {
-		char op = filter[ctp];
+	while(ctp != end and (*ctp == '.' or *ctp == ',')) {
+		char op = *ctp;
 		++ctp;
 		if (op == OP_OR) {
 			if (last) orskip();
@@ -64,8 +64,8 @@ bool Filter::eval() {
 void Filter::orskip() {
 	dbg_print_pos("orskip");
 	int p = 0;
-	while (ctp < filter.size() and p >= 0) {
-		if (filter[ctp] == '(') ++p; if (filter[ctp] == ')') --p;
+	while (ctp != end and p >= 0) {
+		if (*ctp == '(') ++p; if (*ctp == ')') --p;
 		++ctp;
 	}
 	--ctp;
@@ -75,31 +75,31 @@ void Filter::orskip() {
 void Filter::andskip() {
 	dbg_print_pos("andskip");
 	int p = 0;
-	while (ctp < filter.size() and p >= 0) {
-		if (filter[ctp] == '(') ++p; if (filter[ctp] == ')') --p;
-		if (p == 0 and filter[ctp] == ',') {
+	while (ctp != end and p >= 0) {
+		if (*ctp == '(') ++p; if (*ctp == ')') --p;
+		if (p == 0 and *ctp == ',') {
 			++ctp;
 			break;
 		}
 		++ctp;
 	}
-	if (filter[ctp] != ',') --ctp;
+	if (*ctp != ',') --ctp;
 	dbg_print_pos("post_andskip:");
 }
 
 string Filter::read_tag() {
-	if (filter[ctp] != '#') {
+	if (*ctp != '#') {
 		dbg_print_pos("read_tag(): expected #:");
 		return "";
 	}
 	string str = "#";
 	++ctp; // read #
-	while (ctp != filter.size() and
-		filter[ctp] != '.' and filter[ctp] != ',' and
-		filter[ctp] != ':' and filter[ctp] != ')' and
-		filter[ctp] != '#') 
+	while (ctp != end and
+		*ctp != '.' and *ctp != ',' and
+		*ctp != ':' and *ctp != ')' and
+		*ctp != '#') 
 	{
-		str += filter[ctp];
+		str += *ctp;
 		++ctp;
 	}
 	// dbg_print_pos("after tag: "+str + ":");
@@ -107,4 +107,4 @@ string Filter::read_tag() {
 }
 
 
-void Filter::set_filter(const string& filter) { this->filter = filter; }
+void Filter::set_filter(const string& filter) { this->begin = filter.begin(); this->end = filter.end(); }
