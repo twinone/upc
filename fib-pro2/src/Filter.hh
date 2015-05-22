@@ -33,19 +33,31 @@ private:
 	This method evaluates the expression at ctp including ORs and ANDs
 	(in contrast to eval_quick())
 
-	@pre called by match() or eval_quick(), ctp is at the beginning of an expreesion E
-	@post ctp is right after E
-	@return true if the expression pointed at by ctp matches the task
+	We define expression as:
+	<ul>
+	<li>A tag</li>
+	<li>A list of tags separated by "," or "."</li>
+	<li>That list or tag wrapped inside parentheses</li>
+	</ul>
+
+	@pre called by match() or eval_quick(), ctp = CTP is at the beginning of an 
+	subexpreesion E of filter
+	@post ctp is right after E (ctp=CTP+length of E)<br>
+	returns true if the expression filter[CTP..ctp-1] matches the task
 	@see eval()
 	*/
 	bool eval();
 
 	/** @brief Evaluate a single expression
 
-	This method only evaluates the expression at ctp<br>
+	This method only evaluates the subexpression at ctp<br>
 	It stops when it finds an OR or AND.
 
-	@pre called by eval(), ctp is at the beginning of an expreesion E
+	If it finds a "(", it calls eval() and evaluates the subespression enclosed
+	in this parentheses.
+	If it filds a "#", it returns whether the Task contains the tag
+
+	@pre called by eval(), ctp is at the beginning of an subexpreesion E
 	@post ctp is right after E
 	@return true if the expression pointed at by ctp matches the task
 	@see eval()
