@@ -1,0 +1,205 @@
+
++ anar a la platja 21.12.15 22:00
+
++ cine 22:00
+
++ concert dels beatles #swag 13:00
+
++ hola #quetal 12.05.15 21:00
+
++ futbol 25.09.15 21:05 #mola
+
+? 
+1 concert dels beatles 20.04.15 13:00 #swag
+2 cine 20.04.15 22:00
+3 hola 12.05.15 21:00 #quetal
+4 futbol 25.09.15 21:05 #mola
+5 anar a la platja 21.12.15 22:00
+
+2 21:55
+
+1 #swagger
+
+rellotge?
+20.04.15 00:00
+
+rellotge 23:00
+
+rellotge 21.04.15
+
+passat?
+1 concert dels beatles 20.04.15 13:00 #swag #swagger
+2 cine 20.04.15 21:55
+
+?
+1 hola 12.05.15 21:00 #quetal
+2 futbol 25.09.15 21:05 #mola
+3 anar a la platja 21.12.15 22:00
+
+-1 
+
++ hola 22.05.15 22:00 #cool #swag #hola #hi
+
+? (#swag,(#hola.#hi)) 21.03.15 21.06.16
+1 hola 22.05.15 22:00 #cool #hi #hola #swag
+
+? #manololama
+
+?
+1 hola 22.05.15 22:00 #cool #hi #hola #swag
+2 futbol 25.09.15 21:05 #mola
+3 anar a la platja 21.12.15 22:00
+
+? #swag
+1 hola 22.05.15 22:00 #cool #hi #hola #swag
+
+? 16.05.00
+
+? 12.05.13
+
+? 
+1 hola 22.05.15 22:00 #cool #hi #hola #swag
+2 futbol 25.09.15 21:05 #mola
+3 anar a la platja 21.12.15 22:00
+
+1 -etiquetes
+
+rellotge?
+21.04.15 23:00
+
+? #swag
+
+?
+1 hola 22.05.15 22:00
+2 futbol 25.09.15 21:05 #mola
+3 anar a la platja 21.12.15 22:00
+
+1 canvi de nom
+
++ meson don candido 21.09.15 21:01 #segovia #ohquebonito #swag
+
+? 21.09.00 30.04.19
+1 canvi de nom 22.05.15 22:00
+2 meson don candido 21.09.15 21:01 #ohquebonito #segovia #swag
+3 futbol 25.09.15 21:05 #mola
+4 anar a la platja 21.12.15 22:00
+
+passat?
+1 concert dels beatles 20.04.15 13:00 #swag #swagger
+2 cine 20.04.15 21:55
+
++ cine 22:00 25.05.15
+
++ miramira #swag 13:00 26.05.15
+
++ tutu 12.05.16 21:00
+
+?
+1 canvi de nom 22.05.15 22:00
+2 cine 25.05.15 22:00
+3 miramira 26.05.15 13:00 #swag
+4 meson don candido 21.09.15 21:01 #ohquebonito #segovia #swag
+5 futbol 25.09.15 21:05 #mola
+6 anar a la platja 21.12.15 22:00
+7 tutu 12.05.16 21:00
+
+3 -#swag
+
+6 #swag
+
+? #swag 
+1 meson don candido 21.09.15 21:01 #ohquebonito #segovia #swag
+2 anar a la platja 21.12.15 22:00 #swag
+
+-1
+
+rellotge 21.03.13 22:58
+No s'ha realitzat
+
+?
+1 canvi de nom 22.05.15 22:00
+2 cine 25.05.15 22:00
+3 miramira 26.05.15 13:00
+4 futbol 25.09.15 21:05 #mola
+5 anar a la platja 21.12.15 22:00 #swag
+6 tutu 12.05.16 21:00
+
+1 canvi de titol
+
+? 12.05.16
+1 tutu 12.05.16 21:00
+
++ festa 23:59 #sorpresa #mola
+
+1 #hola
+
+?
+1 festa 21.04.15 23:59 #mola #sorpresa
+2 canvi de titol 22.05.15 22:00
+3 cine 25.05.15 22:00
+4 miramira 26.05.15 13:00
+5 futbol 25.09.15 21:05 #mola
+6 anar a la platja 21.12.15 22:00 #swag
+7 tutu 12.05.16 21:00 #hola
+
+? (#swag,#mola)
+1 festa 21.04.15 23:59 #mola #sorpresa
+2 futbol 25.09.15 21:05 #mola
+3 anar a la platja 21.12.15 22:00 #swag
+
+? #hola
+1 tutu 12.05.16 21:00 #hola
+
+?
+1 festa 21.04.15 23:59 #mola #sorpresa
+2 canvi de titol 22.05.15 22:00
+3 cine 25.05.15 22:00
+4 miramira 26.05.15 13:00
+5 futbol 25.09.15 21:05 #mola
+6 anar a la platja 21.12.15 22:00 #swag
+7 tutu 12.05.16 21:00 #hola
+
+? #noexisteix
+
+?
+1 festa 21.04.15 23:59 #mola #sorpresa
+2 canvi de titol 22.05.15 22:00
+3 cine 25.05.15 22:00
+4 miramira 26.05.15 13:00
+5 futbol 25.09.15 21:05 #mola
+6 anar a la platja 21.12.15 22:00 #swag
+7 tutu 12.05.16 21:00 #hola
+
+? (#sorpresa.(#ei,#mola))
+1 festa 21.04.15 23:59 #mola #sorpresa
+
+? (#mola,(#sorpresa.#hola))
+1 festa 21.04.15 23:59 #mola #sorpresa
+2 futbol 25.09.15 21:05 #mola
+
+?
+1 festa 21.04.15 23:59 #mola #sorpresa
+2 canvi de titol 22.05.15 22:00
+3 cine 25.05.15 22:00
+4 miramira 26.05.15 13:00
+5 futbol 25.09.15 21:05 #mola
+6 anar a la platja 21.12.15 22:00 #swag
+7 tutu 12.05.16 21:00 #hola
+
+? ((#hola,#sorpresa),#mola)
+1 festa 21.04.15 23:59 #mola #sorpresa
+2 futbol 25.09.15 21:05 #mola
+3 tutu 12.05.16 21:00 #hola
+
+2 12.05.55
+
+?
+1 festa 21.04.15 23:59 #mola #sorpresa
+2 canvi de titol 22.05.15 22:00
+3 cine 25.05.15 22:00
+4 miramira 26.05.15 13:00
+5 anar a la platja 21.12.15 22:00 #swag
+6 tutu 12.05.16 21:00 #hola
+7 futbol 12.05.55 21:05 #mola
+
+sortir
