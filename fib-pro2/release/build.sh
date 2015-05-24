@@ -18,17 +18,15 @@ cp -r "$DOC_DIR/html" "$OUT_DIR"
 
 cd $OUT_DIR
 mv main.cc program.cc
-rm comanda.cc comanda.hh token.cc token.hh
+#rm comanda.cc comanda.hh token.cc token.hh
 
 cp "$TEST_DIR/jp_"*"entrada.txt" .
 cp "$TEST_DIR/jp_"*"sortida.txt" .
 
 if [ "$1" != "jutge" ]; then
 	zip -r html.zip html
-	bzip2 html.zip
 fi
 rm -rf html
-
 tar -cf "program.tar" *
-rm -rf *.cc *.hh makefile html.zip.bzip2
+rm -rf *.cc *.hh makefile html.zip jp*
 

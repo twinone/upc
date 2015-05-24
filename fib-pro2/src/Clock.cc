@@ -58,7 +58,7 @@ bool Clock::operator<(Clock const& c) const {
 }
 
 bool Clock::operator==(Clock const& c) const {
-	if (eot and c.eot or bot and c.bot) return true;
+	if ((eot and c.eot) or (bot and c.bot)) return true;
 	return year == c.year
 	and	month == c.month
 	and	day == c.day

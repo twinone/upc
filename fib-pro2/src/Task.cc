@@ -20,7 +20,7 @@ void Task::set_title(string title) {
 
 
 bool Task::add_tag(string tag) {
-	tags.insert(tag);
+	return tags.insert(tag).second;
 }
 
 bool Task::delete_tag(string tag) {

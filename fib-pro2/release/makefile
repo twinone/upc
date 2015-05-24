@@ -1,7 +1,7 @@
 CC_FILES := $(wildcard *.cc)
 OBJ_FILES := $(patsubst %.cc,%.o,$(CC_FILES))
 LD_FLAGS := 
-CC_FLAGS := -Werror -D_GLIBCXX_DEBUG
+CC_FLAGS := -D_GLIBCXX_DEBUG -O2 -Wall -Wextra -Werror -Wno-uninitialized -Wno-sign-compare
 
 %.o: %.cc
 	g++ -c $(CC_FLAGS) -o $@ $<
