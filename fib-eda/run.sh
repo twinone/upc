@@ -20,4 +20,6 @@ VIEWER_PATH=Viewer
 
 ./Game $Player1 $Player2 $Player3 $Player4 < ${game}.cnf > $VIEWER_PATH/${game}.res
 
-firefox "$VIEWER_PATH/viewer.html?game=${game}.res"
+
+browser="/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
+$browser "$VIEWER_PATH/viewer.html?game=${game}.res"

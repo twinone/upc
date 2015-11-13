@@ -1,6 +1,7 @@
 #ifndef Utils_hh
 #define Utils_hh
 
+#include <iostream>
 using namespace std;
 
 /////////////////// random numbers //////////////////////
@@ -29,19 +30,19 @@ typedef complex<int> Dir;
 //                                 //
 //    ALL ALLOWED DIRECTIONS       //
 //                                 //
-constexpr Dir UP        = {-1, 1}; //
-constexpr Dir DEFAULT   = { 0, 1}; //
-constexpr Dir DOWN      = { 1, 1}; //
+const Dir UP        = {-1, 1}; //
+const Dir DEFAULT   = { 0, 1}; //
+const Dir DOWN      = { 1, 1}; //
 //                                 //
-constexpr Dir SLOW_UP   = {-1, 0}; //
-constexpr Dir SLOW      = { 0, 0}; //
-constexpr Dir SLOW_DOWN = { 1, 0}; //
+const Dir SLOW_UP   = {-1, 0}; //
+const Dir SLOW      = { 0, 0}; //
+const Dir SLOW_DOWN = { 1, 0}; //
 //                                 //
-constexpr Dir FAST_UP   = {-1, 2}; //
-constexpr Dir FAST      = { 0, 2}; //
-constexpr Dir FAST_DOWN = { 1, 2}; //
+const Dir FAST_UP   = {-1, 2}; //
+const Dir FAST      = { 0, 2}; //
+const Dir FAST_DOWN = { 1, 2}; //
 //                                 //
-/////////////////////////////////////
+////////////////////////////////////
 
 /**
  * Returns the first component (rows)
