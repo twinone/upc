@@ -1,19 +1,38 @@
 
 const Dir NODIR = {-1, -1};
 // Indexes for the vector
-int I_SLOW_UP = 0;
-int I_UP = 1;
-int I_FAST_UP = 2;
-int I_SLOW = 3;
-int I_DEFAULT = 4;
-int I_FAST = 5;
-int I_SLOW_DOWN = 6;
-int I_DOWN = 7;
-int I_FAST_DOWN = 8;
-int I_MISSILE = 9;
+static const int I_SLOW_UP   = 0;
+static const int I_UP        = 1;
+static const int I_FAST_UP   = 2;
+static const int I_SLOW      = 3;
+static const int I_DEFAULT   = 4;
+static const int I_FAST      = 5;
+static const int I_SLOW_DOWN = 6;
+static const int I_DOWN      = 7;
+static const int I_FAST_DOWN = 8;
+static const int I_MISSILE   = 9;
+
+static const int F_SLOW_UP   = 1 << 1;
+static const int F_UP        = 1 << 2;
+static const int F_FAST_UP   = 1 << 3;
+static const int F_SLOW      = 1 << 4;
+static const int F_DEFAULT   = 1 << 5;
+static const int F_FAST      = 1 << 6;
+static const int F_SLOW_DOWN = 1 << 7;
+static const int F_DOWN      = 1 << 8;
+static const int F_FAST_DOWN = 1 << 9;
+static const int F_MISSILE   = 1 << 10;
+
+static const int F_MASK_V = F_UP | F_DEFAULT | F_DOWN;
+static const int F_MASK_H = F_SLOW | F_DEFAULT | F_FAST;
+static const int F_MASK_DOWN = F_SLOW_DOWN | F_DOWN | F_FAST_DOWN;
+static const int F_MASK_UP   = F_SLOW_UP   | F_UP   | F_FAST_UP;
+static const int F_MASK_SLOW = F_SLOW_UP   | F_SLOW | F_SLOW_DOWN;
+static const int F_MASK_FAST = F_FAST_UP   | F_FAST | F_FAST_DOWN;
+
 
 vector<int> dirmap;
-vector<int> curr_dirmap;
+vector<double> curr_dirmap;
 vector<Dir> dirs = { SLOW_UP, UP, FAST_UP, SLOW, DEFAULT, FAST, SLOW_DOWN, DOWN, FAST_DOWN, NODIR };
 
 void init_common() {
@@ -23,12 +42,37 @@ void init_common() {
 Starship_Id sid(int idx) {
   return idx + begin(me());
 }
-void add_curr_dirmap(int absval) {
+
+
+bool tie() {
+  bool t = false;
+  int max;
   for (int i = 0; i < 10; ++i) {
-    if (curr_dirmap[i] < -absval) curr_dirmap[i] = -absval;
-    else if (curr_dirmap[i] > absval) curr_dirmap[i] = absval;
-    dirmap[i] += curr_dirmap[i];
+    if (dirmap[i] > max) {
+      max = dirmap[i];
+      t = false;
+    }
+    else if (dirmap[i] == max) t = true;
   }
+  if (!t) {
+    dbg << "############" << endl;
+    dbg << "#  NO TIE! #" << endl;
+    dbg << "############" << endl;
+  }
+  return t;
+}
+
+void add_curr_dirmap(int val) {
+  for (int i = 0; i < 10; ++i) {
+    if (curr_dirmap[i] < -1.0) curr_dirmap[i] = -1.0;
+    if (curr_dirmap[i] > 1.0) curr_dirmap[i] = 1.0;
+    double m = 0;
+    if (curr_dirmap[i] < 0) m = -0.55 + curr_dirmap[i] / 2;
+    if (curr_dirmap[i] > 0) m =  0.55 + curr_dirmap[i] / 2;
+
+    dirmap[i] += m * val;
+  }
+
   init_curr_dirmap();
 }
 void init_dirmap() {
@@ -48,6 +92,11 @@ Player_Id highest_rated_rival() {
     if (s > max) { pid = i; max = s; }
   }
   return pid;
+}
+int num_alive_starships() {
+  int c;
+  for (int i = 0; i < number_starships(); ++i) if (starship(i).alive) c++;
+  return c;
 }
 
 // Returns the offset of the aircraft from the beginning of the window
@@ -73,37 +122,59 @@ string dirToString(Dir d) {
 }
 
 // Increase a cell's value by i
-void inccd(int what, int i) {
+void inccd(int what, double i) {
   dirmap[what] += i;
 }
 
 // Increase a cell's value by i
-void deccd(int what, int i) {
+void deccd(int what, double i) {
   inccd(what, -i);
 }
 
 bool issetc(int what) {
   return curr_dirmap[what] != 0;
 }
-void setc(int what, int i) {
-  curr_dirmap[what] = i;
-}
-// Increase a cell's value by i
-void incc(int what, int i) {
-  curr_dirmap[what] += i;
+
+// Decrease these cells by i
+void deccf(int what, double i) {
+  inccf(what, -i);
 }
 
-// Increase a cell's value by i
-void decc(int what, int i) {
-  incc(what, -i);
+// Increase these cells by i
+void inccf(int what, double val) {
+  assert(abs(val) <= 1);
+  for (int i = 1; i <= 10; i++) {
+    if (what & (1<<i)) {
+      setc(i-1, val);
+    }
+  }
+}
+int flag(int index) {
+  assert(index >= 0 && index <= 10);
+  return 1 << (index-1);
+}
+void setc(int what, double val) {
+  assert(abs(val) <= 1);
+  curr_dirmap[what] = val;
 }
 
-void print_dirmap() {
+void dbg_print_dirmap() {
   for (int i = 0; i < 10; i++) {
     if (i%3 == 0 && i != 0) dbg <<endl;
     dbg << right << setw(10) <<  dirmap[i] << "\t";
   }
   dbg<<endl;
+}
+bool dbg_print_curr_dirmap() {
+  bool a = false;
+  for (int i = 0; i < 10; i++) if (curr_dirmap[i] != 0) a = true;
+  if (!a) return false;
+  for (int i = 0; i < 10; i++) {
+    if (i%3 == 0 && i != 0) dbg <<endl;
+    dbg << right << setw(10) <<  curr_dirmap[i] << "\t";
+  }
+  dbg<<endl;
+  return true;
 }
 
 void perform_move(Starship_Id sid) {
@@ -121,12 +192,12 @@ void perform_move(Starship_Id sid) {
     move(sid, d);
   }
   else {
-    dbg << "move: SHOOT" << endl;
+    dbg << "move: MISSILE" << endl;
     shoot(sid);
   }
-  dbg << "setting last move to " << dirToString(dirs[maxi]) << endl;
-  details(sid)->last_move = maxi;
+  details(sid)->last_move_f = flag(maxi);
 }
+
 
 // returns behind but not AT pos
 Cell behind(const Pos& pos, int &dst) {
@@ -189,7 +260,7 @@ void  analyze_map() {
   dbg << "most point   bonuses at row " << mpbr << endl;
   dbg << "most missile bonuses at row " << mmbr << endl;
   dbg << "most rocks at row           " << mrr << endl;
-  dbg << "---------------------" << endl;
+  dbg << "---------------------" << endl << endl;
 
 
 }
@@ -201,22 +272,22 @@ void  analyze_map() {
 /*
 This strategy decreases cells you cannot go to by val
 */
-void s_valid(Starship_Id sid, int v) {
+void s_valid(Starship_Id sid) {
   Starship s = starship(sid);
   int up = first(s.pos) != 0;
   int down = first(s.pos) != number_rows() -1;
   int slow = ww(s.pos+SLOW);
   int fast = ww(s.pos+FAST);
 
-  if (!slow || !up)   decc(I_SLOW_UP, v);
-  if (!up)            decc(I_UP, v);
-  if (!fast || !up)   decc(I_FAST_UP, v);
-  if (!slow)          decc(I_SLOW, v);
-  if (!fast)          decc(I_FAST, v);
-  if (!slow || !down) decc(I_SLOW_DOWN, v);
-  if (!down)          decc(I_DOWN, v);
-  if (!fast || !down) decc(I_FAST_DOWN, v);
-  if (s.nb_miss == 0) decc(I_MISSILE, v);
+  if (!slow || !up)   deccf(F_SLOW_UP, 1.0);
+  if (!up)            deccf(F_UP, 1.0);
+  if (!fast || !up)   deccf(F_FAST_UP, 1.0);
+  if (!slow)          deccf(F_SLOW, 1.0);
+  if (!fast)          deccf(F_FAST, 1.0);
+  if (!slow || !down) deccf(F_SLOW_DOWN, 1.0);
+  if (!down)          deccf(F_DOWN, 1.0);
+  if (!fast || !down) deccf(F_FAST_DOWN, 1.0);
+  if (s.nb_miss == 0) deccf(F_MISSILE, 1.0);
 }
 
 
@@ -226,16 +297,26 @@ bool ww(const Pos& pos) {
   return within_window(pos, round()+1);
 }
 
-////////////////////////////////////////////////////////////////////////////////
-////// s_imm_asteriods
-////////////////////////////////////////////////////////////////////////////////
-
 bool collision(const Pos& pos) {
   return within_universe(pos) && (cell(pos).type == ASTEROID || cell(pos).type == STARSHIP);
 }
+
+void s_default(Starship_Id sid) {
+  // Initial map
+/*
+  deccf(F_SLOW_UP,   1-0.2); deccf(F_UP,      1-0.6); deccf(F_FAST_UP,   1-0.3);
+  deccf(F_SLOW,      1-0.1); deccf(F_DEFAULT, 1-0.7); deccf(F_FAST,      1-0.4);
+  deccf(F_SLOW_DOWN, 1-0.2); deccf(F_DOWN,    1-0.6); deccf(F_FAST_DOWN, 1-0.3);
+  deccf(F_MISSILE,   1-0.05);
+*/
+  inccf(F_SLOW_UP,   0.2); inccf(F_UP,      0.6); inccf(F_FAST_UP,   0.3);
+  inccf(F_SLOW,      0.1); inccf(F_DEFAULT, 0.7); inccf(F_FAST,      0.4);
+  inccf(F_SLOW_DOWN, 0.2); inccf(F_DOWN,    0.6); inccf(F_FAST_DOWN, 0.3);
+  inccf(F_MISSILE,   0.05);
+}
 // Decreases the value of a cell where there's an asteriod
 // By val
-void s_imm_collision(Starship_Id sid, int v) {
+void s_imm_collision(Starship_Id sid) {
   Starship s = starship(sid);
   bool ast_su = collision(s.pos+SLOW_UP);
   bool ast_u  = collision(s.pos+UP);
@@ -246,28 +327,40 @@ void s_imm_collision(Starship_Id sid, int v) {
   bool ast_d  = collision(s.pos+DOWN);
   bool ast_fd = collision(s.pos+FAST_DOWN);
 
-  if (ast_su) decc(I_SLOW_UP, v);
-  if (ast_su || ast_u || ast_df) decc(I_UP, v);
-  if (ast_su || ast_u || ast_df || ast_f || ast_fu) decc(I_FAST_UP, v);
+  if (ast_su) deccf(F_MASK_UP, 1.0);
+  else if (ast_u) { deccf(F_SLOW_UP, 0.9); deccf(F_UP|F_FAST_UP, 1.0); }
+  else if (ast_fu) { deccf(F_SLOW_UP, 0.8); deccf(F_UP, 0.9); deccf(F_FAST_UP, 1.0); }
 
-  if (ast_df)  decc(I_DEFAULT, v);
-  if (ast_df || ast_f)  decc(I_FAST, v);
+  if (ast_sd) deccf(F_MASK_DOWN, 1.0);
+  else if (ast_d) { deccf(F_SLOW_DOWN, 0.9); deccf(F_DOWN|F_FAST_DOWN, 1.0); }
+  else if (ast_fd) { deccf(F_SLOW_DOWN, 0.8); deccf(F_DOWN, 0.9); deccf(F_FAST_DOWN, 1.0); }
 
-  if (ast_sd) decc(I_SLOW_DOWN, v);
-  if (ast_sd || ast_d || ast_df) decc(I_DOWN, v);
-  if (ast_sd || ast_d || ast_df || ast_f || ast_fd) decc(I_FAST_DOWN, v);
+  if (ast_df) { deccf(F_SLOW, 0.9); deccf(F_MASK_V|F_MASK_FAST, 1.0); }
+  if (ast_f) { deccf(F_SLOW, 0.8); deccf(F_DEFAULT, 0.9); deccf(F_MASK_FAST, 1.0); }
+/*
+  if (ast_su) deccf(F_SLOW_UP, 1.0);
+  if (ast_su || ast_u || ast_df) deccf(F_UP, 1.0);
+  if (ast_su || ast_u || ast_df || ast_f || ast_fu) deccf(F_FAST_UP, 1.0);
+
+  if (ast_df)  deccf(F_DEFAULT, 1.0);
+  if (ast_df || ast_f)  deccf(F_FAST, 1.0);
+
+  if (ast_sd) deccf(F_SLOW_DOWN, 1.0);
+  if (ast_sd || ast_d || ast_df) deccf(F_DOWN, 1.0);
+  if (ast_sd || ast_d || ast_df || ast_f || ast_fd) deccf(F_FAST_DOWN, 1.0);
+  */
   //
 }
 
-void s_kill(Starship_Id sid, int v) {
-  int min_missiles_to_kill = 3;
+void s_kill(Starship_Id sid) {
+  int min_missiles_to_kill = 2;
   Starship s = starship(sid);
   int d;
   Cell c = in_front(s.pos, d);
   if (d < 6 && c.type == STARSHIP && player_of(c.sid) != me()) {
     if (cell(s.pos+DEFAULT).type != MISSILE && cell(s.pos+FAST).type != MISSILE) {
       if (s.nb_miss >= min_missiles_to_kill) {
-        inccd(I_MISSILE, v);
+        inccf(F_MISSILE, 1.0);
       } else {
         dbg << "not enough missiles to kill, want "<< min_missiles_to_kill << ", have " << s.nb_miss << endl;
       }
@@ -278,89 +371,100 @@ void s_kill(Starship_Id sid, int v) {
 
 }
 
+bool type_in_area(const Pos& tl, const Pos& br, CType t) {
+  assert(first(tl) <= first(br));
+  assert(second(tl) <= second(br));
+  for (int i = first(tl); i <= first(br); ++i) {
+    for (int j = second(tl); j <= second(br); ++j) {
+      if (cell(Dir{i, j}).type == t) return true;
+    }
+  }
+  return false;
+}
 bool is_rival(const Pos& pos) {
   if (!within_universe(pos)) return false;
   Cell c = cell(pos);
-  return c.type == STARSHIP && c.sid != me();
+  return c.type == STARSHIP && player_of(c.sid) != me();
 }
 
-void s_dangerously_close_rivals(Starship_Id sid, int v) {
+bool rival_in_area(const Pos& tl, const Pos& br) {
+  assert(first(tl) <= first(br));
+  assert(second(tl) <= second(br));
+  for (int i = first(tl); i <= first(br); ++i) {
+    for (int j = second(tl); j <= second(br); ++j) {
+      if (is_rival(Dir{i, j})) return true;
+    }
+  }
+  return false;
+}
+
+void s_dangerously_close_rivals(Starship_Id sid) {
   Starship s = starship(sid);
-  if (is_rival(s.pos+SLOW_UP)) { decc(I_SLOW_UP, v); decc(I_UP, v); decc(I_FAST_UP, v); decc(I_SLOW, v); decc(I_DEFAULT, v); decc(I_FAST, v); }
-  else if (is_rival(s.pos+UP)) { decc(I_UP, v); decc(I_FAST_UP, v); decc(I_DEFAULT, v); decc(I_FAST, v); }
 
-  if (is_rival(s.pos+SLOW_DOWN)) { decc(I_SLOW_DOWN, v); decc(I_DOWN, v); decc(I_FAST_DOWN, v); decc(I_SLOW, v); decc(I_DEFAULT, v); decc(I_FAST, v); }
-  else if (is_rival(s.pos+DOWN)) { decc(I_DOWN, v); decc(I_FAST_DOWN, v); decc(I_DEFAULT, v); decc(I_FAST, v); }
+  if (is_rival(s.pos+DEFAULT)) deccf(F_MASK_FAST|F_MASK_V, 1.0);
+  if (is_rival(s.pos+UP)); // TODO
+}
+
+void s_get_behind_rival(Starship_Id sid) {
 
 }
 
-void s_dodge_starship_behind_me(Starship_Id sid, int v) {
+void s_dodge_starship_behind_me(Starship_Id sid) {
   Starship s = starship(sid);
   int dst;
   Cell c = behind(s.pos, dst);
   if (c.type == STARSHIP && player_of(c.sid) != me()) {
-    if (dst <= 4) { decc(I_SLOW, v); dbg << "dodging starship!" << endl; }
-    if (dst <= 3) { decc(I_DEFAULT, v); }
+    if (dst <= 4) { deccf(F_SLOW, 1.0); dbg << "dodging starship!" << endl; }
+    // TODO also deccf missile?
+    if (dst <= 3) { deccf(F_DEFAULT|F_FAST, 1.0); }
     // if (dst <= 2) then_im_dead();
   }
-  if (ww(s.pos+UP)) {
-    c = behind(s.pos+UP, dst);
-    if (c.type == STARSHIP && player_of(c.sid) != me()) {
-      if      (dst == 0) { decc(I_FAST_UP, v); }
-      else if (dst == 1) { decc(I_FAST_UP, v); decc(I_UP, v); }
-      else if (dst <  6) { decc(I_FAST_UP, v); decc(I_UP, v); decc(I_SLOW_UP, v); }
-      if (dst < 6) dbg << "starship above me at distance"<<dst<<"!" << endl;
-    }
+  Pos sup = s.pos+SLOW_UP;
+  if (ww(sup)) {
+    // We can GO TOWARDS a distance of at most 4
+    if      (rival_in_area(sup-DEFAULT*2, sup)) { deccf(F_MASK_UP, 1.0); dbg << "dodge enemy above a" << endl; }
+    else if (rival_in_area(sup-DEFAULT*3, sup)) { deccf(F_SLOW_UP|F_UP, 1.0); dbg << "dodge enemy above b" << endl; }
+    else if (rival_in_area(sup-DEFAULT*4, sup)) { deccf(F_SLOW_UP, 1.0); dbg << "dodge enemy above c" << endl; }
+    else dbg << "no rival up" << endl;
+
   }
-  if (ww(s.pos+DOWN)) {
-    c = behind(s.pos+DOWN, dst);
-    if (c.type == STARSHIP && player_of(c.sid) != me()) {
-      if      (dst == 0) { decc(I_FAST_DOWN, v); }
-      else if (dst == 1) { decc(I_FAST_DOWN, v); decc(I_DOWN, v); }
-      else if (dst <  6) { decc(I_FAST_DOWN, v); decc(I_DOWN, v); decc(I_SLOW_DOWN, v); }
-      if (dst < 6) dbg << "starship beneath me at distance"<<dst<<"!" << endl;
-    }
+  Pos sdown = s.pos+SLOW_DOWN;
+  if (ww(sdown)) {
+    if      (rival_in_area(sdown-DEFAULT*2, sdown)) { deccf(F_MASK_DOWN, 1.0); dbg << "dodge enemy below a" << endl; }
+    else if (rival_in_area(sdown-DEFAULT*3, sdown)) { deccf(F_SLOW_DOWN|F_DOWN, 1.0); dbg << "dodge enemy below b" << endl; }
+    else if (rival_in_area(sdown-DEFAULT*4, sdown)) { deccf(F_SLOW_DOWN, 1.0); dbg << "dodge enemy below c" << endl; }
+    else dbg << "no rival down" << endl;
   }
 }
 
 // returns whether there's any missile from pos (including) to pos-n(including)
-bool contains_missile(const Pos& pos, int n) {
-  for (int i = 0; i <= n; ++i) if (cell(pos-DEFAULT*i).type == MISSILE) return true;
-  return false;
+bool missile_behind(const Pos& pos, int n) {
+  return type_in_area(pos-DEFAULT*n, pos, MISSILE);
+  //for (int i = 0; i <= n; ++i) if (cell(pos-DEFAULT*i).type == MISSILE) return true;
+  //return false;
 }
 // Dodges missiles on it's way to kill me
 // AND avoids moving into one
-void s_dodge_missile(Starship_Id sid, int v) {
+void s_dodge_missile(Starship_Id sid) {
   Starship s = starship(sid);
   int dst;
   Cell c = behind(s.pos, dst);
   if (c.type == MISSILE) {
-    if (dst <= 4) { decc(I_SLOW, v); dbg << "dodging missile!" << endl; }
-    if (dst == 3) { decc(I_DEFAULT, v); }
+    if (dst <= 4) { deccf(F_SLOW, 1.0); dbg << "dodging missile!" << endl; }
+    // throwing a missile will make us go at default speed
+    // which will get us killed by the missile, so we don't want to do that
+    if (dst == 3) { deccf(F_DEFAULT|F_MISSILE, 1.0); }
     // if (dst <= 2) then_im_dead();
   }
-  if (ww(s.pos+UP)) {
-    if (contains_missile(s.pos+SLOW_UP-DEFAULT*2, 2)) decc(I_SLOW_UP, v);
-    if (contains_missile(s.pos+UP-DEFAULT*2, 2)) decc(I_UP, v);
-    if (contains_missile(s.pos+FAST_UP-DEFAULT*2, 2)) decc(I_FAST_UP, v);
-    /*
-    c = behind(s.pos+SLOW_UP, dst);
-    if (c.type == MISSILE) {
-      if      (dst == 0) { decc(I_FAST_UP, v); }
-      else if (dst == 1) { decc(I_FAST_UP, v); decc(I_UP, v); }
-      else if (dst <  6) { decc(I_FAST_UP, v); decc(I_UP, v); decc(I_SLOW_UP, v); }
-      if (dst < 6) dbg << "missile above me at distance"<<dst<<"!" << endl;
-    }
-    */
+  if (ww(s.pos+SLOW_UP)) {
+    if (missile_behind(s.pos+SLOW_UP-DEFAULT*2, 2)) deccf(F_SLOW_UP, 1.0);
+    if (missile_behind(s.pos+UP-DEFAULT*2, 2)) deccf(F_UP, 1.0);
+    if (missile_behind(s.pos+FAST_UP-DEFAULT*2, 2)) deccf(F_FAST_UP, 1.0);
   }
-  if (ww(s.pos+DOWN)) {
-    c = behind(s.pos+DOWN, dst);
-    if (c.type == MISSILE) {
-      if      (dst == 0) { decc(I_FAST_DOWN, v); }
-      else if (dst == 1) { decc(I_FAST_DOWN, v); decc(I_DOWN, v); }
-      else if (dst <  6) { decc(I_FAST_DOWN, v); decc(I_DOWN, v); decc(I_SLOW_DOWN, v); }
-      if (dst < 6) dbg << "missile beneath me at distance"<<dst<<"!" << endl;
-    }
+  if (ww(s.pos+SLOW_DOWN)) {
+    if (missile_behind(s.pos+SLOW_DOWN-DEFAULT*2, 2)) deccf(F_SLOW_DOWN, 1.0);
+    if (missile_behind(s.pos+DOWN-DEFAULT*2, 2)) deccf(F_DOWN, 1.0);
+    if (missile_behind(s.pos+FAST_DOWN-DEFAULT*2, 2)) deccf(F_FAST_DOWN, 1.0);
   }
 }
 // Returns -1 if no rock found
@@ -374,11 +478,30 @@ int rock_distance(const Pos &pos) {
   return -1;
 }
 
-int rock_wall_direction = 0;
-void s_wall_collision(Starship_Id sid, int v) {
+void s_far_wall(Starship_Id sid) {
   Starship s = starship(sid);
-  int rd = rock_distance(s.pos);
-  if (rd > 0 && rd < 3) {
+  int rd = details(sid)->rd;
+  if (rd > 0 && rd < 4) deccf(F_FAST, 1.0);
+  if (rd > 0 && rd < 3) deccf(F_DEFAULT, 1.0);
+
+  if (within_universe(s.pos+SLOW_UP)) {
+    rd = rock_distance(s.pos+SLOW_UP);
+    if (rd > 0 && rd < 4) deccf(F_FAST_UP, 1.0);
+    if (rd > 0 && rd < 3) deccf(F_UP, 1.0);
+    if (rd > 0 && rd < 2) deccf(F_SLOW_UP, 1.0);
+  }
+  if (within_universe(s.pos+SLOW_DOWN)) {
+    rd = rock_distance(s.pos+SLOW_DOWN);
+    if (rd > 0 && rd < 4) deccf(F_FAST_DOWN, 1.0);
+    if (rd > 0 && rd < 3) deccf(F_DOWN, 1.0);
+    if (rd > 0 && rd < 2) deccf(F_SLOW_DOWN, 1.0);
+  }
+}
+void s_wall_collision(Starship_Id sid) {
+  Starship s = starship(sid);
+  int rd = details(sid)->rd;
+
+  if (rd > 0 && rd < 2) {
     int lim = max(first(s.pos)+1, number_rows() - first(s.pos));
     bool cangoup = true;
     bool cangodown = true;
@@ -407,19 +530,22 @@ void s_wall_collision(Starship_Id sid, int v) {
       if (!cangoup && !cangodown) { break; }
     }
     if (!cangoup) {
-      decc(I_SLOW_UP, v); decc(I_UP, v); decc(I_FAST_UP, v);
+      deccf(F_MASK_UP, 1.0);
       dbg << "cannot go up!" << endl;
     }
     if (!cangodown) {
-      decc(I_SLOW_DOWN, v); decc(I_DOWN, v); decc(I_FAST_DOWN, v);
+      deccf(F_MASK_DOWN, 1.0);
       dbg << "cannot go down!" << endl;
     }
     if (cangodown || cangoup) {
       if (!foundup || !founddown) {
         // TODO avoid up/down
-        if (foundup) { incc(I_SLOW_UP, v); incc(I_UP, v); incc(I_FAST_UP, v); dbg << "found up!" << endl;}
-        else if (founddown) { incc(I_SLOW_DOWN, v); incc(I_DOWN, v); incc(I_FAST_DOWN, v); dbg << "found down!" << endl; }
+        if (foundup) { inccf(F_MASK_UP, 1.0); dbg << "found up!" << endl;}
+        else if (founddown) { inccf(F_MASK_DOWN, 1.0); dbg << "found down!" << endl; }
       }
+    } else {
+      dbg << "cannot go up nor down";
+      inccf(F_MISSILE, 1.0);
     }
 
   }
@@ -436,7 +562,7 @@ bool bonus(const Pos& pos) {
   return false;
 }
 
-void s_get_bonus(Starship_Id sid, int v) {
+void s_get_bonus(Starship_Id sid) {
   Starship s = starship(sid);
   int b_su = bonus(s.pos+SLOW_UP);
   int b_u  = bonus(s.pos+UP);
@@ -448,16 +574,51 @@ void s_get_bonus(Starship_Id sid, int v) {
   int b_fd = bonus(s.pos+FAST_DOWN);
 
 
-  if (b_su)      { incc(I_SLOW_UP, int(v*1.0)); incc(I_UP, int(v*1.0)); incc(I_FAST_UP, int(v*1.0)); }
-  else if (b_u)  { setc(I_DEFAULT, int(v*0.9));  incc(I_SLOW_UP, int(v*0.9)); incc(I_UP, int(v*1.0)); incc(I_FAST_UP, int(v*0.9)); }
-  else if (b_fu) { setc(I_DEFAULT, int(v*0.9));  incc(I_SLOW_UP, int(v*0.8)); incc(I_UP, int(v*0.9)); incc(I_FAST_UP, int(v*0.9)); }
+  if (b_su)      { inccf(F_SLOW_UP, 1.0); inccf(F_UP, 0.9); inccf(F_FAST_UP, 0.8); }
+  else if (b_u)  { inccf(F_DEFAULT, 0.9); inccf(F_SLOW_UP, 0.9); inccf(F_UP, 0.95); inccf(F_FAST_UP, 0.8); }
+  else if (b_fu) { inccf(F_DEFAULT, 0.9); inccf(F_SLOW_UP, 0.8); inccf(F_UP, 0.9); inccf(F_FAST_UP, 0.9); }
 
-  if (b_sd)      { incc(I_SLOW_DOWN, int(v*1.0)); incc(I_DOWN, int(v*1.0)); incc(I_FAST_DOWN, int(v*1.0)); }
-  else if (b_d)  { setc(I_DEFAULT, int(v*0.9));  incc(I_SLOW_DOWN, int(v*0.9)); incc(I_DOWN, int(v*1.0)); incc(I_FAST_DOWN, int(v*0.9)); }
-  else if (b_fd) { setc(I_DEFAULT, int(v*0.9));  incc(I_SLOW_DOWN, int(v*0.8)); incc(I_DOWN, int(v*0.9)); incc(I_FAST_DOWN, int(v*0.9)); }
+  if (b_sd)      { inccf(F_SLOW_DOWN, 1.0); inccf(F_DOWN, 0.9); inccf(F_FAST_DOWN, 0.8); }
+  else if (b_d)  { inccf(F_DEFAULT, 0.9); inccf(F_SLOW_DOWN, 0.9); inccf(F_DOWN, 0.95); inccf(F_FAST_DOWN, 0.9); }
+  else if (b_fd) { inccf(F_DEFAULT, 0.9); inccf(F_SLOW_DOWN, 0.8); inccf(F_DOWN, 0.9); inccf(F_FAST_DOWN, 0.9); }
 
-  if (b_df)      { incc(I_DEFAULT, int(v*0.8)); incc(I_FAST, int(v*0.7)); }
-  else if (b_f)  { incc(I_DEFAULT, int(v*0.7)); incc(I_FAST, int(v*0.8)); }
+  if (b_df)      { inccf(F_DEFAULT, 0.8); inccf(F_FAST, 0.7); }
+  else if (b_f)  { inccf(F_DEFAULT, 0.7); inccf(F_FAST, 0.8); }
 
 
+}
+void s_repeated_move(Starship_Id sid) {
+    if (round() == 0) return;
+    int lm = details(sid)->last_move_f;
+    if (lm == F_SLOW_UP) deccf(F_SLOW_DOWN, 1.0);
+    if (lm == F_SLOW_DOWN) deccf(F_SLOW_UP, 1.0);
+}
+
+
+void s_holding_row(Starship_Id sid) {
+  Starship s = starship(sid);
+
+  // Y
+  int hr = details(sid)->holding_row;
+  int hm = details(sid)->holding_row_margin;
+
+  int ydir = 0;
+  if (first(s.pos) < hr-hm) { ydir =  1; }
+  if (first(s.pos) > hr+hm) { ydir = -1; }
+
+//  if (ydir > 0) { inccf(F_SLOW_DOWN, 0.5); inccf(F_DOWN | F_FAST_DOWN, 1.0); }
+//  if (ydir < 0) { inccf(F_SLOW_UP,   0.5); inccf(F_UP   | F_FAST_UP,   1.0); }
+  if (ydir > 0) { inccf(F_MASK_DOWN, 1.0); }
+  if (ydir < 0) { inccf(F_MASK_UP,   1.0); }
+}
+
+
+void s_holding_col(Starship_Id sid) {
+  Starship s = starship(sid);
+  // X
+  int hc = details(sid)->holding_col;
+  int hm = details(sid)->holding_col_margin;
+  dbg << "holding col: " << hc << " margin: " << hm << endl;
+  if (offset(s.pos) < (hc - hm)) { inccf(F_MASK_FAST, 1.0); dbg << "fast!" << endl; }
+  if (offset(s.pos) > (hc + hm)) { inccf(F_MASK_SLOW, 1.0); dbg << "slow!" << endl; }
 }

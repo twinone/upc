@@ -12,9 +12,9 @@ if [ "$#" -ge 1 ]; then
 fi
 
 Player1=Dummy
-Player2=Dummy
+Player2=Twinone
 Player3=Dummy
-Player4=Twinone
+Player4=Dummy
 
 VIEWER_PATH=$(pwd)/Viewer
 
