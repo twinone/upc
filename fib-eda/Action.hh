@@ -21,7 +21,7 @@ public:
    */
   Action();
 
-  
+
   /**
    * Moves the specified starship in a given direction.
    * The movement should be such that the resulting position is within the window,
@@ -33,24 +33,24 @@ public:
    */
   void move(Starship_Id s, Dir d);
 
-  
+
   /**
    * Makes the specified starship shoot a missile.
    * There should be at least one missile in the starship ammunition,
    * the starship should be alive,
-   * the starship identifier should be ok,      
+   * the starship identifier should be ok,
    * the starship should belong to the commanding player,
    * and no other instruction should have been commanded to the starship before in the same round.
    * Otherwise the instruction is ignored.
    */
   void shoot(Starship_Id s);
 
-  
+
   /****************************************************/
   /***************** STOP READING HERE ****************/
   /****************************************************/
 
-  
+
 private:
 
   friend class Game;
@@ -69,7 +69,7 @@ private:
    * Print the action to a stream.
    */
   void print(ostream& os) const;
-  
+
 };
 
 

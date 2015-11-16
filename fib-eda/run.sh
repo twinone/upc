@@ -11,15 +11,19 @@ if [ "$#" -ge 1 ]; then
   game=$1
 fi
 
-Player1=Demo
-Player2=Demo
-Player3=Demo
-Player4=Demo
+Player1=Dummy
+Player2=Dummy
+Player3=Dummy
+Player4=Twinone
 
-VIEWER_PATH=Viewer
+VIEWER_PATH=$(pwd)/Viewer
 
 ./Game $Player1 $Player2 $Player3 $Player4 < ${game}.cnf > $VIEWER_PATH/${game}.res
 
-
+#Mac OSX
 browser="/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
-$browser "$VIEWER_PATH/viewer.html?game=${game}.res"
+browser="/Applications/Firefox.app/Contents/MacOS/firefox"
+#Linux
+browser=firefox
+echo "$browser" "$VIEWER_PATH/viewer.html?game=${game}.res"
+"$browser" "file://$VIEWER_PATH/viewer.html?game=${game}.res"

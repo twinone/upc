@@ -34,7 +34,7 @@ var data = { }     // Object for storing all the game data.
 // Animation
 ////////////////////////////////////////////////////////////////
 
-var SPEED = 25; // Ticks per second
+var SPEED = 100; // Ticks per second
 var FRAMES_PER_ROUND = 8;
 var frame = 0; // Incremented each tick.
                // When reaches FRAMES_PER_ROUND, cur_round is incremented.

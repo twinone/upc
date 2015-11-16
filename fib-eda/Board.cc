@@ -25,7 +25,7 @@ Board::Board (istream& is) {
   is >> s;
   my_assert(s == "seed");
   is >> s;
-  
+
   is >> s >> nb_players;
   my_assert(s == "nb_players");
   my_assert(nb_players == 4);
@@ -139,7 +139,7 @@ Board::Board (istream& is) {
     is >> sid >> i >> j >> m >> a >> t;
 
     j = normalize(j);
-    
+
     my_assert(sid == k);
     my_assert(within_universe({i, j}));
     my_assert(m >= 0);
@@ -176,7 +176,7 @@ Board::Board (istream& is) {
     is >> mid >> sid >> i >> j;
 
     j = normalize(j);
-    
+
     my_assert(starship_ok(sid));
     my_assert(within_universe({i, j}));
     my_assert(cellPriv({i, j}).type == EMPTY);
@@ -219,7 +219,7 @@ extern int seed;
 void Board::print_settings(ostream& os, bool secgame) const {
   os << "starwar"          << "\t" << "v1"                         << endl;
   os << "secgame"          << "\t" << secgame                      << endl;
-  os << "seed"             << "\t" << seed                         << endl;  
+  os << "seed"             << "\t" << seed                         << endl;
   os << "nb_players"       << "\t" << number_players()             << endl;
   os << "nb_rnds"          << "\t" << number_rounds()              << endl;
   os << "nb_rows"          << "\t" << number_rows()                << endl;
@@ -681,7 +681,7 @@ bool Board::ok() const {
         cerr << "debug: cell should have an invalid starship identifier." << endl;
         return false;
       }
-      
+
       int mid = cells[i][j].mid;
       if (mid < -1) {
         cerr << "debug: problem with missile identifiers in cells." << endl;
@@ -699,7 +699,7 @@ bool Board::ok() const {
         cerr << "debug: missile map is corrupted." << endl;
         return false;
       }
-      
+
       if      (cells[i][j].type == MISSILE_BONUS) ++nb_miss_bonuses_on_board;
       else if (cells[i][j].type == POINT_BONUS)   ++nb_point_bonuses_on_board;
       else if (cells[i][j].type == STARSHIP)      ++nb_ships_on_board[player_of(sid)];

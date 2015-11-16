@@ -30,17 +30,17 @@ typedef complex<int> Dir;
 //                                 //
 //    ALL ALLOWED DIRECTIONS       //
 //                                 //
-const Dir UP        = {-1, 1}; //
-const Dir DEFAULT   = { 0, 1}; //
-const Dir DOWN      = { 1, 1}; //
+constexpr Dir UP        = {-1, 1}; //
+constexpr Dir DEFAULT   = { 0, 1}; //
+constexpr Dir DOWN      = { 1, 1}; //
 //                                 //
-const Dir SLOW_UP   = {-1, 0}; //
-const Dir SLOW      = { 0, 0}; //
-const Dir SLOW_DOWN = { 1, 0}; //
+constexpr Dir SLOW_UP   = {-1, 0}; //
+constexpr Dir SLOW      = { 0, 0}; //
+constexpr Dir SLOW_DOWN = { 1, 0}; //
 //                                 //
-const Dir FAST_UP   = {-1, 2}; //
-const Dir FAST      = { 0, 2}; //
-const Dir FAST_DOWN = { 1, 2}; //
+constexpr Dir FAST_UP   = {-1, 2}; //
+constexpr Dir FAST      = { 0, 2}; //
+constexpr Dir FAST_DOWN = { 1, 2}; //
 //                                 //
 ////////////////////////////////////
 
@@ -88,7 +88,7 @@ struct Cmp {
 };
 
 extern const map<Dir, vector<Dir>, Cmp> dir2all;
-  
+
 /////////////////// random numbers //////////////////////
 
 #include <iostream>
@@ -113,7 +113,7 @@ class Random_generator {
   static constexpr int RANDOMIZE_MULTIPLIER = 48271;
   static constexpr int RANDOMIZE_DEFAULT    = 123456789;  // Initial seed.
   static constexpr int RANDOMIZE_MAX        = RANDOMIZE_MODULUS - 2;
-      
+
   long rnd_seed;
 
   // Sets random seed.
@@ -124,7 +124,7 @@ class Random_generator {
 
   friend int main (int argc, char** argv);
 
-  
+
 public:
 
   // Returns random number between 0 and RANDOMIZE_MAX.
@@ -134,13 +134,13 @@ public:
     long t;
 
     t = RANDOMIZE_MULTIPLIER * (rnd_seed % Q) - R * (rnd_seed / Q);
-    if (t > 0) 
+    if (t > 0)
       rnd_seed = t;
-    else 
+    else
       rnd_seed = t + RANDOMIZE_MODULUS;
     return rnd_seed - 1;
   }
-  
+
 };
 
 
@@ -149,7 +149,7 @@ extern Random_generator random_generator;
 inline int randomize() {
   return random_generator.randomize();
 }
-  
+
 // Returns a random number between l and u.
 inline int randomize(int l, int u) {
   return l + randomize() % (u-l+1);

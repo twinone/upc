@@ -5,7 +5,7 @@
 #
 # 2) Uncomment the following line.
 #
-#DUMMY_OBJ = AIDummy.o
+DUMMY_OBJ = AIDummy.o
 
 # Add here any extra .o player files you want to link to the executable
 EXTRA_OBJS =
@@ -47,6 +47,8 @@ all: Game
 clean:
 	rm -rf Game SecGame *.o *.exe Makefile.deps
 	rm -rf latex refman.pdf
+	rm -rf *.log
+	cp dummy/AIDummy.o AIDummy.o
 
 Game: Utils.o Board.o Action.o Player.o Registry.o Game.o Main.o $(PLAYERS_OBJ)
 	$(CXX) $(LDFLAGS) $^ -o $@

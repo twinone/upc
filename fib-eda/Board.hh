@@ -62,7 +62,7 @@ struct Starship {
 /**
  * The description of a missile stores
  * its missile identifier,
- * the identifier of the starship that shot it, and 
+ * the identifier of the starship that shot it, and
  * its position.
  */
 
@@ -128,7 +128,7 @@ public:
    */
   int number_starships() const;
 
-  
+
   /**
    * Returns the number of rounds to wait before a starship can regenerate.
    */
@@ -184,7 +184,7 @@ public:
    */
   bool starship_ok(Starship_Id s) const;
 
-  
+
   /**
    * Returns whether p is a valid player identifier.
    */
@@ -342,7 +342,7 @@ private:
 
   /**
    * Moves a missile.
-   * Returns whether the instruction could be successfully applied.   
+   * Returns whether the instruction could be successfully applied.
    */
   bool move_missile(Missile& m);
 
@@ -370,7 +370,7 @@ private:
    * do not contain cells of any type in s.
    */
   bool is_free(Pos p, int n, const set<CType>& s);
-  
+
   /**
    * Kills a starship.
    */
@@ -385,7 +385,7 @@ private:
    * Returns a new missile identifier.
    */
   Missile_Id new_missile_identifier() const;
-  
+
   /**
    * Asserts invariants of the board. For debugging.
    */
@@ -414,7 +414,7 @@ private:
     if (j < 0) j += nb_uni_cols;
     return j;
   }
-  
+
 };
 
 
@@ -542,7 +542,7 @@ inline Cell Board::cell(const Pos& p) const {
 inline Cell& Board::cellPriv(const Pos& p) {
   my_assert(within_universe(p));
   int i = first(p);
-  int j = normalize(second(p));  
+  int j = normalize(second(p));
   return cells[i][j];
 }
 
