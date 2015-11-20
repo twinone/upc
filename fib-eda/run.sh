@@ -11,8 +11,8 @@ if [ "$#" -ge 1 ]; then
   game=$1
 fi
 
-Player1=Dummy
-Player2=Twinone
+Player2=Dummy
+Player1=Twinone
 Player3=Dummy
 Player4=Dummy
 

@@ -113,7 +113,7 @@ Board::Board (istream& is) {
       case 'X': cellPriv({i, j}).type = ASTEROID;      break;
       case 'P': cellPriv({i, j}).type = POINT_BONUS;   break;
       case 'M': cellPriv({i, j}).type = MISSILE_BONUS; break;
-      default:  my_assert(false);
+      default:  cerr << "Invalid cell " << c << endl; my_assert(false);
       }
     }
   }

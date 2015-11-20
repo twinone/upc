@@ -422,12 +422,15 @@ function writeGameState () {
     for (var i = 0; i <= 2; ++i)
 	scoreboard += "<br/><br/>";
     for (var i = 0; i < data.nb_players; i++) {
+        missiles = data.rounds[cur_round].ships[2*i].nb_miss + "," + data.rounds[cur_round].ships[2*i+1].nb_miss;
         scoreboard += "<span class='score'>"
             + "<div style='display:inline-block; margin-top: 5px; width:20px; height:20px; background-color:#"+ player_colors[i] +"'></div>"
             + "<div style='display:inline-block; vertical-align: middle; margin-bottom: 7px; margin-left:8px;'>"+data.names[i]+"</div>"
             + "<br/>"
             + "<div style='margin-left: 10px;'>"
             + "<div style='padding:2px;'>Score: "+data.rounds[cur_round].players[i].score+"</div>"
+            + "<div style='padding:2px;'>Miss: "+missiles+"</div>"
+
             + (data.secgame? "<div style='padding:2px;'>CPU: " + (data.rounds[cur_round].players[i].cpu == -1 ? " <font color=\"red\"><b>OUT</b></font>" : data.rounds[cur_round].players[i].cpu) + "</div>" : "")
             + "</div>"
             + "</span><br/><br/><br/>";
