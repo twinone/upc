@@ -34,7 +34,11 @@ var data = { }     // Object for storing all the game data.
 // Animation
 ////////////////////////////////////////////////////////////////
 
-var SPEED = 100; // Ticks per second
+// Ticks per second
+var MIN_SPEED = 20;
+var MAX_SPEED = 150;
+var SPEED_STEP = 5;
+var SPEED = getURLParameter("speed") || 25;
 var FRAMES_PER_ROUND = 8;
 var frame = 0; // Incremented each tick.
                // When reaches FRAMES_PER_ROUND, cur_round is incremented.
@@ -323,6 +327,18 @@ function initGame (raw_data) {
 	min: 0,
 	max: data.nb_rnds,
     });
+    // Speed slider
+    $("#speedslider").slider({
+	min: MIN_SPEED,
+	max: MAX_SPEED,
+  step: SPEED_STEP,
+  value: SPEED, // Set to initial speed = 25 or url determined
+  slide: function(ev) {
+    var value = $("#speedslider").slider( "option", "value" );
+    SPEED = value;
+  }
+
+  }).width(50);
 
     // Canvas element.
     canvas = document.getElementById('myCanvas');
@@ -413,6 +429,15 @@ function preloadImages () {
 // Main loop functions
 // *********************************************************************
 
+function getRemainingMissiles(pid) {
+  var str = "";
+  var comma = "";
+  for (var i = 0; i < data.nb_ships_x_player; i++) {
+    str += comma + data.rounds[cur_round].ships[2*pid+i].nb_miss;
+    comma = ", ";
+  }
+  return str;
+}
 function writeGameState () {
     // Write round.
     $("#round").html("Round: " + cur_round);
@@ -422,15 +447,14 @@ function writeGameState () {
     for (var i = 0; i <= 2; ++i)
 	scoreboard += "<br/><br/>";
     for (var i = 0; i < data.nb_players; i++) {
-        missiles = data.rounds[cur_round].ships[2*i].nb_miss + "," + data.rounds[cur_round].ships[2*i+1].nb_miss;
         scoreboard += "<span class='score'>"
             + "<div style='display:inline-block; margin-top: 5px; width:20px; height:20px; background-color:#"+ player_colors[i] +"'></div>"
             + "<div style='display:inline-block; vertical-align: middle; margin-bottom: 7px; margin-left:8px;'>"+data.names[i]+"</div>"
             + "<br/>"
             + "<div style='margin-left: 10px;'>"
             + "<div style='padding:2px;'>Score: "+data.rounds[cur_round].players[i].score+"</div>"
-            + "<div style='padding:2px;'>Miss: "+missiles+"</div>"
-
+            + "<div style='padding:2px;'>Missiles:</div>"
+            + "<div style='padding:2px;'>"+getRemainingMissiles(i)+"</div>" // Show missiles
             + (data.secgame? "<div style='padding:2px;'>CPU: " + (data.rounds[cur_round].players[i].cpu == -1 ? " <font color=\"red\"><b>OUT</b></font>" : data.rounds[cur_round].players[i].cpu) + "</div>" : "")
             + "</div>"
             + "</span><br/><br/><br/>";
@@ -807,6 +831,7 @@ function main_loop () {
 
     }
     // Periodically call main_loop.
+    // Note: SPEED will be modified by the speed slider.
     var frame_time = 1000/SPEED;
     setTimeout(main_loop, frame_time);
 }

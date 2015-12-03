@@ -16,23 +16,23 @@
             width:  100%;
             height: 100%;
             margin: 0px;
-            overflow:hidden; 
+            overflow:hidden;
         }
-		
+
         .score {
-            min-width: 100px; 
+            min-width: 100px;
             margin-right: 25px;
             display:inline-block;
             text-align:left;
             font-size: 11pt;
         }
-        
+
         .button {
             cursor:pointer;
          }
-         
+
     </style>
-    
+
     <link type='text/css' href='css/ui-lightness/jquery-ui-1.8.18.custom.css' rel='Stylesheet' />
 
     <script type='text/javascript' src='js/jquery-1.7.1.min.js'></script>
@@ -44,31 +44,31 @@
 </head>
 
 <body onload="init()">
-    
+
     <div id="scores" style="position:absolute; margin:20px;"></div>
 
     <center id="inputdiv" style="display:none;">
 
                 <!-- ERC: add logo image here -->
 		<img src="img/logo.png" style="with:50px; height: 50px; margin:40px;"/>
-		
+
 		<div style="margin-bottom: 20px;">
 			Select a game file to load:
 		</div>
 		<input type="file" id="file" name="file" />
-		
+
 	</center>
-	        
+
 	<center id='loadingdiv' style="display:none; margin-top:200px;">
 		<p>
 			Please wait, loading game.
 		</p>
 	</center>
-		
+
     <center id="gamediv" style="display:none;">
-    
+
         <br/>
-		
+
         <div style='width:500px; height:32px;'>
             <div style='float:left;'>
                 <img id='but_play' class='button' title="Play (space)" src='img/but_play.png' height='32' width='32' onclick='playButton();' />
@@ -76,17 +76,21 @@
                 <img id='but_start' class='button' title="Go to start (start)" src='img/but_start.png' height='32' width='32' onclick='startButton();' />
                 <img id='but_end' class='button' title="Go to end (end)" src='img/but_end.png' height='32' width='32' onclick='endButton();' />
                 <img id='but_anim' class='button' title="Toggle animation" src='img/but_refresh.png' height='32' width='32' onclick='animButton();' />
-            </div>         
+            </div>
 
             <span id='round' style="position:relative; top: 10px;"> </span>
-   
-            <img style='float:right;' class='button' id='but_anim' title="Close window" src='img/but_close.png' height='32' width='32' onclick='closeButton();' />
+            <!-- Speed slider -->
+            <div style='float:right;'>
+              <span style='margin-right:25px'>Speed: </span>
+              <div style='display:inline-block;margin-right:25px;' id='speedslider'></div>
+              <img class='button' id='but_anim' title="Close window" src='img/but_close.png' height='32' width='32' onclick='closeButton();' />
+            </div>
         </div>
-        
+
         <br/>
 
         <div id='slider'> </div>
-        
+
         <br/>
 
 
@@ -99,7 +103,7 @@
 			Press H for help.
 		</p>
 		-->
-		
+
     </center>
 
 </body>
