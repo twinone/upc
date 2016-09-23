@@ -160,9 +160,13 @@ void execute(AST *a) {
 	if (a == NULL) return;
   bool err;
   string k = a->kind;
+  //cout << "kind " << k << endl;
 
   // Handled by if internally
   if (k == "elif" || k == "else" || k == "fi") return;
+
+  // Handled by while internally
+  if (k == "done") return;
 
 	if (k == ":=") {
 		Variable res = evaluate(child(a,1), err);
@@ -185,34 +189,45 @@ void execute(AST *a) {
     // if true:
     if (cond.boolval) {
         execute(a->down->right);
-        return;
     }
     // if false:
-    AST *node = nextif(a->down);
-    while (node->kind != "fi") {
-      if (node->kind == "else") {
-        execute(node->right);
-        break;
-      }
-      if (node->kind == "elif") {
-        cond = evaluate(node->right, err);
-        if (err) return;
-        if (cond.type != BOOL) {
-          cerr << "expected boolean expression at elif" << endl;
-          return;
+    else {
+      AST *node = nextif(a->down);
+      while (node->kind != "fi") {
+        if (node->kind == "else") {
+          execute(node->right);
+          break;
         }
-        // if true:
-        if (cond.boolval) {
-            execute(node->right->right);
-            break;
-        } else {
-          node = node->right; // skip this elif block
+        if (node->kind == "elif") {
+          cond = evaluate(node->right, err);
+          if (err) return;
+          if (cond.type != BOOL) {
+            cerr << "expected boolean expression at elif" << endl;
+            return;
+          }
+          // if true:
+          if (cond.boolval) {
+              execute(node->right->right);
+              break;
+          } else {
+            node = node->right; // skip this elif block
+          }
         }
+        node = nextif(node);
       }
-      node = nextif(node);
     }
   } else if (k == "while") {
-    
+    while (true) {
+      Variable cond = evaluate(a->down, err);
+      if (err) return;
+      if (cond.type != BOOL) {
+        cerr << "expected boolean expression at while" << endl;
+        return;
+      }
+      // if true:
+      if (!cond.boolval) break;
+      execute(a->down->right);
+    }
   }
   execute(a->right);
 }
@@ -243,6 +258,10 @@ int main() {
 #token ELSE "else"
 #token FI "fi"
 
+#token WHILE "while"
+#token DO "do"
+#token DONE "done"
+
 #token LPAREN "\("
 #token RPAREN "\)"
 #token SPACE "[\ \n]" << zzskip(); >>
@@ -252,8 +271,9 @@ int main() {
 #token ASIG ":="
 
 prog: (instr)* "@"!;
+instr: (ID ASIG^ expr | WRITE^ expr) | cond | loop;
+loop: WHILE^ expr DO! (instr)* DONE;
 cond: IF^ expr THEN! (instr)* (ELIF expr THEN! (instr)*)* (ELSE (instr)*|) FI;
-instr: (ID ASIG^ expr | WRITE^ expr) | cond;
 
 expr: cmp;
 cmp: arit (CMP^ arit)*;
