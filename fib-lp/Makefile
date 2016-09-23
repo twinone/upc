@@ -1,5 +1,5 @@
 CC := g++
-PROG := example1
+PROG := example2
 CC_FLAGS := -Wno-write-strings
 all:
 	antlr -gt $(PROG).g
@@ -8,6 +8,6 @@ all:
 
 
 clean:
-	rm -f *.o example1.c scan.c err.c parser.dlg tokens.h mode.h
+	rm -f *.o *.c parser.dlg tokens.h mode.h
 
 .PHONY: clean
