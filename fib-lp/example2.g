@@ -125,7 +125,8 @@ Variable evaluate(AST *a, bool &err) {
 		if (t == "+") res.intval = l.intval + r.intval;
 		if (t == "-") res.intval = l.intval - r.intval;
 		if (t == "*") res.intval = l.intval * r.intval;
-		if (t == "/") res.intval = l.intval / r.intval;
+    if (t == "/") res.intval = l.intval / r.intval;
+    if (t == "%") res.intval = l.intval % r.intval;
 		return res;
 	}
 	if (k == "cmp") {
@@ -133,7 +134,8 @@ Variable evaluate(AST *a, bool &err) {
 		Variable l = evaluate(child(a,0), err);
 		Variable r = evaluate(child(a,1), err);
 		if (l.type != NUM || r.type != NUM) { cerr << "operand " << k << " expects two values of type NUM" << endl; err = true; return res; }
-  	if (t == "==") res.boolval = l.intval == r.intval;
+    if (t == "==") res.boolval = l.intval == r.intval;
+  	if (t == "!=") res.boolval = l.intval != r.intval;
 		if (t == "<") res.boolval = l.intval < r.intval;
 		if (t == "<=") res.boolval = l.intval <= r.intval;
 		if (t == ">") res.boolval = l.intval > r.intval;
@@ -249,8 +251,8 @@ int main() {
 #token BOOL "true|false"
 
 #token PLUS "\+|\-"
-#token TIMES "\*|\/"
-#token CMP "(\=\=)|(\<)|(\<\=)|(\>)|(\>\=)"
+#token TIMES "\*|\/|\%"
+#token CMP "(\=\=)|\!\=|(\<)|(\<\=)|(\>)|(\>\=)"
 
 #token IF "if"
 #token THEN "then"
@@ -276,8 +278,8 @@ loop: WHILE^ expr DO! (instr)* DONE;
 cond: IF^ expr THEN! (instr)* (ELIF expr THEN! (instr)*)* (ELSE (instr)*|) FI;
 
 expr: cmp;
+par: LPAREN! cmp RPAREN!;
 cmp: arit (CMP^ arit)*;
 arit: term (PLUS^ term)*;
 term: base (TIMES^ base)*;
-par: LPAREN! cmp RPAREN!;
 base: par|NUM|ID|BOOL;
