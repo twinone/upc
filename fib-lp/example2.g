@@ -38,14 +38,13 @@ map<string, Variable> vars;
 
 // function to fill token information
 void zzcr_attr(Attrib *attr, int type, char *text) {
-  if (type == NUM) {
-    attr->kind = "intconst";
-    attr->text = text;
-  }
-  else if (type == BOOL) {
-    attr->kind = "boolconst";
-    attr->text = text;
-  }
+  attr->text = text;
+
+  if (type == NUM) attr->kind = "intconst";
+  else if (type == BOOL) attr->kind = "boolconst";
+  else if (type == TIMES || type == PLUS) attr->kind = "arit";
+  else if (type == CMP) attr->kind = "cmp";
+
   else {
     attr->kind = text;
     attr->text = "";
@@ -55,9 +54,9 @@ void zzcr_attr(Attrib *attr, int type, char *text) {
 // function to create a new AST node
 AST* createASTnode(Attrib* attr, int type, char* text) {
   AST* as = new AST;
-  as->kind = attr->kind; 
+  as->kind = attr->kind;
   as->text = attr->text;
-  as->right = NULL; 
+  as->right = NULL;
   as->down = NULL;
   return as;
 }
@@ -68,7 +67,7 @@ AST* child(AST *a,int n) {
  AST *c=a->down;
  for (int i=0; c!=NULL && i<n; i++) c=c->right;
  return c;
-} 
+}
 
 /// print AST, recursively, with indentation
 void ASTPrintIndent(AST *a,string s)
@@ -85,7 +84,7 @@ void ASTPrintIndent(AST *a,string s)
     ASTPrintIndent(i,s+"  |"+string(i->kind.size()+i->text.size(),' '));
     i=i->right;
   }
-  
+
   if (i!=NULL) {
       cout<<s+"  \\__";
       ASTPrintIndent(i,s+"   "+string(i->kind.size()+i->text.size(),' '));
@@ -93,7 +92,7 @@ void ASTPrintIndent(AST *a,string s)
   }
 }
 
-/// print AST 
+/// print AST
 void ASTPrint(AST *a)
 {
   while (a!=NULL) {
@@ -106,7 +105,8 @@ void ASTPrint(AST *a)
 Variable evaluate(AST *a, bool &err) {
 	Variable res;
 	if (a == NULL) return res;
-	string k = a->kind;
+  string k = a->kind;
+  string t = a->text;
 	if (k == "intconst") {
 		res.type = NUM;
 		res.intval = atoi(a->text.c_str());
@@ -117,27 +117,27 @@ Variable evaluate(AST *a, bool &err) {
 		res.boolval = a->text == "true";
 		return res;
 	}
-	if (k == "+" || k == "-" || k == "*" || k == "/") {
+	if (k == "arit") {
 		res.type = NUM;
 		Variable l = evaluate(child(a,0), err);
 		Variable r = evaluate(child(a,1), err);
 		if (l.type != NUM || r.type != NUM) { cerr << "operand " << k << " expects two values of type NUM" << endl; err = true; return res; }
-		if (k == "+") res.intval = l.intval + r.intval;
-		if (k == "-") res.intval = l.intval - r.intval;
-		if (k == "*") res.intval = l.intval * r.intval;
-		if (k == "/") res.intval = l.intval / r.intval;
+		if (t == "+") res.intval = l.intval + r.intval;
+		if (t == "-") res.intval = l.intval - r.intval;
+		if (t == "*") res.intval = l.intval * r.intval;
+		if (t == "/") res.intval = l.intval / r.intval;
 		return res;
 	}
-	if (k == "==" || k == "<" || k == "<=" || k == ">" || k == ">=") {
+	if (k == "cmp") {
 		res.type = BOOL;
 		Variable l = evaluate(child(a,0), err);
 		Variable r = evaluate(child(a,1), err);
 		if (l.type != NUM || r.type != NUM) { cerr << "operand " << k << " expects two values of type NUM" << endl; err = true; return res; }
-		if (k == "==") res.boolval = l.intval == r.intval;
-		if (k == "<") res.boolval = l.intval < r.intval;
-		if (k == "<=") res.boolval = l.intval <= r.intval;
-		if (k == ">") res.boolval = l.intval > r.intval;
-		if (k == ">=") res.boolval = l.intval >= r.intval;
+  	if (t == "==") res.boolval = l.intval == r.intval;
+		if (t == "<") res.boolval = l.intval < r.intval;
+		if (t == "<=") res.boolval = l.intval <= r.intval;
+		if (t == ">") res.boolval = l.intval > r.intval;
+		if (t == ">=") res.boolval = l.intval >= r.intval;
 		return res;
 	}
 	else { // variable
@@ -151,24 +151,70 @@ Variable evaluate(AST *a, bool &err) {
 	}
 }
 
+AST *nextif(AST *a) {
+  while (a->kind != "elif" && a->kind != "else" && a->kind != "fi") a = a->right;
+  return a;
+}
+
 void execute(AST *a) {
 	if (a == NULL) return;
-	if (a->kind == ":=") {
-		bool err;
+  bool err;
+  string k = a->kind;
+
+  // Handled by if internally
+  if (k == "elif" || k == "else" || k == "fi") return;
+
+	if (k == ":=") {
 		Variable res = evaluate(child(a,1), err);
-		if (!err) vars[child(a,0)->kind] = res;
-		else return;
+    if (err) return;
+		vars[child(a,0)->kind] = res;
 	}
-	else if (a->kind == "write") {
-		bool err;
+	else if (k == "write") {
 		Variable res = evaluate(child(a,0), err);
-		if (!err) {
-			if(res.type == NUM) cout << res.intval << endl;
-			if(res.type == BOOL) cout << (res.boolval ? "true" : "false") << endl;
-		}
-		else return;
+    if (err) return;
+		if(res.type == NUM) cout << res.intval << endl;
+		if(res.type == BOOL) cout << (res.boolval ? "true" : "false") << endl;
 	}
-	execute(a->right);
+  else if (k == "if") {
+    Variable cond = evaluate(a->down, err);
+    if (err) return;
+    if (cond.type != BOOL) {
+      cerr << "expected boolean expression at if" << endl;
+      return;
+    }
+    // if true:
+    if (cond.boolval) {
+        execute(a->down->right);
+        return;
+    }
+    // if false:
+    AST *node = nextif(a->down);
+    while (node->kind != "fi") {
+      if (node->kind == "else") {
+        execute(node->right);
+        break;
+      }
+      if (node->kind == "elif") {
+        cond = evaluate(node->right, err);
+        if (err) return;
+        if (cond.type != BOOL) {
+          cerr << "expected boolean expression at elif" << endl;
+          return;
+        }
+        // if true:
+        if (cond.boolval) {
+            execute(node->right->right);
+            break;
+        } else {
+          node = node->right; // skip this elif block
+        }
+      }
+      node = nextif(node);
+    }
+  } else if (k == "while") {
+    
+  }
+  execute(a->right);
 }
 
 int main() {
@@ -191,6 +237,12 @@ int main() {
 #token TIMES "\*|\/"
 #token CMP "(\=\=)|(\<)|(\<\=)|(\>)|(\>\=)"
 
+#token IF "if"
+#token THEN "then"
+#token ELIF "elif"
+#token ELSE "else"
+#token FI "fi"
+
 #token LPAREN "\("
 #token RPAREN "\)"
 #token SPACE "[\ \n]" << zzskip(); >>
@@ -200,8 +252,10 @@ int main() {
 #token ASIG ":="
 
 prog: (instr)* "@"!;
-instr: (ID ASIG^ cmp | WRITE^ cmp);
+cond: IF^ expr THEN! (instr)* (ELIF expr THEN! (instr)*)* (ELSE (instr)*|) FI;
+instr: (ID ASIG^ expr | WRITE^ expr) | cond;
 
+expr: cmp;
 cmp: arit (CMP^ arit)*;
 arit: term (PLUS^ term)*;
 term: base (TIMES^ base)*;
