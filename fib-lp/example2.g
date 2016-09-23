@@ -266,14 +266,18 @@ int main() {
 
 #token LPAREN "\("
 #token RPAREN "\)"
-#token SPACE "[\ \n]" << zzskip(); >>
+#token SPACE "[\ \n\t]" << zzskip(); >>
 
 #token WRITE "write"
 #token ID "[a-zA-Z]"
 #token ASIG ":="
 
 prog: (instr)* "@"!;
-instr: (ID ASIG^ expr | WRITE^ expr) | cond | loop;
+
+instr: assignment | write | cond | loop;
+assignment: ID ASIG^ expr;
+write: WRITE^ expr;
+
 loop: WHILE^ expr DO! (instr)* DONE;
 cond: IF^ expr THEN! (instr)* (ELIF expr THEN! (instr)*)* (ELSE (instr)*|) FI;
 
