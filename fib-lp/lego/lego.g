@@ -12,19 +12,21 @@
 #define D(x)
 #endif
 
+
 using namespace std;
 
 // struct to store information about tokens
 typedef struct {
   string kind;
   string text;
+  int type;
 } Attrib;
 
 // function to fill token information (predeclaration)
 void zzcr_attr(Attrib *attr, int type, char *text);
 
 // fields for AST nodes
-#define AST_FIELDS string kind; string text;
+#define AST_FIELDS string kind; string text; int type;
 #include "ast.h"
 
 // macro to create a new AST node (and function predeclaration)
@@ -40,18 +42,20 @@ AST* createASTnode(Attrib* attr,int ttype, char *textt);
 AST *root;
 
 
+
 // function to fill token information
 void zzcr_attr(Attrib *attr, int type, char *text) {
-  if (type == ID) {
-    attr->kind = "id";
-    attr->text = text;
-  }
+  attr->text = text;
+  attr->type = type;
 
+// This is bullshit
+/*  if (type == ID) attr->kind = "id";
 
   else {
     attr->kind = text;
     attr->text = "";
   }
+*/
 }
 
 // function to create a new AST node
@@ -59,6 +63,7 @@ AST* createASTnode(Attrib* attr, int type, char* text) {
   AST* as = new AST;
   as->kind = attr->kind; 
   as->text = attr->text;
+  as->type = attr->type; // We want this
   as->right = NULL; 
   as->down = NULL;
   return as;
@@ -150,11 +155,19 @@ void loadDefs(AST *a) {
 }
 
 void exec(AST *a) {
-
+	a = a->down;
+	while (a != NULL) {
+		switch (a->type) {
+			case INT:  break;
+		}
+		a = a->right;
+	}
 }
 
-void printBlock(Block *b) {
 
+// Debug function to print a block's heights
+void printBlock(Block *b) {
+#ifdef DEBUG
 	cout << "+";
 	for (int i = 0; i < b->w*2-1; i++) cout << (i%2==0?"-":"+");
 	cout << "+" << endl;
@@ -168,7 +181,7 @@ void printBlock(Block *b) {
 		for (int i = 0; i < b->w*2-1; i++) cout << (i%2==0?"-":"+");
 		cout << "+" << endl;
 	}
-
+#endif
 }
 
 int main() {
@@ -246,4 +259,4 @@ ppr: ID (PUSH^ ppr|);
 
 block: ID|coords;
 
-
+ 
