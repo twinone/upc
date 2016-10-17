@@ -3,6 +3,7 @@
 #include <string>
 #include <iostream>
 #include <map>
+#include <vector>
 using namespace std;
 
 // struct to store information about tokens
@@ -107,6 +108,18 @@ void ASTPrint(AST *a)
 }
 
 
+typedef struct Block {
+	int x;
+	int y;
+	int w;
+	int h;
+	// Blocks stacked on top of this one
+	vector<Block> stack;
+	// The block below this one
+	Block* parent;
+} Block;
+
+Block grid;
 
 int main() {
   root = NULL;
@@ -147,11 +160,11 @@ int main() {
 
 def: DEF^ ID ops ENDEF!;
 
-lego: grid ops defs <<#0=createASTlist(_sibling);>>;
+lego: griddef ops defs <<#0=createASTlist(_sibling);>>;
 ops: (op)* <<#0=createASTlist(_sibling);>>;
 defs: (def)* <<#0=createASTlist(_sibling);>>;
 
-grid: GRID^ INT INT;
+griddef: GRID^ INT INT;
 op: move|while_loop|fits|height|assig;
 
 
