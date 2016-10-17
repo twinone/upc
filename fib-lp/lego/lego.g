@@ -153,6 +153,24 @@ void exec(AST *a) {
 
 }
 
+void printBlock(Block *b) {
+
+	cout << "+";
+	for (int i = 0; i < b->w*2-1; i++) cout << (i%2==0?"-":"+");
+	cout << "+" << endl;
+
+	for (int i = 0; i < b->h; i++) {
+		for (int j = 0; j < b->w; j++) {
+			cout << "|" << "x";
+		}
+		cout << "|" << endl;
+		cout << "+";
+		for (int i = 0; i < b->w*2-1; i++) cout << (i%2==0?"-":"+");
+		cout << "+" << endl;
+	}
+
+}
+
 int main() {
   root = NULL;
   ANTLR(lego(&root), stdin);
@@ -160,6 +178,7 @@ int main() {
   loadDefs(root->down->right->right);
   exec(root->down->right);
   ASTPrint(root);
+  printBlock(&grid);
 }
 >>
 
