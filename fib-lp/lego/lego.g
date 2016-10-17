@@ -119,18 +119,25 @@ int main() {
 
 
 // Tokens defined higher have a higher precedence
-#token SPACE "[\ \n]" << zzskip();>>
+#token SPACE "[\ \n\t]" << zzskip();>>
+#token BOOL "true|false" // placeholder
+#token AND "AND"
 #token MOVE "MOVE"
+#token FITS "FITS"
+#token HEIGHT "HEIGHT"
 #token NESW "NORTH|EAST|SOUTH|WEST"
 #token GRID "Grid|GRID"
 #token DEF "DEF"
 #token PLACE "PLACE"
-#token ENDEF "ENDEF"
+#token ENDEF "ENDEF|ENDDEF"
 #token WHILE "WHILE"
 #token AT "AT"
+#token CMP "\<|\>|\<\=|\>\=|\=\=|\!\="
 #token ASSIG "\="
 #token LPAREN "\("
 #token RPAREN "\)"
+#token LSQUARE "\["
+#token RSQUARE "\]"
 #token COMMA "\,"
 #token PUSH "PUSH|POP"
 #token INT "[0-9]+"
@@ -138,20 +145,38 @@ int main() {
 
 
 
+def: DEF^ ID ops ENDEF!;
 
-lego: grid ops <<#0=createASTlist(_sibling);>>;
+lego: grid ops defs <<#0=createASTlist(_sibling);>>;
 ops: (op)* <<#0=createASTlist(_sibling);>>;
+defs: (def)* <<#0=createASTlist(_sibling);>>;
 
 grid: GRID^ INT INT;
+op: move|while_loop|fits|height|assig;
 
-op: assig|move;
 
+assig: ID (ASSIG^ blockexpr|);
+
+
+fits: FITS^ LPAREN! ID COMMA! INT COMMA! INT COMMA! INT RPAREN!;
+height: HEIGHT^ LPAREN! block RPAREN!;
+
+boolexpr: booland;
+booland: boolatom (AND^ boolatom)*;
+boolatom: BOOL|boolcmp|fits;
+boolcmp: intexpr (CMP^ intexpr|);
+intexpr: INT | height;
+
+while_loop: WHILE^ LPAREN! boolexpr RPAREN! LSQUARE! ops RSQUARE!;
 move: MOVE^ ID NESW INT;
 
 coords: LPAREN! INT COMMA! INT RPAREN! <<#0=createASTlist(_sibling);>>;
-assig: ID ASSIG^ blockexpr;
 blockexpr: place|push;
 place: PLACE^ coords AT! coords;
-push: block (PUSH^ push|);
+
+push: block (PUSH^ ppr);
+ppr: ID (PUSH^ ppr|);
 
 block: ID|coords;
+
+

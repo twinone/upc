@@ -247,12 +247,9 @@ int main() {
 
 
 #lexclass START
-#token NUM "[0-9]+"
+#token WRITE "write"
 #token BOOL "true|false"
-
-#token PLUS "\+|\-"
-#token TIMES "\*|\/|\%"
-#token CMP "(\=\=)|\!\=|(\<)|(\<\=)|(\>)|(\>\=)"
+#token NUM "[0-9]+"
 
 #token IF "if"
 #token THEN "then"
@@ -268,9 +265,13 @@ int main() {
 #token RPAREN "\)"
 #token SPACE "[\ \n\t]" << zzskip(); >>
 
-#token WRITE "write"
-#token ID "[a-zA-Z]"
 #token ASIG ":="
+
+#token PLUS "\+|\-"
+#token TIMES "\*|\/|\%"
+#token CMP "(\=\=)|\!\=|(\<)|(\<\=)|(\>)|(\>\=)"
+
+#token ID "[a-zA-Z]+"
 
 prog: (instr)* "@"!;
 
