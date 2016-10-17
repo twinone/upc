@@ -22,3 +22,4 @@ WHILE (HEIGHT(B4) > 1 AND HEIGHT(B4) < 10) [
  B4 = (2,2) PUSH B4
 ]
 ENDEF
+

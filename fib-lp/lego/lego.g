@@ -4,6 +4,14 @@
 #include <iostream>
 #include <map>
 #include <vector>
+
+#define DEBUG
+#ifdef DEBUG 
+#define D(x) x
+#else 
+#define D(x)
+#endif
+
 using namespace std;
 
 // struct to store information about tokens
@@ -34,14 +42,16 @@ AST *root;
 
 // function to fill token information
 void zzcr_attr(Attrib *attr, int type, char *text) {
-/*  if (type == ID) {
+  if (type == ID) {
     attr->kind = "id";
     attr->text = text;
   }
-  else {*/
+
+
+  else {
     attr->kind = text;
     attr->text = "";
-//  }
+  }
 }
 
 // function to create a new AST node
@@ -119,11 +129,36 @@ typedef struct Block {
 	Block* parent;
 } Block;
 
+map<string, AST*> functions;
 Block grid;
+
+void initGrid(AST *a) {
+	grid.x = 0;
+	grid.y = 0;
+	grid.w = atoi(a->down->kind.c_str());
+	grid.h = atoi(a->down->right->kind.c_str());
+	D(cerr << "Initialized grid of " << grid.w << "x" << grid.h << endl;)
+}
+void loadDefs(AST *a) {
+	a = a->down;
+	while (a != NULL) {
+		D(cerr<<"READ DEF "<<a->down->text<<endl;)
+//		D(ASTPrint(a->down->right);)
+		functions.insert(std::pair<string,AST*>(a->down->text,a->down->right));
+		a = a->right;
+	}	
+}
+
+void exec(AST *a) {
+
+}
 
 int main() {
   root = NULL;
   ANTLR(lego(&root), stdin);
+  initGrid(root->down);
+  loadDefs(root->down->right->right);
+  exec(root->down->right);
   ASTPrint(root);
 }
 >>
