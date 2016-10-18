@@ -6,10 +6,17 @@
 #include <vector>
 
 #define DEBUG
-#ifdef DEBUG 
+#ifdef DEBUG
 #define D(x) x
-#else 
+#else
 #define D(x)
+#endif
+
+#define WARN
+#ifdef WARN
+#define W(x) x
+#else
+#define W(x)
 #endif
 
 
@@ -61,10 +68,10 @@ void zzcr_attr(Attrib *attr, int type, char *text) {
 // function to create a new AST node
 AST* createASTnode(Attrib* attr, int type, char* text) {
   AST* as = new AST;
-  as->kind = attr->kind; 
+  as->kind = attr->kind;
   as->text = attr->text;
   as->type = attr->type; // We want this
-  as->right = NULL; 
+  as->right = NULL;
   as->down = NULL;
   return as;
 }
@@ -104,7 +111,7 @@ void ASTPrintIndent(AST *a,string s)
     ASTPrintIndent(i,s+"  |"+string(i->kind.size()+i->text.size(),' '));
     i=i->right;
   }
-  
+
   if (i!=NULL) {
       cout<<s+"  \\__";
       ASTPrintIndent(i,s+"   "+string(i->kind.size()+i->text.size(),' '));
@@ -112,7 +119,7 @@ void ASTPrintIndent(AST *a,string s)
   }
 }
 
-/// print AST 
+/// print AST
 void ASTPrint(AST *a)
 {
   while (a!=NULL) {
@@ -122,64 +129,167 @@ void ASTPrint(AST *a)
   }
 }
 
+////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////
+
 
 typedef struct Block {
-	int x;
-	int y;
-	int w;
-	int h;
+  // global coordinates of block
+	int x; int y;
+  // dimensions of block
+	int w; int h;
 	// Blocks stacked on top of this one
-	vector<Block> stack;
+	vector<Block*> blocks;
 	// The block below this one
 	Block* parent;
 } Block;
 
+vector<Block*> allBlocks;
 map<string, AST*> functions;
+map<string, Block*> blocks;
 Block grid;
+
+inline int toInt(AST *a) { return atoi(a->text.c_str()); }
+
+inline int getdx(AST *a) {
+  string s = a->down->right->text;
+  int num = toInt(a->down->right->right);
+	if (s == "NORTH"||s == "SOUTH") return 0;
+	return (s == "EAST" ? 1 : -1) * num;
+}
+
+inline int getdy(AST *a) {
+  string s = a->down->right->text;
+  int num = toInt(a->down->right->right);
+	if (s == "EAST"||s == "WEST") return 0;
+	return (s == "SOUTH" ? 1 : -1) * num;
+}
+
 
 void initGrid(AST *a) {
 	grid.x = 0;
 	grid.y = 0;
-	grid.w = atoi(a->down->kind.c_str());
-	grid.h = atoi(a->down->right->kind.c_str());
+	grid.w = toInt(a->down);
+	grid.h = toInt(a->down->right);
 	D(cerr << "Initialized grid of " << grid.w << "x" << grid.h << endl;)
 }
-void loadDefs(AST *a) {
+
+void processDefs(AST *a) {
 	a = a->down;
 	while (a != NULL) {
 		D(cerr<<"READ DEF "<<a->down->text<<endl;)
 //		D(ASTPrint(a->down->right);)
 		functions.insert(std::pair<string,AST*>(a->down->text,a->down->right));
 		a = a->right;
-	}	
+	}
+}
+
+
+
+Block *processPlace(AST *a) {
+	Block *b;
+  b = new Block;
+  allBlocks.push_back(b);
+
+	AST *size = a->down;
+	AST *coords = size->right;
+
+	b->x = toInt(coords->down) -1;
+	b->y = toInt(coords->down->right) -1;
+
+	b->w = toInt(size->down);
+	b->h = toInt(size->down->right);
+
+	grid.blocks.push_back(b);
+	b->parent = &grid;
+
+	return b;
+}
+
+
+void processAssig(AST *a) {
+	string name = a->down->text;
+	Block *b = new Block;
+  a = a->down->right;
+	switch (a->type) {
+		case PLACE: b = processPlace(a); break;
+	}
+	blocks.insert(std::pair<string,Block*>(name, b));
+}
+
+// Returns true if you can place a wxh block at (x, y)
+// on Block b
+bool canPlace(Block *b, int x, int y, int w, int h) {
+
+}
+
+
+// Move moves the block and everything above it
+void processMove(AST *a) {
+	string name = a->down->text;
+	Block *b = blocks[name];
+	if (b == NULL) {
+		W(cout << "warning: ignoring instruction: block " << name << " undefined" << endl;)
+		return;
+	}
+	string nesw = a->down->right->text;
+  int num = toInt(a->down->right->right);
+	int newX = b->x + getdx(a);
+	int newY = b->y + getdy(a);
+  b->x = newX; b->y = newY;
+
+  Block bbb = *grid.blocks[0];
 }
 
 void exec(AST *a) {
 	a = a->down;
 	while (a != NULL) {
 		switch (a->type) {
-			case INT:  break;
+			case ASSIG: processAssig(a); break;
+			case MOVE: processMove(a); break;
 		}
 		a = a->right;
 	}
 }
 
+// Returns true if (x,y) is inside the block (in parent's coordinate system)
+inline bool contains(Block *b, int x, int y) {
+  return x >= b->x && y >= b->y && x < b->x+b->w && y < b->y+b->h;
+}
+// Returns the height at the specified position
+int heightAt(Block *b, int x, int y) {
+  int n = 0;
+  for (int i = 0; i < b->blocks.size(); i++) {
+    Block bb = *b->blocks[i];
+    if (contains(&bb, x,y)) {
+      n += heightAt(&bb, x, y) + 1;
+      break;
+    }
+  }
+  return n;
+}
 
 // Debug function to print a block's heights
-void printBlock(Block *b) {
+void printBlock(Block *b, bool fancy) {
 #ifdef DEBUG
-	cout << "+";
-	for (int i = 0; i < b->w*2-1; i++) cout << (i%2==0?"-":"+");
-	cout << "+" << endl;
+	if (fancy) cout << "+";
+	if (fancy)  for (int i = 0; i < b->w*2-1; i++) cout << (i%2==0?"-":"+");
+	if (fancy)  cout << "+" << endl;
 
 	for (int i = 0; i < b->h; i++) {
 		for (int j = 0; j < b->w; j++) {
-			cout << "|" << "x";
+			if (fancy) cout << "|";
+      cout << heightAt(&grid, j, i);
+      if (!fancy) cout << " ";
 		}
-		cout << "|" << endl;
-		cout << "+";
-		for (int i = 0; i < b->w*2-1; i++) cout << (i%2==0?"-":"+");
-		cout << "+" << endl;
+		if (fancy) cout << "|" << endl;
+		if (fancy) cout << "+";
+		if (fancy) for (int i = 0; i < b->w*2-1; i++) cout << (i%2==0?"-":"+");
+		if (fancy) cout << "+";
+    cout << endl;
 	}
 #endif
 }
@@ -188,10 +298,10 @@ int main() {
   root = NULL;
   ANTLR(lego(&root), stdin);
   initGrid(root->down);
-  loadDefs(root->down->right->right);
+  processDefs(root->down->right->right);
   exec(root->down->right);
   ASTPrint(root);
-  printBlock(&grid);
+  printBlock(&grid, false);
 }
 >>
 
@@ -258,5 +368,3 @@ push: block (PUSH^ ppr);
 ppr: ID (PUSH^ ppr|);
 
 block: ID|coords;
-
- 
