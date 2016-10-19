@@ -4,6 +4,7 @@
 #include <iostream>
 #include <map>
 #include <vector>
+#include <algorithm>
 
 #define DEBUG
 #ifdef DEBUG
@@ -54,8 +55,6 @@ AST *root;
 void zzcr_attr(Attrib *attr, int type, char *text) {
   attr->text = text;
   attr->type = type;
-
-// This is bullshit
 /*  if (type == ID) attr->kind = "id";
 
   else {
@@ -152,7 +151,40 @@ map<string, AST*> functions;
 map<string, Block*> blocks;
 Block grid;
 
+int heightAt(Block *b, int x, int y);
+
 inline int toInt(AST *a) { return atoi(a->text.c_str()); }
+
+Block *newBlock() {
+  Block *b;
+  b = new Block;
+  allBlocks.push_back(b);
+  return b;
+}
+
+Block *namedBlock(AST *a) {
+  return blocks[a->text];
+}
+
+// Attach block "b" to block "to"
+void attach(Block *b, Block *to) {
+  to->blocks.push_back(b);
+	b->parent = to;
+}
+
+// Detaches this block from it's parent and sets it's coordinates to (0,0)
+// Size is left unchanged
+void detach(Block *b) {
+  if (b->parent != NULL) {
+    Block *p = b->parent;
+    vector<Block*>::iterator it = find(p->blocks.begin(), p->blocks.end(), b);
+    if(it != p->blocks.end())
+      p->blocks.erase(it);
+    b->parent = NULL;
+  }
+  b->x = 0;
+  b->y = 0;
+}
 
 inline int getdx(AST *a) {
   string s = a->down->right->text;
@@ -177,6 +209,10 @@ void initGrid(AST *a) {
 	D(cerr << "Initialized grid of " << grid.w << "x" << grid.h << endl;)
 }
 
+// Processess and stores function definitions as plain AST
+// If the AST is semantically incorrect it will throw a runtime error
+// when executed, but not a compile-time error, because we do not analyze
+// it until it's executed
 void processDefs(AST *a) {
 	a = a->down;
 	while (a != NULL) {
@@ -187,12 +223,95 @@ void processDefs(AST *a) {
 	}
 }
 
+// Returns true if (x,y) is inside the block (in parent's coordinate system)
+inline bool contains(Block *b, int x, int y) {
+  return x >= b->x && y >= b->y && x < b->x+b->w && y < b->y+b->h;
+}
+
+// returns true if the block b is completely contained inside block a
+// That means you can place b on top of a without hanging edges
+// this function does not check coordinates, only sizes
+inline bool containsBlock(Block *a, Block *b) {
+  return a->w >= b->w && a->h >= b->h;
+}
+
+// Returns true if you can physically place the block stc
+// ontop of dst at the given coordinates (ignoring src's coords)
+bool canPlace(Block *src, Block *dst, int x, int y) {
+  if (!contains(dst,x,y)) {
+    D(cerr << "invalid canPlace: dst does not contain x,y" << endl;)
+  }
+  int h = heightAt(dst, x, y);
+  for (int i = 0; i < src->h; i++) {
+    for (int j = 0; j < src->w; j++) {
+      if (heightAt(dst, x+j, y+i) != h) {
+        D(cerr << "cannot place block: conflicts at ("<<x+j<<","<<y+i<<")"<<endl;)
+        return false;
+      }
+    }
+  }
+  return true;
+}
+
+// returns true if one or more coordinates of a and b are common
+bool intersects(Block *a, Block *b) {
+  if (b->w < a->w || b->h < a->h) return false;
+
+  // we check if one of the four corners of a is inside b or the other way around
+  return contains(a, b->x, b->y) || contains(a, b->x+b->w, b->y)
+    || contains(a, b->x, b->y+b->h) || contains(a, b->x+b->w, b->y+b->h)
+    || contains(b, a->x, a->y) || contains(b, a->x+a->w, a->y)
+    || contains(b, a->x, a->y+a->h) || contains(b, a->x+a->w, a->y+a->h);
+}
+
+Block *processPop(AST *a) {
+  return NULL;
+}
+Block *processPush(AST *a) {
+  cout << "ast of a push"<<endl;
+  ASTPrint(a);
+  AST *x = a->down;
+  AST *y = x->right;
+  Block *b1;
+  if (x->kind == "list") { // block literal
+    b1 = newBlock();
+    b1->w = toInt(x->down);
+    b1->h = toInt(x->down->right);
+    D(cerr << "Created anonymous block of " << b1->w << "x" << b1->h << " for push" << endl;)
+  }
+  // else it's a named block
+  else {
+    b1 = namedBlock(x);
+    D(cerr << "Named block [" << x->text << "] for push" << endl;)
+  }
+  Block *b2 = namedBlock(y);
+  D(cerr << "finding spot on " << y->text << " ("<<b2->x << "," << b2->y << ")["<<b2->w<<"x"<<b2->h<<"]"<<endl;)
+  bool found = false;
+  int fx = 0;
+  int fy = 0;
+  for (int i = 0; i <= b2->h-b1->h && !found; i++) {
+    for (int j = 0; j <= b2->w-b1->w && !found; j++) {
+      bool can = canPlace(b1, b2, b2->x, b2->y);
+      if (can) {
+        D(cerr << "got position for block ("<<j+b2->x<<","<<i+b2->y<<"): "<<endl;)
+        fx = j+b2->x; fy = i+b2->y;
+        found = true;
+      }
+    }
+  }
+  if (found) {
+    detach(b1);
+    b1->x = fx;
+    b1->y = fy;
+    attach(b1, b2);
+  }
+
+}
+
 
 
 Block *processPlace(AST *a) {
-	Block *b;
-  b = new Block;
-  allBlocks.push_back(b);
+  Block *b = newBlock();
 
 	AST *size = a->down;
 	AST *coords = size->right;
@@ -203,8 +322,7 @@ Block *processPlace(AST *a) {
 	b->w = toInt(size->down);
 	b->h = toInt(size->down->right);
 
-	grid.blocks.push_back(b);
-	b->parent = &grid;
+  attach(b, &grid);
 
 	return b;
 }
@@ -216,49 +334,42 @@ void processAssig(AST *a) {
   a = a->down->right;
 	switch (a->type) {
 		case PLACE: b = processPlace(a); break;
+    case PUSH: b = a->text == "PUSH" ? processPush(a) : processPop(a); break;
 	}
-	blocks.insert(std::pair<string,Block*>(name, b));
+	blocks.insert(std::pair<string, Block*>(name, b));
 }
 
-// Returns true if you can place a wxh block at (x, y)
-// on Block b
-bool canPlace(Block *b, int x, int y, int w, int h) {
-
-}
 
 
 // Move moves the block and everything above it
 void processMove(AST *a) {
-	string name = a->down->text;
-	Block *b = blocks[name];
+  Block *b = namedBlock(a->down);
 	if (b == NULL) {
-		W(cout << "warning: ignoring instruction: block " << name << " undefined" << endl;)
+		W(cout << "warning: ignoring instruction: block " << a->down->text << " undefined" << endl;)
 		return;
 	}
 	string nesw = a->down->right->text;
   int num = toInt(a->down->right->right);
 	int newX = b->x + getdx(a);
 	int newY = b->y + getdy(a);
+  // TODO checks
   b->x = newX; b->y = newY;
-
-  Block bbb = *grid.blocks[0];
 }
+
+
 
 void exec(AST *a) {
 	a = a->down;
 	while (a != NULL) {
 		switch (a->type) {
 			case ASSIG: processAssig(a); break;
-			case MOVE: processMove(a); break;
+      case MOVE: processMove(a); break;
 		}
 		a = a->right;
 	}
 }
 
-// Returns true if (x,y) is inside the block (in parent's coordinate system)
-inline bool contains(Block *b, int x, int y) {
-  return x >= b->x && y >= b->y && x < b->x+b->w && y < b->y+b->h;
-}
+
 // Returns the height at the specified position
 int heightAt(Block *b, int x, int y) {
   int n = 0;
@@ -300,7 +411,7 @@ int main() {
   initGrid(root->down);
   processDefs(root->down->right->right);
   exec(root->down->right);
-  ASTPrint(root);
+//  ASTPrint(root);
   printBlock(&grid, false);
 }
 >>
