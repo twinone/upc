@@ -152,6 +152,9 @@ map<string, Block*> blocks;
 Block grid;
 
 int heightAt(Block *b, int x, int y);
+Block* top(int x, int y);
+int level(Block *b);
+inline bool contains(Block *b, int x, int y);
 
 inline int toInt(AST *a) { return atoi(a->text.c_str()); }
 
@@ -185,6 +188,25 @@ void detach(Block *b) {
   b->x = 0;
   b->y = 0;
 }
+
+// Get the block that contains (x,y)
+Block *at(Block *b, int x, int y) {
+  for (int i = 0; i < b->blocks.size(); i++) {
+    if (contains(b->blocks[i], x, y)) return b->blocks[i];
+  }
+  return NULL;
+}
+
+// Gets the block that's on the top of the stack at the position (x,y)
+Block *top(int x, int y) {
+  Block *r = &grid;
+  while (true) {
+    Block *t = at(r, x, y);
+    if (t == NULL) return r;
+    r = t;
+  }
+}
+
 
 inline int getdx(AST *a) {
   string s = a->down->right->text;
@@ -223,7 +245,7 @@ void processDefs(AST *a) {
 	}
 }
 
-// Returns true if (x,y) is inside the block (in parent's coordinate system)
+// Returns true if (x,y) is inside the block
 inline bool contains(Block *b, int x, int y) {
   return x >= b->x && y >= b->y && x < b->x+b->w && y < b->y+b->h;
 }
@@ -235,22 +257,23 @@ inline bool containsBlock(Block *a, Block *b) {
   return a->w >= b->w && a->h >= b->h;
 }
 
-// Returns true if you can physically place the block stc
+// Returns n>=0 if you can physically place the block
 // ontop of dst at the given coordinates (ignoring src's coords)
-bool canPlace(Block *src, Block *dst, int x, int y) {
+// If it cannot be placed, it returns -1
+int canPlace(Block *src, Block *dst, int x, int y) {
   if (!contains(dst,x,y)) {
     D(cerr << "invalid canPlace: dst does not contain x,y" << endl;)
   }
-  int h = heightAt(dst, x, y);
+  int h = heightAt(&grid, x,y);
   for (int i = 0; i < src->h; i++) {
     for (int j = 0; j < src->w; j++) {
-      if (heightAt(dst, x+j, y+i) != h) {
-        D(cerr << "cannot place block: conflicts at ("<<x+j<<","<<y+i<<")"<<endl;)
-        return false;
+      if (heightAt(&grid, x+j, y+i) != h) {
+        D(cerr << "cannot place block: conflicts at ("<<x+j<<","<<y+i<<") expected"<<h<<", but got "<<(heightAt(&grid, x+j, y+i))<<endl;)
+        return -1;
       }
     }
   }
-  return true;
+  return h;
 }
 
 // returns true if one or more coordinates of a and b are common
@@ -268,8 +291,6 @@ Block *processPop(AST *a) {
   return NULL;
 }
 Block *processPush(AST *a) {
-  cout << "ast of a push"<<endl;
-  ASTPrint(a);
   AST *x = a->down;
   AST *y = x->right;
   Block *b1;
@@ -282,7 +303,7 @@ Block *processPush(AST *a) {
   // else it's a named block
   else {
     b1 = namedBlock(x);
-    D(cerr << "Named block [" << x->text << "] for push" << endl;)
+    D(cerr << "Named block " << x->text << " "<<"["<<b1->w<<"x"<<b1->h<<"]" << " for push" << endl;)
   }
   Block *b2 = namedBlock(y);
   D(cerr << "finding spot on " << y->text << " ("<<b2->x << "," << b2->y << ")["<<b2->w<<"x"<<b2->h<<"]"<<endl;)
@@ -303,9 +324,11 @@ Block *processPush(AST *a) {
     detach(b1);
     b1->x = fx;
     b1->y = fy;
-    attach(b1, b2);
+    attach(b1, top(fx, fy));
+  } else {
+    D(cerr << "no spot found for the block" << endl;)
   }
-
+  return NULL;
 }
 
 
@@ -323,7 +346,6 @@ Block *processPlace(AST *a) {
 	b->h = toInt(size->down->right);
 
   attach(b, &grid);
-
 	return b;
 }
 
@@ -369,10 +391,17 @@ void exec(AST *a) {
 	}
 }
 
+// Returns how many blocks are under this block
+int level(Block *b) {
+  if (b->parent == NULL) return 0;
+  return level(b->parent) + 1;
+}
 
 // Returns the height at the specified position
+// The height is defined as the number of blocks on top of it
+// Counting from block b
 int heightAt(Block *b, int x, int y) {
-  int n = 0;
+  /*int n = 0;
   for (int i = 0; i < b->blocks.size(); i++) {
     Block bb = *b->blocks[i];
     if (contains(&bb, x,y)) {
@@ -380,7 +409,10 @@ int heightAt(Block *b, int x, int y) {
       break;
     }
   }
-  return n;
+
+
+  return n;*/
+  return level(top(x,y));
 }
 
 // Debug function to print a block's heights
