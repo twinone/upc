@@ -144,6 +144,8 @@ typedef struct Block {
 	vector<Block*> blocks;
 	// The block below this one
 	Block* parent;
+
+  bool attached;
 } Block;
 
 vector<Block*> allBlocks;
@@ -151,16 +153,19 @@ map<string, AST*> functions;
 map<string, Block*> blocks;
 Block grid;
 
-int heightAt(Block *b, int x, int y);
+int heightAt(int x, int y);
 Block* top(int x, int y);
 int level(Block *b);
 inline bool contains(Block *b, int x, int y);
+void printBlock(Block *b, bool fancy);
 
 inline int toInt(AST *a) { return atoi(a->text.c_str()); }
 
 Block *newBlock() {
   Block *b;
   b = new Block;
+  b->x = -1;
+  b->y = -1;
   allBlocks.push_back(b);
   return b;
 }
@@ -173,6 +178,7 @@ Block *namedBlock(AST *a) {
 void attach(Block *b, Block *to) {
   to->blocks.push_back(b);
 	b->parent = to;
+  b->attached = true;
 }
 
 // Detaches this block from it's parent and sets it's coordinates to (0,0)
@@ -185,9 +191,12 @@ void detach(Block *b) {
       p->blocks.erase(it);
     b->parent = NULL;
   }
-  b->x = 0;
-  b->y = 0;
+  b->x = -1;
+  b->y = -1;
+  b->attached = false;
 }
+
+inline bool isDetached(Block *b) { return b->x != -1 && b->y != -1; }
 
 // Get the block that contains (x,y)
 Block *at(Block *b, int x, int y) {
@@ -260,15 +269,13 @@ inline bool containsBlock(Block *a, Block *b) {
 // Returns n>=0 if you can physically place the block
 // ontop of dst at the given coordinates (ignoring src's coords)
 // If it cannot be placed, it returns -1
-int canPlace(Block *src, Block *dst, int x, int y) {
-  if (!contains(dst,x,y)) {
-    D(cerr << "invalid canPlace: dst does not contain x,y" << endl;)
-  }
-  int h = heightAt(&grid, x,y);
+int canPlace(Block *src,  int x, int y) {
+  Block *dst = top(x, y);
+  int h = heightAt(x,y);
   for (int i = 0; i < src->h; i++) {
     for (int j = 0; j < src->w; j++) {
-      if (heightAt(&grid, x+j, y+i) != h) {
-        D(cerr << "cannot place block: conflicts at ("<<x+j<<","<<y+i<<") expected"<<h<<", but got "<<(heightAt(&grid, x+j, y+i))<<endl;)
+      if (heightAt(x+j, y+i) != h) {
+        //D(cerr << "cannot place block: conflicts at ("<<x+j<<","<<y+i<<") expected"<<h<<", but got "<<(heightAt(x+j, y+i))<<endl;)
         return -1;
       }
     }
@@ -306,21 +313,22 @@ Block *processPush(AST *a) {
     D(cerr << "Named block " << x->text << " "<<"["<<b1->w<<"x"<<b1->h<<"]" << " for push" << endl;)
   }
   Block *b2 = namedBlock(y);
-  D(cerr << "finding spot on " << y->text << " ("<<b2->x << "," << b2->y << ")["<<b2->w<<"x"<<b2->h<<"]"<<endl;)
-  bool found = false;
+  int foundh = -1;
   int fx = 0;
   int fy = 0;
-  for (int i = 0; i <= b2->h-b1->h && !found; i++) {
-    for (int j = 0; j <= b2->w-b1->w && !found; j++) {
-      bool can = canPlace(b1, b2, b2->x, b2->y);
-      if (can) {
-        D(cerr << "got position for block ("<<j+b2->x<<","<<i+b2->y<<"): "<<endl;)
+  for (int i = 0; i <= b2->h-b1->h; i++) {
+    for (int j = 0; j <= b2->w-b1->w; j++) {
+      int nh = canPlace(b1, b2->x+j, b2->y+i);
+      if (foundh == -1 || (nh >= level(b2) && nh < foundh)) {
+        //D(cerr << "got better pos for block ("<<j+b2->x<<","<<i+b2->y<<"): "<<nh<<" old was:"<<foundh<<endl;)
         fx = j+b2->x; fy = i+b2->y;
-        found = true;
+        foundh = nh;
       }
     }
   }
-  if (found) {
+  if (foundh != -1) {
+    D(cerr << "placed at ("<<fx<<","<<fy<<"): "<<endl;)
+
     detach(b1);
     b1->x = fx;
     b1->y = fy;
@@ -400,7 +408,7 @@ int level(Block *b) {
 // Returns the height at the specified position
 // The height is defined as the number of blocks on top of it
 // Counting from block b
-int heightAt(Block *b, int x, int y) {
+int heightAt(int x, int y) {
   /*int n = 0;
   for (int i = 0; i < b->blocks.size(); i++) {
     Block bb = *b->blocks[i];
@@ -412,7 +420,13 @@ int heightAt(Block *b, int x, int y) {
 
 
   return n;*/
-  return level(top(x,y));
+  // Doesnt work with overlapping blocks
+  /*return level(top(x,y));*/
+  int n = 0;
+  for (int i = 0; i < allBlocks.size(); i++) {
+    if (allBlocks[i]->attached && contains(allBlocks[i], x, y)) n++;
+  }
+  return n;
 }
 
 // Debug function to print a block's heights
@@ -425,7 +439,7 @@ void printBlock(Block *b, bool fancy) {
 	for (int i = 0; i < b->h; i++) {
 		for (int j = 0; j < b->w; j++) {
 			if (fancy) cout << "|";
-      cout << heightAt(&grid, j, i);
+      cout << heightAt(j, i);
       if (!fancy) cout << " ";
 		}
 		if (fancy) cout << "|" << endl;
