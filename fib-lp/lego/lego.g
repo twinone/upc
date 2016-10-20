@@ -154,11 +154,12 @@ map<string, Block*> blocks;
 Block grid;
 
 int heightAt(int x, int y);
+int heightAt(Block *b);
 Block* top(int x, int y);
 int level(Block *b);
 inline bool contains(Block *b, int x, int y);
 void printBlock(Block *b, bool fancy);
-
+void exec(AST *a);
 inline int toInt(AST *a) { return atoi(a->text.c_str()); }
 
 Block *newBlock() {
@@ -166,6 +167,8 @@ Block *newBlock() {
   b = new Block;
   b->x = -1;
   b->y = -1;
+  b->parent = NULL;
+  b->attached = false;
   allBlocks.push_back(b);
   return b;
 }
@@ -194,6 +197,14 @@ void detach(Block *b) {
   b->x = -1;
   b->y = -1;
   b->attached = false;
+}
+
+void destroy(Block *b) {
+  detach(b);
+  for (int i = 0; i < b->blocks.size(); i++) destroy(b->blocks[i]);
+  vector<Block*>::iterator it = find(allBlocks.begin(), allBlocks.end(), b);
+  if(it != allBlocks.end())
+    allBlocks.erase(it);
 }
 
 inline bool isDetached(Block *b) { return b->x != -1 && b->y != -1; }
@@ -249,7 +260,8 @@ void processDefs(AST *a) {
 	while (a != NULL) {
 		D(cerr<<"READ DEF "<<a->down->text<<endl;)
 //		D(ASTPrint(a->down->right);)
-		functions.insert(std::pair<string,AST*>(a->down->text,a->down->right));
+    functions[a->down->text] = a->down->right;
+//		functions.insert(std::pair<string,AST*>(a->down->text,a->down->right));
 		a = a->right;
 	}
 }
@@ -266,21 +278,27 @@ inline bool containsBlock(Block *a, Block *b) {
   return a->w >= b->w && a->h >= b->h;
 }
 
+int canPlace(int w, int h, int x, int y) {
+  Block *dst = top(x, y);
+  int hh = heightAt(x,y);
+  for (int i = 0; i < h; i++)
+    for (int j = 0; j < w; j++)
+      if (heightAt(x+j, y+i) != hh)
+        //D(cerr << "cannot place block: conflicts at ("<<x+j<<","<<y+i<<") expected"<<h<<", but got "<<(heightAt(x+j, y+i))<<endl;)
+        return -1;
+  return hh;
+}
 // Returns n>=0 if you can physically place the block
 // ontop of dst at the given coordinates (ignoring src's coords)
 // If it cannot be placed, it returns -1
 int canPlace(Block *src,  int x, int y) {
-  Block *dst = top(x, y);
-  int h = heightAt(x,y);
-  for (int i = 0; i < src->h; i++) {
-    for (int j = 0; j < src->w; j++) {
-      if (heightAt(x+j, y+i) != h) {
-        //D(cerr << "cannot place block: conflicts at ("<<x+j<<","<<y+i<<") expected"<<h<<", but got "<<(heightAt(x+j, y+i))<<endl;)
-        return -1;
-      }
-    }
-  }
-  return h;
+  return canPlace(src->w, src->h, x, y);
+}
+void updateCoords(Block *b, int dx, int dy) {
+  b->x += dx;
+  b->y += dy;
+  for (int i = 0; i < b->blocks.size(); i++)
+    updateCoords(b->blocks[i], dx, dy);
 }
 
 // returns true if one or more coordinates of a and b are common
@@ -295,8 +313,16 @@ bool intersects(Block *a, Block *b) {
 }
 
 Block *processPop(AST *a) {
-  return NULL;
+  Block *b1 = namedBlock(a->down);
+  Block *b2 = namedBlock(a->down->right);
+  if (b1 == NULL || b2 == NULL) {
+    D(cerr << "warning: b1 or b2 null in pop";)
+    return NULL;
+  }
+  destroy(b1);
+  return b2;
 }
+
 Block *processPush(AST *a) {
   AST *x = a->down;
   AST *y = x->right;
@@ -305,20 +331,31 @@ Block *processPush(AST *a) {
     b1 = newBlock();
     b1->w = toInt(x->down);
     b1->h = toInt(x->down->right);
-    D(cerr << "Created anonymous block of " << b1->w << "x" << b1->h << " for push" << endl;)
+    D(cerr << "anon (" << b1->w << "x" << b1->h << ") ";)
   }
   // else it's a named block
   else {
     b1 = namedBlock(x);
-    D(cerr << "Named block " << x->text << " "<<"["<<b1->w<<"x"<<b1->h<<"]" << " for push" << endl;)
+    D(cerr << "block " << x->text << " "<<"["<<b1->w<<"x"<<b1->h<<"]" << " ";)
   }
-  Block *b2 = namedBlock(y);
+
+  Block *b2;
+
+  if (y->text == "PUSH") {
+    b2 = processPush(y);
+  } else if (y->text == "POP") {
+    b2 = processPop(y);
+  } else {
+    b2 = namedBlock(y);
+  }
   int foundh = -1;
   int fx = 0;
   int fy = 0;
+
   for (int i = 0; i <= b2->h-b1->h; i++) {
     for (int j = 0; j <= b2->w-b1->w; j++) {
       int nh = canPlace(b1, b2->x+j, b2->y+i);
+
       if (foundh == -1 || (nh >= level(b2) && nh < foundh)) {
         //D(cerr << "got better pos for block ("<<j+b2->x<<","<<i+b2->y<<"): "<<nh<<" old was:"<<foundh<<endl;)
         fx = j+b2->x; fy = i+b2->y;
@@ -326,17 +363,20 @@ Block *processPush(AST *a) {
       }
     }
   }
+
   if (foundh != -1) {
     D(cerr << "placed at ("<<fx<<","<<fy<<"): "<<endl;)
 
     detach(b1);
     b1->x = fx;
     b1->y = fy;
+
     attach(b1, top(fx, fy));
+    return b2;
   } else {
-    D(cerr << "no spot found for the block" << endl;)
+    W(cerr << "warning: no spot found for the block" << endl;)
+    return NULL;
   }
-  return NULL;
 }
 
 
@@ -366,11 +406,51 @@ void processAssig(AST *a) {
 		case PLACE: b = processPlace(a); break;
     case PUSH: b = a->text == "PUSH" ? processPush(a) : processPop(a); break;
 	}
-	blocks.insert(std::pair<string, Block*>(name, b));
+  blocks[name] = b;
 }
 
 
+int processInt(AST *a) {
+  if (a->type == HEIGHT) {
+    return heightAt(namedBlock(a->down));
+  } else {
+    return toInt(a);
+  }
+  return -1;
+}
 
+bool processBool(AST *a) {
+  if (a->type == BOOL) return a->text == "true";
+  if (a->type == FITS) {
+    Block *b = namedBlock(a->down);
+    int w = toInt(a->down->right);
+    int h = toInt(a->down->right->right);
+    int hh = toInt(a->down->right->right->right);
+    // Return true if there fits a block of wxh ontop of
+    // the block b with at most hh height
+    for (int i = 0; i < b->h; i++) {
+      for (int j = 0; j < b->w; j++) {
+        int ph = canPlace(w,h, b->x+j, b->y+i);
+        if (ph >= 0 && ph < hh) return true;
+      }
+    }
+    return false;
+  }
+  if (a->type == AND) {
+    return processBool(a->down) && processBool(a->down->right);
+  }
+  if (a->type == CMP) {
+    int l = processInt(a->down);
+    int r = processInt(a->down->right);
+    if (a->text == "<") return l < r;
+    if (a->text == "<=") return l <= r;
+    if (a->text == ">") return l > r;
+    if (a->text == ">=") return l >= r;
+    if (a->text == "==") return l == r;
+    if (a->text == "!=") return l != r;
+  }
+  return false;
+}
 // Move moves the block and everything above it
 void processMove(AST *a) {
   Block *b = namedBlock(a->down);
@@ -380,12 +460,24 @@ void processMove(AST *a) {
 	}
 	string nesw = a->down->right->text;
   int num = toInt(a->down->right->right);
+  int dx = getdx(a);
+  int dy = getdy(a);
 	int newX = b->x + getdx(a);
 	int newY = b->y + getdy(a);
+  if (!contains(&grid, newX, newY)) {
+    W(cout << "warning: ignoring instruction: "<<a->text<<": out of bounds" << endl;)
+    return;
+  }
   // TODO checks
-  b->x = newX; b->y = newY;
+  updateCoords(b, dx, dy);
 }
 
+void processWhile(AST *a) {
+  ASTPrint(a->down);
+  while (processBool(a->down)) {
+    exec(a->down->right);
+  }
+}
 
 
 void exec(AST *a) {
@@ -394,6 +486,14 @@ void exec(AST *a) {
 		switch (a->type) {
 			case ASSIG: processAssig(a); break;
       case MOVE: processMove(a); break;
+      case WHILE: processWhile(a); break;
+      default:
+        AST *f = functions[a->text];
+        if (f != NULL) {
+          D(cerr << "func "<<a->text<<endl;)
+          exec(f);
+        }
+        break;
 		}
 		a = a->right;
 	}
@@ -405,23 +505,10 @@ int level(Block *b) {
   return level(b->parent) + 1;
 }
 
-// Returns the height at the specified position
-// The height is defined as the number of blocks on top of it
-// Counting from block b
+int heightAt(Block *b) {
+  return heightAt(b->x, b->y);
+}
 int heightAt(int x, int y) {
-  /*int n = 0;
-  for (int i = 0; i < b->blocks.size(); i++) {
-    Block bb = *b->blocks[i];
-    if (contains(&bb, x,y)) {
-      n += heightAt(&bb, x, y) + 1;
-      break;
-    }
-  }
-
-
-  return n;*/
-  // Doesnt work with overlapping blocks
-  /*return level(top(x,y));*/
   int n = 0;
   for (int i = 0; i < allBlocks.size(); i++) {
     if (allBlocks[i]->attached && contains(allBlocks[i], x, y)) n++;
@@ -448,6 +535,7 @@ void printBlock(Block *b, bool fancy) {
 		if (fancy) cout << "+";
     cout << endl;
 	}
+  cout << endl;
 #endif
 }
 
@@ -467,6 +555,7 @@ int main() {
 
 // Tokens defined higher have a higher precedence
 #token SPACE "[\ \n\t]" << zzskip();>>
+#token PRINT "PRINT"
 #token BOOL "true|false" // placeholder
 #token AND "AND"
 #token MOVE "MOVE"
@@ -499,7 +588,7 @@ ops: (op)* <<#0=createASTlist(_sibling);>>;
 defs: (def)* <<#0=createASTlist(_sibling);>>;
 
 griddef: GRID^ INT INT;
-op: move|while_loop|fits|height|assig;
+op: move|while_loop|fits|height|assig|PRINT;
 
 
 assig: ID (ASSIG^ blockexpr|);
