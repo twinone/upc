@@ -5,9 +5,13 @@ all:
 	antlr -gt $(PROG).g
 	dlg -ci parser.dlg scan.c
 	$(CC) $(CC_FLAGS) -o $(PROG).o $(PROG).c scan.c err.c
+	@make halfclean
 
 
-clean:
-	rm -f *.o *.c parser.dlg tokens.h mode.h
+halfclean:
+	rm -f *.c *.h *.dlg
+
+clean: halfclean
+	rm $(PROG).o
 
 .PHONY: clean
