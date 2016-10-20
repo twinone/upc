@@ -1,7 +1,0 @@
-a := 0
-while a != 10 do
-	if a%2 == 0 then
-		write a
-	fi
-	a := a + 1
-done
