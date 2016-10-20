@@ -5,15 +5,19 @@
 #include <map>
 #include <vector>
 #include <algorithm>
+#include <iomanip>
 
-#define DEBUG
+
+// Uncomment for debugging lines
+//#define DEBUG
 #ifdef DEBUG
 #define D(x) x
 #else
 #define D(x)
 #endif
 
-#define WARN
+// Uncomment for user-warnings (wrongly placed blocks, out of bounds, etc)
+//#define WARN
 #ifdef WARN
 #define W(x) x
 #else
@@ -53,15 +57,11 @@ AST *root;
 
 // function to fill token information
 void zzcr_attr(Attrib *attr, int type, char *text) {
+  // Changed from teachers' implementation
+  // I don't use kind, it's much easier to switch over type ints
+  // and have the text attritubte to be consistent...
   attr->text = text;
   attr->type = type;
-/*  if (type == ID) attr->kind = "id";
-
-  else {
-    attr->kind = text;
-    attr->text = "";
-  }
-*/
 }
 
 // function to create a new AST node
@@ -69,7 +69,7 @@ AST* createASTnode(Attrib* attr, int type, char* text) {
   AST* as = new AST;
   as->kind = attr->kind;
   as->text = attr->text;
-  as->type = attr->type; // We want this
+  as->type = attr->type; // We want the type!
   as->right = NULL;
   as->down = NULL;
   return as;
@@ -152,6 +152,13 @@ vector<Block*> allBlocks;
 map<string, AST*> functions;
 map<string, Block*> blocks;
 Block grid;
+
+
+////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////
 
 int heightAt(int x, int y);
 int heightAt(Block *b);
@@ -259,9 +266,7 @@ void processDefs(AST *a) {
 	a = a->down;
 	while (a != NULL) {
 		D(cerr<<"READ DEF "<<a->down->text<<endl;)
-//		D(ASTPrint(a->down->right);)
     functions[a->down->text] = a->down->right;
-//		functions.insert(std::pair<string,AST*>(a->down->text,a->down->right));
 		a = a->right;
 	}
 }
@@ -473,7 +478,6 @@ void processMove(AST *a) {
 }
 
 void processWhile(AST *a) {
-  ASTPrint(a->down);
   while (processBool(a->down)) {
     exec(a->down->right);
   }
@@ -518,7 +522,6 @@ int heightAt(int x, int y) {
 
 // Debug function to print a block's heights
 void printBlock(Block *b, bool fancy) {
-#ifdef DEBUG
 	if (fancy) cout << "+";
 	if (fancy)  for (int i = 0; i < b->w*2-1; i++) cout << (i%2==0?"-":"+");
 	if (fancy)  cout << "+" << endl;
@@ -526,7 +529,7 @@ void printBlock(Block *b, bool fancy) {
 	for (int i = 0; i < b->h; i++) {
 		for (int j = 0; j < b->w; j++) {
 			if (fancy) cout << "|";
-      cout << heightAt(j, i);
+      cout << std::right << std::setw(3) << heightAt(j, i);
       if (!fancy) cout << " ";
 		}
 		if (fancy) cout << "|" << endl;
@@ -535,8 +538,6 @@ void printBlock(Block *b, bool fancy) {
 		if (fancy) cout << "+";
     cout << endl;
 	}
-  cout << endl;
-#endif
 }
 
 int main() {
@@ -545,8 +546,14 @@ int main() {
   initGrid(root->down);
   processDefs(root->down->right->right);
   exec(root->down->right);
-//  ASTPrint(root);
+  cout << "============================== AST ==============================" << endl;
+  ASTPrint(root);
+  cout << "============================== GRID =============================" << endl;
   printBlock(&grid, false);
+  cout << "=================================================================" << endl;
+  for (int i = 0; i < allBlocks.size(); i++) {
+    delete allBlocks[i];
+  }
 }
 >>
 
