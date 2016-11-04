@@ -1,0 +1,65 @@
+package com.example.pr_idi.mydatabaseexample.ui;
+
+
+import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+
+import com.example.pr_idi.mydatabaseexample.model.Film;
+import com.example.pr_idi.mydatabaseexample.db.FilmData;
+import com.example.pr_idi.mydatabaseexample.ui.fragments.FilmListFragment;
+
+import java.util.List;
+
+public class MainActivity extends AppCompatActivity {
+    private FilmData mFilmData;
+    private List<Film> mFilms;
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+
+        mFilmData = new FilmData(this);
+        mFilmData.open();
+        updateFilms();
+
+        getFragmentManager()
+                .beginTransaction()
+                .replace(android.R.id.content, new FilmListFragment(), null)
+                .commit();
+    }
+
+
+    @Override
+    protected void onResume() {
+        mFilmData.open();
+        super.onResume();
+    }
+
+    @Override
+    protected void onPause() {
+        mFilmData.close();
+        super.onPause();
+    }
+
+    public void insertFilm(Film f) {
+        mFilmData.insertFilm(f);
+        updateFilms();
+        // TODO tell FilmListFragment
+    }
+    /**
+     * Updates the list of films (should be called after a new insertion or deletion)
+     */
+    public void updateFilms() {
+        mFilms = mFilmData.getAllFilms();
+    }
+
+    /**
+     *
+     * @return The list of all available films
+     */
+    public List<Film> getFilms() {
+        return mFilms;
+    }
+
+}
