@@ -23,4 +23,10 @@ dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     testCompile 'junit:junit:4.12'
     compile 'com.android.support:appcompat-v7:22.2.1'
+
+    // RecyclerView
+    compile 'com.android.support:recyclerview-v7:22.2.1'
+
+    // Floating Action Button
+    compile 'com.android.support:design:22.2.1'
 }
