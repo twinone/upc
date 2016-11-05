@@ -75,9 +75,19 @@ public class Film {
         this.critics_rate = critics_rate;
     }
 
-    // Will be used by the ArrayAdapter in the ListView
     @Override
     public String toString() {
-        return String.format("%s - %s", title, director);
+        return id + " - " + title + " - " + director + " - " +
+                country + " - " + year + " - " + protagonist + " - " + critics_rate;
+    }
+
+    @Override
+    public int hashCode() {
+        return Long.valueOf(id).hashCode();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        return obj instanceof Film && ((Film) obj).getId() == getId();
     }
 }

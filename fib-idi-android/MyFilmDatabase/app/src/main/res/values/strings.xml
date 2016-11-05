@@ -9,4 +9,6 @@
     <string name="newfilm_year">Year</string>
     <string name="newfilm_protagonist">Protagonist</string>
     <string name="newfilm_critics_rate">Critics_rate</string>
+    <string name="deleted">Deleted %s</string>
+    <string name="undo">Undo</string>
 </resources>

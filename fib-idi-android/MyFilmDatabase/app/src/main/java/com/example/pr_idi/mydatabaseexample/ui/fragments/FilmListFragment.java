@@ -1,23 +1,19 @@
 package com.example.pr_idi.mydatabaseexample.ui.fragments;
 
 import android.app.Fragment;
-import android.content.Context;
-import android.graphics.Canvas;
-import android.graphics.drawable.Drawable;
-import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.DividerItemDecoration;
+import android.support.design.widget.Snackbar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.transition.TransitionManager;
+import android.support.v7.widget.helper.ItemTouchHelper;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
 import android.widget.TextView;
 
 import com.example.pr_idi.mydatabaseexample.model.Film;
@@ -33,9 +29,25 @@ import java.util.Set;
  */
 public class FilmListFragment extends Fragment implements View.OnClickListener, MainActivity.Listener {
 
+    /**
+     * Time to undo a removal
+     */
+    private static final int REMOVAL_TIMEOUT = 10000;
     private RecyclerView mRecycler;
     private MyAdapter mAdapter;
     private FloatingActionButton mAdd;
+    private long mRemovalId = -1;
+
+    private Handler mHandler = new Handler();
+    private Runnable mRemovalRunnable = new Runnable() {
+        @Override
+        public void run() {
+            flushRemoval();
+        }
+    };
+
+    private List<Film> mFilteredFilms;
+    private Snackbar mSnackBar;
 
     @Nullable
     @Override
@@ -46,12 +58,35 @@ public class FilmListFragment extends Fragment implements View.OnClickListener, 
 
         LinearLayoutManager llm = new LinearLayoutManager(getActivity());
         llm.setOrientation(LinearLayoutManager.VERTICAL);
-
         mRecycler.setLayoutManager(llm);
 
 
+        mRecycler.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                flushRemoval();
+                return false;
+            }
+        });
+
         mAdapter = new MyAdapter();
         mRecycler.setAdapter(mAdapter);
+
+        ItemTouchHelper.SimpleCallback cb = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
+            @Override
+            public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder holder, RecyclerView.ViewHolder target) {
+                return false;
+            }
+
+            @Override
+            public void onSwiped(RecyclerView.ViewHolder holder, int swipeDir) {
+                //Remove swiped item from list and notify the RecyclerView
+                int pos = holder.getAdapterPosition();
+                queueRemoval(mFilteredFilms.get(pos));
+            }
+        };
+        new ItemTouchHelper(cb).attachToRecyclerView(mRecycler);
+
 
         mAdd = (FloatingActionButton) root.findViewById(R.id.fab_add);
         mAdd.setOnClickListener(this);
@@ -60,6 +95,61 @@ public class FilmListFragment extends Fragment implements View.OnClickListener, 
         // Get events for film insertion / deletion
         getMainActivity().addOnFilmsChangedListener(this);
         return root;
+    }
+
+    /**
+     * Adds a film pending for removal
+     */
+    private void queueRemoval(Film f) {
+        long id = f.getId();
+        flushRemoval();
+        mRemovalId = id;
+        mSnackBar = Snackbar.make(
+                getView(),
+                getString(R.string.deleted, f.getTitle()),
+                Snackbar.LENGTH_INDEFINITE);
+        mSnackBar.setAction(R.string.undo, new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                cancelRemoval();
+                onFilmsChanged();
+            }
+        });
+        mSnackBar.show();
+
+        mHandler.postDelayed(mRemovalRunnable, REMOVAL_TIMEOUT);
+
+        onFilmsChanged();
+    }
+
+    private void cancelRemoval() {
+        mRemovalId = -1;
+        mHandler.removeCallbacks(mRemovalRunnable);
+    }
+
+    private void flushRemoval() {
+        Log.d("Main", "flush");
+        if (mRemovalId != -1) getMainActivity().remove(mRemovalId);
+        cancelRemoval();
+        if (mSnackBar != null) {
+            mSnackBar.dismiss();
+            mSnackBar = null;
+        }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+
+        // Make sure we actually remove removed films
+        flushRemoval();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        onFilmsChanged();
     }
 
     @Override
@@ -82,13 +172,9 @@ public class FilmListFragment extends Fragment implements View.OnClickListener, 
         return (MainActivity) getActivity();
     }
 
-    private List<Film> getFilms() {
-        return getMainActivity().getFilms();
-    }
-
 
     private class MyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-        private Set<Integer> mExpandedFilmIds = new HashSet<>();
+        private Set<Long> mExpandedFilmIds = new HashSet<>();
 
         @Override
         public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -99,16 +185,15 @@ public class FilmListFragment extends Fragment implements View.OnClickListener, 
         @Override
         public void onBindViewHolder(final RecyclerView.ViewHolder holder, int position) {
             final MyViewHolder h = (MyViewHolder) holder;
-            final Film f = getFilms().get(position);
-            final boolean isExpanded = mExpandedFilmIds.contains((int)f.getId());
+            final Film f = mFilteredFilms.get(position);
+            final boolean isExpanded = mExpandedFilmIds.contains(f.getId());
 
             View v = h.getView();
-            v.setActivated(isExpanded);
             v.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if (isExpanded) mExpandedFilmIds.remove((int) f.getId());
-                    else mExpandedFilmIds.add((int) f.getId());
+                    if (isExpanded) mExpandedFilmIds.remove(f.getId());
+                    else mExpandedFilmIds.add(f.getId());
 
                     notifyDataSetChanged();
                 }
@@ -137,7 +222,8 @@ public class FilmListFragment extends Fragment implements View.OnClickListener, 
 
         @Override
         public int getItemCount() {
-            return getFilms().size();
+            Log.d("Main", "getCount()" + mFilteredFilms.size());
+            return mFilteredFilms.size();
         }
 
     }
@@ -157,6 +243,17 @@ public class FilmListFragment extends Fragment implements View.OnClickListener, 
 
     @Override
     public void onFilmsChanged() {
+        mFilteredFilms = getMainActivity().getFilms();
+
+        Log.d("Main", "onFilmsChanged -- " + mFilteredFilms.size());
+
+        if (mRemovalId != -1) {
+            Film f = new Film();
+            f.setId(mRemovalId);
+            mFilteredFilms.remove(f);
+        }
+        Log.d("Main", "onFilmsChanged --->>>>" + mFilteredFilms.size());
+
         mAdapter.notifyDataSetChanged();
     }
 

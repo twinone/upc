@@ -59,6 +59,12 @@ public class FilmData {
                 values);
     }
 
+    public void deleteFilm(long id) {
+        Film f = new Film();
+        f.setId(id);
+        deleteFilm(f);
+    }
+
     public void deleteFilm(Film film) {
         long id = film.getId();
         db.delete(MySQLiteHelper.TABLE_FILMS, MySQLiteHelper.COLUMN_ID

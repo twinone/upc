@@ -13,6 +13,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
+
+    /**
+     * String to filter the shown elements with.
+     * The filter will apply Film.toString().contains(filter) to match
+     */
+    private String mFilter;
     private FilmData mFilmData;
     private List<Film> mFilms;
     private List<Listener> mListeners = new ArrayList<>();
@@ -55,7 +61,6 @@ public class MainActivity extends AppCompatActivity {
      * Updates the list of films (should be called after a new insertion or deletion)
      */
     public void updateFilms() {
-
         mFilms = mFilmData.getAllFilms();
 
         // let everyone know
@@ -68,12 +73,18 @@ public class MainActivity extends AppCompatActivity {
      * @return The list of all available films
      */
     public List<Film> getFilms() {
-        return mFilms;
+        return new ArrayList<>(mFilms);
     }
 
 
     public void addOnFilmsChangedListener(Listener l) {
         mListeners.add(l);
+    }
+
+    public void remove(long id) {
+        mFilmData.deleteFilm(id);
+
+        updateFilms();
     }
 
     public interface Listener {
