@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">MyDatabaseExample</string>
+    <string name="app_name">Films</string>
     <string name="new_film_tit">New Film</string>
 
 

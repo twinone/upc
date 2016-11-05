@@ -56,6 +56,8 @@ public class FilmListFragment extends Fragment implements View.OnClickListener, 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        getActivity().setTitle(R.string.app_name);
+
         View root = inflater.inflate(R.layout.fragment_film_list, null);
 
         insertDummyData();
