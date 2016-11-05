@@ -81,13 +81,4 @@ public class Film {
                 country + " - " + year + " - " + protagonist + " - " + critics_rate;
     }
 
-    @Override
-    public int hashCode() {
-        return Long.valueOf(id).hashCode();
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        return obj instanceof Film && ((Film) obj).getId() == getId();
-    }
 }

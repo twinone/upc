@@ -3,7 +3,6 @@ package com.example.pr_idi.mydatabaseexample.ui;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 
 import com.example.pr_idi.mydatabaseexample.model.Film;
 import com.example.pr_idi.mydatabaseexample.db.FilmData;
@@ -18,7 +17,7 @@ public class MainActivity extends AppCompatActivity {
      * String to filter the shown elements with.
      * The filter will apply Film.toString().contains(filter) to match
      */
-    private String mFilter;
+    private String mQuery;
     private FilmData mFilmData;
     private List<Film> mFilms;
     private List<Listener> mListeners = new ArrayList<>();
@@ -92,6 +91,11 @@ public class MainActivity extends AppCompatActivity {
          * Called when a film is inserted or deleted
          */
         void onFilmsChanged();
+    }
+
+    public String getQuery() {
+        if (mQuery == null) return "";
+        return mQuery;
     }
 
 }

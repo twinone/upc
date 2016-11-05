@@ -1,6 +1,8 @@
 package com.example.pr_idi.mydatabaseexample.ui.fragments;
 
 import android.app.Fragment;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
@@ -20,6 +22,7 @@ import com.example.pr_idi.mydatabaseexample.model.Film;
 import com.example.pr_idi.mydatabaseexample.R;
 import com.example.pr_idi.mydatabaseexample.ui.MainActivity;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -54,6 +57,7 @@ public class FilmListFragment extends Fragment implements View.OnClickListener, 
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_film_list, null);
 
+        insertDummyData();
         mRecycler = (RecyclerView) root.findViewById(R.id.recycler);
 
         LinearLayoutManager llm = new LinearLayoutManager(getActivity());
@@ -63,8 +67,10 @@ public class FilmListFragment extends Fragment implements View.OnClickListener, 
 
         mRecycler.setOnTouchListener(new View.OnTouchListener() {
             @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
-                flushRemoval();
+            public boolean onTouch(View view, MotionEvent e) {
+                if (e.getAction() == MotionEvent.ACTION_DOWN) {
+                    flushRemoval();
+                }
                 return false;
             }
         });
@@ -108,6 +114,7 @@ public class FilmListFragment extends Fragment implements View.OnClickListener, 
                 getView(),
                 getString(R.string.deleted, f.getTitle()),
                 Snackbar.LENGTH_INDEFINITE);
+
         mSnackBar.setAction(R.string.undo, new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -118,7 +125,6 @@ public class FilmListFragment extends Fragment implements View.OnClickListener, 
         mSnackBar.show();
 
         mHandler.postDelayed(mRemovalRunnable, REMOVAL_TIMEOUT);
-
         onFilmsChanged();
     }
 
@@ -128,7 +134,6 @@ public class FilmListFragment extends Fragment implements View.OnClickListener, 
     }
 
     private void flushRemoval() {
-        Log.d("Main", "flush");
         if (mRemovalId != -1) getMainActivity().remove(mRemovalId);
         cancelRemoval();
         if (mSnackBar != null) {
@@ -243,18 +248,44 @@ public class FilmListFragment extends Fragment implements View.OnClickListener, 
 
     @Override
     public void onFilmsChanged() {
-        mFilteredFilms = getMainActivity().getFilms();
-
-        Log.d("Main", "onFilmsChanged -- " + mFilteredFilms.size());
-
-        if (mRemovalId != -1) {
-            Film f = new Film();
-            f.setId(mRemovalId);
-            mFilteredFilms.remove(f);
+        mFilteredFilms = new ArrayList<>();
+        for (Film f : getMainActivity().getFilms()) {
+            if (mRemovalId != -1 && f.getId() == mRemovalId) continue;
+            if (!f.toString().contains(getMainActivity().getQuery())) continue;
+            mFilteredFilms.add(f);
         }
-        Log.d("Main", "onFilmsChanged --->>>>" + mFilteredFilms.size());
 
         mAdapter.notifyDataSetChanged();
     }
+
+    private void insertDummyData() {
+        SharedPreferences sp = getActivity().getSharedPreferences("init", Context.MODE_PRIVATE);
+        boolean init = sp.getBoolean("init", false);
+        if (init) return;
+
+        //sp.edit().putBoolean("init", true).apply();
+        insertFilm("Captain America", "Joe Russo", "USA", 2016, "", 0);
+        insertFilm("Finding Dory", "Andrew Stanton", "USA", 2016, "", 0);
+        insertFilm("Doctor Strange", "Scott Derrickson", "USA", 2016, "", 0);
+        insertFilm("Suicide Squad", "David Ayer", "USA", 2016, "", 0);
+        insertFilm("Star Trek Beyond", "Justin Lin", "USA", 2016, "", 0);
+    }
+
+    private void insertFilm(
+            String title,
+            String director,
+            String country,
+            int year,
+            String protagonist,
+            int critics_rate) {
+        Film f = new Film();
+        f.setTitle(title);
+        f.setDirector(director);
+        f.setCountry(country);
+        f.setYear(year);
+        f.setProtagonist(protagonist);
+        f.setCritics_rate(critics_rate);
+    }
+
 
 }
