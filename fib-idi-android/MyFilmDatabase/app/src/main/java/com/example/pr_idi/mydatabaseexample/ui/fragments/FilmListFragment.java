@@ -250,6 +250,7 @@ public class FilmListFragment extends Fragment implements View.OnClickListener, 
     @Override
     public void onFilmsChanged() {
         mFilteredFilms = new ArrayList<>();
+        if (!isAdded()) return;
         for (Film f : getMainActivity().getFilms()) {
             if (mRemovalId != -1 && f.getId() == mRemovalId) continue;
             if (!f.toString().contains(getMainActivity().getQuery())) continue;
