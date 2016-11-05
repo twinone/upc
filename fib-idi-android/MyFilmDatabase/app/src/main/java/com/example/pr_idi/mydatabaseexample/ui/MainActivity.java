@@ -3,16 +3,19 @@ package com.example.pr_idi.mydatabaseexample.ui;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 
 import com.example.pr_idi.mydatabaseexample.model.Film;
 import com.example.pr_idi.mydatabaseexample.db.FilmData;
 import com.example.pr_idi.mydatabaseexample.ui.fragments.FilmListFragment;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
     private FilmData mFilmData;
     private List<Film> mFilms;
+    private List<Listener> mListeners = new ArrayList<>();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -44,22 +47,40 @@ public class MainActivity extends AppCompatActivity {
 
     public void insertFilm(Film f) {
         mFilmData.insertFilm(f);
+
         updateFilms();
-        // TODO tell FilmListFragment
     }
+
     /**
      * Updates the list of films (should be called after a new insertion or deletion)
      */
     public void updateFilms() {
+
         mFilms = mFilmData.getAllFilms();
+
+        // let everyone know
+        for (Listener l : mListeners) {
+            if (l != null) l.onFilmsChanged();
+        }
     }
 
     /**
-     *
      * @return The list of all available films
      */
     public List<Film> getFilms() {
         return mFilms;
+    }
+
+
+    public void addOnFilmsChangedListener(Listener l) {
+        mListeners.add(l);
+    }
+
+    public interface Listener {
+        /**
+         * Called when a film is inserted or deleted
+         */
+        void onFilmsChanged();
     }
 
 }

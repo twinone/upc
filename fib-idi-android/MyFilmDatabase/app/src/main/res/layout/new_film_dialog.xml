@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <EditText
+        android:id="@+id/et_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/newfilm_title" />
+
+    <EditText
+        android:id="@+id/et_director"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/newfilm_director" />
+
+    <EditText
+        android:id="@+id/et_country"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/newfilm_country" />
+
+    <EditText
+        android:id="@+id/et_year"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/newfilm_year"
+        android:inputType="number" />
+
+    <EditText
+        android:id="@+id/et_protagonist"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/newfilm_protagonist" />
+
+    <EditText
+        android:id="@+id/et_critics_rate"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/newfilm_critics_rate"
+        android:inputType="number" />
+
+</LinearLayout>

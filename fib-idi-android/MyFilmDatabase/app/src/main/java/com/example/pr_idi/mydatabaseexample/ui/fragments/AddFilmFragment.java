@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,7 +36,7 @@ public class AddFilmFragment extends DialogFragment {
     @Nullable
     public View onCreateDialogView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        View v = inflater.inflate(R.layout.film_list_item, null);
+        View v = inflater.inflate(R.layout.new_film_dialog, null);
 
         title = (EditText) v.findViewById(R.id.et_title);
         director = (EditText) v.findViewById(R.id.et_director);
@@ -58,7 +59,7 @@ public class AddFilmFragment extends DialogFragment {
         if (!critics_rate.getText().toString().isEmpty())
             f.setCritics_rate(Integer.parseInt(critics_rate.getText().toString()));
 
-        getMainActivity().get
+        getMainActivity().insertFilm(f);
     }
 
     @Override
@@ -79,7 +80,6 @@ public class AddFilmFragment extends DialogFragment {
                     }
                 }
         );
-        ab.create();
         View view = onCreateDialogView(getActivity().getLayoutInflater(), null, null);
         onViewCreated(view, null);
         ab.setView(view);
