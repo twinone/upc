@@ -11,7 +11,6 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -23,6 +22,8 @@ import com.example.pr_idi.mydatabaseexample.R;
 import com.example.pr_idi.mydatabaseexample.ui.MainActivity;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -228,7 +229,6 @@ public class FilmListFragment extends Fragment implements View.OnClickListener, 
 
         @Override
         public int getItemCount() {
-            Log.d("Main", "getCount()" + mFilteredFilms.size());
             return mFilteredFilms.size();
         }
 
@@ -255,6 +255,12 @@ public class FilmListFragment extends Fragment implements View.OnClickListener, 
             if (!f.toString().contains(getMainActivity().getQuery())) continue;
             mFilteredFilms.add(f);
         }
+        Collections.sort(mFilteredFilms, new Comparator<Film>() {
+            @Override
+            public int compare(Film a, Film b) {
+                return (int) (b.getId() - a.getId());
+            }
+        });
 
         mAdapter.notifyDataSetChanged();
     }
