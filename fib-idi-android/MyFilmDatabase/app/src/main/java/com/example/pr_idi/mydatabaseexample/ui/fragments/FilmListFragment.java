@@ -194,6 +194,7 @@ public class FilmListFragment extends Fragment implements View.OnClickListener, 
             final boolean isExpanded = mExpandedFilmIds.contains(f.getId());
 
             View v = h.getView();
+            v.setActivated(isExpanded);
             v.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -261,9 +262,12 @@ public class FilmListFragment extends Fragment implements View.OnClickListener, 
     private void insertDummyData() {
         SharedPreferences sp = getActivity().getSharedPreferences("init", Context.MODE_PRIVATE);
         boolean init = sp.getBoolean("init", false);
-        if (init) return;
 
-        //sp.edit().putBoolean("init", true).apply();
+        // TODO
+        //if (init) return;
+        if (getMainActivity().getFilms().size() >= 10) return;
+
+        sp.edit().putBoolean("init", true).apply();
         insertFilm("Captain America", "Joe Russo", "USA", 2016, "", 0);
         insertFilm("Finding Dory", "Andrew Stanton", "USA", 2016, "", 0);
         insertFilm("Doctor Strange", "Scott Derrickson", "USA", 2016, "", 0);
@@ -285,6 +289,7 @@ public class FilmListFragment extends Fragment implements View.OnClickListener, 
         f.setYear(year);
         f.setProtagonist(protagonist);
         f.setCritics_rate(critics_rate);
+        getMainActivity().insertFilm(f);
     }
 
 

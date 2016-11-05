@@ -55,8 +55,8 @@
       <file leaf-file-name="FilmData.java" pinned="false" current-in-tab="false">
         <entry file="file://$USER_HOME$/dev/upc/c5/idi/android/MyFilmDatabase/app/src/main/java/com/example/pr_idi/mydatabaseexample/db/FilmData.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-1.8181819">
-              <caret line="94" column="38" selection-start-line="94" selection-start-column="38" selection-end-line="94" selection-end-column="38" />
+            <state vertical-scroll-proportion="-0.45454547">
+              <caret line="89" column="24" selection-start-line="89" selection-start-column="24" selection-end-line="89" selection-end-column="24" />
               <folding />
             </state>
           </provider>
@@ -80,8 +80,8 @@
       <file leaf-file-name="FilmListFragment.java" pinned="false" current-in-tab="true">
         <entry file="file://$USER_HOME$/dev/upc/c5/idi/android/MyFilmDatabase/app/src/main/java/com/example/pr_idi/mydatabaseexample/ui/fragments/FilmListFragment.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.47058824">
-              <caret line="252" column="35" selection-start-line="252" selection-start-column="35" selection-end-line="252" selection-end-column="35" />
+            <state vertical-scroll-proportion="0.46835443">
+              <caret line="200" column="43" selection-start-line="200" selection-start-column="43" selection-end-line="200" selection-end-column="43" />
               <folding>
                 <element signature="imports" expanded="true" />
                 <element signature="e#1444#1550#0" expanded="true" />
@@ -92,8 +92,8 @@
                 <element signature="e#3849#3862#0" expanded="true" />
                 <element signature="e#3864#4050#0" expanded="true" />
                 <element signature="e#4049#4050#0" expanded="true" />
-                <element signature="e#6008#6318#0" expanded="true" />
-                <element signature="e#6317#6318#0" expanded="true" />
+                <element signature="e#6048#6358#0" expanded="true" />
+                <element signature="e#6357#6358#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -112,8 +112,21 @@
       <file leaf-file-name="film_list_item.xml" pinned="false" current-in-tab="false">
         <entry file="file://$USER_HOME$/dev/upc/c5/idi/android/MyFilmDatabase/app/src/main/res/layout/film_list_item.xml">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="2.5961537">
-              <caret line="6" column="30" selection-start-line="6" selection-start-column="30" selection-end-line="6" selection-end-column="30" />
+            <state vertical-scroll-proportion="-4.2884617">
+              <caret line="42" column="0" selection-start-line="42" selection-start-column="0" selection-end-line="42" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+          <provider editor-type-id="android-designer">
+            <state />
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="new_film_dialog.xml" pinned="false" current-in-tab="false">
+        <entry file="file://$USER_HOME$/dev/upc/c5/idi/android/MyFilmDatabase/app/src/main/res/layout/new_film_dialog.xml">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="-1.0">
+              <caret line="30" column="26" selection-start-line="30" selection-start-column="26" selection-end-line="30" selection-end-column="26" />
               <folding />
             </state>
           </provider>
@@ -1901,12 +1914,12 @@
         <option value="$USER_HOME$/dev/upc/c5/idi/android/MyFilmDatabase/app/src/main/res/animator/comment_selection.xml" />
         <option value="$USER_HOME$/dev/upc/c5/idi/android/MyFilmDatabase/app/build/intermediates/res/merged/debug/values-v23/values-v23.xml" />
         <option value="$USER_HOME$/dev/upc/c5/idi/android/MyFilmDatabase/app/src/main/res/drawable/line_divider.xml" />
-        <option value="$USER_HOME$/dev/upc/c5/idi/android/MyFilmDatabase/app/src/main/res/layout/film_list_item.xml" />
         <option value="$USER_HOME$/dev/upc/c5/idi/android/MyFilmDatabase/app/src/main/res/values/strings.xml" />
         <option value="$USER_HOME$/dev/upc/c5/idi/android/MyFilmDatabase/app/src/main/res/layout/fragment_film_list.xml" />
         <option value="$USER_HOME$/dev/upc/c5/idi/android/MyFilmDatabase/app/src/main/java/com/example/pr_idi/mydatabaseexample/model/Film.java" />
         <option value="$USER_HOME$/dev/upc/c5/idi/android/MyFilmDatabase/app/src/main/java/com/example/pr_idi/mydatabaseexample/db/FilmData.java" />
         <option value="$USER_HOME$/dev/upc/c5/idi/android/MyFilmDatabase/app/src/main/java/com/example/pr_idi/mydatabaseexample/ui/MainActivity.java" />
+        <option value="$USER_HOME$/dev/upc/c5/idi/android/MyFilmDatabase/app/src/main/res/layout/film_list_item.xml" />
         <option value="$USER_HOME$/dev/upc/c5/idi/android/MyFilmDatabase/app/src/main/java/com/example/pr_idi/mydatabaseexample/ui/fragments/FilmListFragment.java" />
       </list>
     </option>
@@ -2394,7 +2407,7 @@
       <window_info id="Palette&#9;" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
-      <window_info id="Android Monitor" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.3280255" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Android Monitor" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.3280255" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3290938" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
@@ -2489,8 +2502,8 @@
             <element signature="e#3849#3862#0" expanded="true" />
             <element signature="e#3864#4050#0" expanded="true" />
             <element signature="e#4049#4050#0" expanded="true" />
-            <element signature="e#6008#6318#0" expanded="true" />
-            <element signature="e#6317#6318#0" expanded="true" />
+            <element signature="e#6048#6358#0" expanded="true" />
+            <element signature="e#6357#6358#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -2520,8 +2533,8 @@
             <element signature="e#3849#3862#0" expanded="true" />
             <element signature="e#3864#4050#0" expanded="true" />
             <element signature="e#4049#4050#0" expanded="true" />
-            <element signature="e#6008#6318#0" expanded="true" />
-            <element signature="e#6317#6318#0" expanded="true" />
+            <element signature="e#6048#6358#0" expanded="true" />
+            <element signature="e#6357#6358#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -2562,8 +2575,8 @@
             <element signature="e#3849#3862#0" expanded="true" />
             <element signature="e#3864#4050#0" expanded="true" />
             <element signature="e#4049#4050#0" expanded="true" />
-            <element signature="e#6008#6318#0" expanded="true" />
-            <element signature="e#6317#6318#0" expanded="true" />
+            <element signature="e#6048#6358#0" expanded="true" />
+            <element signature="e#6357#6358#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -2696,8 +2709,8 @@
             <element signature="e#3849#3862#0" expanded="true" />
             <element signature="e#3864#4050#0" expanded="true" />
             <element signature="e#4049#4050#0" expanded="true" />
-            <element signature="e#6008#6318#0" expanded="true" />
-            <element signature="e#6317#6318#0" expanded="true" />
+            <element signature="e#6048#6358#0" expanded="true" />
+            <element signature="e#6357#6358#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -2819,8 +2832,8 @@
             <element signature="e#3849#3862#0" expanded="true" />
             <element signature="e#3864#4050#0" expanded="true" />
             <element signature="e#4049#4050#0" expanded="true" />
-            <element signature="e#6008#6318#0" expanded="true" />
-            <element signature="e#6317#6318#0" expanded="true" />
+            <element signature="e#6048#6358#0" expanded="true" />
+            <element signature="e#6357#6358#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -2914,17 +2927,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$USER_HOME$/dev/upc/c5/idi/android/MyFilmDatabase/app/src/main/res/layout/new_film_dialog.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="30" column="37" selection-start-line="30" selection-start-column="37" selection-end-line="30" selection-end-column="37" />
-          <folding />
-        </state>
-      </provider>
-      <provider editor-type-id="android-designer">
-        <state />
-      </provider>
-    </entry>
     <entry file="file://$USER_HOME$/dev/upc/c5/idi/android/MyFilmDatabase/app/src/main/java/com/example/pr_idi/mydatabaseexample/ui/fragments/AddFilmFragment.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.8101266">
@@ -2989,17 +2991,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$USER_HOME$/dev/upc/c5/idi/android/MyFilmDatabase/app/src/main/res/layout/film_list_item.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="2.5961537">
-          <caret line="6" column="30" selection-start-line="6" selection-start-column="30" selection-end-line="6" selection-end-column="30" />
-          <folding />
-        </state>
-      </provider>
-      <provider editor-type-id="android-designer">
-        <state />
-      </provider>
-    </entry>
     <entry file="file://$USER_HOME$/dev/upc/c5/idi/android/MyFilmDatabase/app/src/main/res/layout/fragment_film_list.xml">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="-3.4230769">
@@ -3022,14 +3013,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$USER_HOME$/dev/upc/c5/idi/android/MyFilmDatabase/app/src/main/java/com/example/pr_idi/mydatabaseexample/db/FilmData.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-1.8181819">
-          <caret line="94" column="38" selection-start-line="94" selection-start-column="38" selection-end-line="94" selection-end-column="38" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$USER_HOME$/dev/upc/c5/idi/android/MyFilmDatabase/app/src/main/java/com/example/pr_idi/mydatabaseexample/model/Film.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
@@ -3043,10 +3026,40 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$USER_HOME$/dev/upc/c5/idi/android/MyFilmDatabase/app/src/main/res/layout/new_film_dialog.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-1.0">
+          <caret line="30" column="26" selection-start-line="30" selection-start-column="26" selection-end-line="30" selection-end-column="26" />
+          <folding />
+        </state>
+      </provider>
+      <provider editor-type-id="android-designer">
+        <state />
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/dev/upc/c5/idi/android/MyFilmDatabase/app/src/main/res/layout/film_list_item.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-4.2884617">
+          <caret line="42" column="0" selection-start-line="42" selection-start-column="0" selection-end-line="42" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+      <provider editor-type-id="android-designer">
+        <state />
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/dev/upc/c5/idi/android/MyFilmDatabase/app/src/main/java/com/example/pr_idi/mydatabaseexample/db/FilmData.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-0.45454547">
+          <caret line="89" column="24" selection-start-line="89" selection-start-column="24" selection-end-line="89" selection-end-column="24" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$USER_HOME$/dev/upc/c5/idi/android/MyFilmDatabase/app/src/main/java/com/example/pr_idi/mydatabaseexample/ui/fragments/FilmListFragment.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.47058824">
-          <caret line="252" column="35" selection-start-line="252" selection-start-column="35" selection-end-line="252" selection-end-column="35" />
+        <state vertical-scroll-proportion="0.46835443">
+          <caret line="200" column="43" selection-start-line="200" selection-start-column="43" selection-end-line="200" selection-end-column="43" />
           <folding>
             <element signature="imports" expanded="true" />
             <element signature="e#1444#1550#0" expanded="true" />
@@ -3057,8 +3070,8 @@
             <element signature="e#3849#3862#0" expanded="true" />
             <element signature="e#3864#4050#0" expanded="true" />
             <element signature="e#4049#4050#0" expanded="true" />
-            <element signature="e#6008#6318#0" expanded="true" />
-            <element signature="e#6317#6318#0" expanded="true" />
+            <element signature="e#6048#6358#0" expanded="true" />
+            <element signature="e#6357#6358#0" expanded="true" />
           </folding>
         </state>
       </provider>
