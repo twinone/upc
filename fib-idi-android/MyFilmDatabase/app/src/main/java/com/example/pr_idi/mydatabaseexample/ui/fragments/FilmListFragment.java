@@ -11,6 +11,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -193,14 +194,17 @@ public class FilmListFragment extends Fragment implements View.OnClickListener, 
         @Override
         public void onBindViewHolder(final RecyclerView.ViewHolder holder, int position) {
             final MyViewHolder h = (MyViewHolder) holder;
-            final Film f = mFilteredFilms.get(position);
-            final boolean isExpanded = mExpandedFilmIds.contains(f.getId());
+            Film f = mFilteredFilms.get(position);
+            boolean isExpanded = mExpandedFilmIds.contains(f.getId());
 
             View v = h.getView();
             v.setActivated(isExpanded);
             v.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    Film f = mFilteredFilms.get(holder.getAdapterPosition());
+                    boolean isExpanded = mExpandedFilmIds.contains(f.getId());
+
                     if (isExpanded) mExpandedFilmIds.remove(f.getId());
                     else mExpandedFilmIds.add(f.getId());
 
