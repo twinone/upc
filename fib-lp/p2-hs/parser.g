@@ -143,8 +143,7 @@ int main() {
 #token SPACE "[\ \n\t]" << zzskip();>>
 
 #token ASIG  "\:\="
-#token EQ    "\="
-#token GT    "\<"
+#token BOP    "\=|\>"
 #token ADD   "\+|\-"
 #token MULT  "\*|\/"
 #token INPUT "INPUT"
@@ -158,6 +157,7 @@ int main() {
 #token ELSE  "ELSE"
 #token END   "END"
 #token OR    "OR"
+#token AND   "AND"
 #token NOT   "NOT"
 #token INT   "[0-9]+"
 #token ID    "[a-zA-Z][a-zA-Z0-9]*"
@@ -170,16 +170,30 @@ asig: input|lit;
 input: INPUT^ ID;
 lit: ID ASIG^ nexpr;
 
-nexpr: nmult (ADD^ nmult)*;
-nmult: natom (MULT^ natom)*;
+nexpr: nfact (ADD^ nfact)*;
+nfact: natom (MULT^ natom)*;
 natom: INT|ID;
 
-instr: asig;
-//print:;
-//read:;
+print: PRINT^ ID;
+
+
+/////////////////////////
+cond: IF^ bexpr cond_then cond_else END;
+// Note that it's allowed, like in regular programming languages
+// to have an empty if
+cond_then: (THEN^ instrs|);
+cond_else: (ELSE^ instrs|);
+
+bexpr: band (OR^ band)*;
+band: batom2 (AND^ batom2)*;
+batom2: batom|NOT^ batom2;
+batom: (nexpr BOP^ nexpr)|"true"|"false";
+
+instr: asig|print|cond;
+
 //push:;
 //pop:;
 //cond:;
 //loop:;
 //
-//instr: print|read|push|pop|cond|loop|asig;
+//instr: print|asig|push|pop|cond|loop|asig;
