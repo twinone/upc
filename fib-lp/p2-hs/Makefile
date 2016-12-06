@@ -3,11 +3,13 @@ PROG := parser
 BINPATH := 
 CC_FLAGS := -Wno-write-strings
 
-all:
+parser.o:
 	$(BINPATH)antlr -gt $(PROG).g
 	$(BINPATH)dlg -ci parser.dlg scan.c
 	$(ENV) $(CC) $(CC_FLAGS) -o $(PROG).o $(PROG).c scan.c err.c
 	@make halfclean
+
+all: parser.o
 
 
 halfclean:
