@@ -1,4 +1,5 @@
 *.o
 *.bak
+*.hi
 main
 parser
