@@ -128,10 +128,48 @@ void ASTPrint(AST *a)
 }
 
 
+/// print AST, recursively, with indentation
+void ASTPrintIndent2(AST *a,string s)
+{
+  if (a==NULL) return;
+  cout << "(";
+  cout<<a->kind;
+  if (a->text!="") cout<<"["<<a->text<<"]";
+  cout<<endl;
+
+  AST *i = a->down;
+  while (i!=NULL && i->right!=NULL) {
+    cout<<s+"  ";
+    ASTPrintIndent2(i,s+"  "+string(i->kind.size()+i->text.size(),' '));
+    i=i->right;
+  }
+
+// Last node
+  if (i!=NULL) {
+      cout<<s+"  ";
+      ASTPrintIndent2(i,s+"  "+string(i->kind.size()+i->text.size(),' '));
+      i=i->right;
+      cout << ")";
+  }
+}
+
+/// print AST
+void ASTPrint2(AST *a)
+{
+  while (a!=NULL) {
+    //cout<<"(";
+    ASTPrintIndent2(a,"");
+    a=a->right;
+  }
+  //cout << endl << ")" << endl;
+}
+
+
 int main() {
   root = NULL;
   ANTLR(parse(&root), stdin);
   ASTPrint(root);
+  ASTPrint2(root);
   exec(&root);
 }
 >>
