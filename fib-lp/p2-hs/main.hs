@@ -22,13 +22,13 @@ data BExpr a
   deriving (Read, Show)
 
 data Command a
-  = Assign  Ident a       -- TODO: Nexpr Assign x y assigns a constant value y to x
-  | Print   Ident         -- Print x prints the value of x to stdout
-  | Input   Ident         -- Input x reads a value from stdin into x
-  | Empty   Ident         -- Return an empty list
-  | Pop     Ident Ident     -- Pop x y pops the top of x to y
-  | Push    Ident Ident   -- TODO: Nexpr Push x y pushes y onto x
-  | Size    Ident Ident   -- Size x y assigns the len(x) to y
+  = Assign  Ident (NExpr a)  -- Assign x y assigns a constant value y to x
+  | Print   Ident            -- Print x prints the value of x to stdout
+  | Input   Ident            -- Input x reads a value from stdin into x
+  | Empty   Ident            -- Return an empty list
+  | Pop     Ident Ident      -- Pop x y pops the top of x to y
+  | Push    Ident (NExpr a)  -- Push x y pushes y onto x
+  | Size    Ident Ident      -- Size x y assigns the len(x) to y
   | Cond    (BExpr a) (Seq a) (Seq a) -- Cond x y z executes if x then y else z
   | Loop    (BExpr a) (Seq a) -- Loop x y executes y while x
   deriving (Read, Show)
