@@ -147,7 +147,9 @@ int main() {
 #token ADD   "\+|\-"
 #token MULT  "\*|\/"
 #token INPUT "INPUT"
+#token EMPTY "EMPTY"
 #token PRINT "PRINT"
+#token SIZE "SIZE"
 #token PUSH  "PUSH"
 #token POP   "POP"
 #token WHILE "WHILE"
@@ -163,12 +165,14 @@ int main() {
 #token ID    "[a-zA-Z][a-zA-Z0-9]*"
 
 exec: parse;
-parse: instrs <<#0=createASTlist(_sibling);>>;
-instrs: (instr)*;
+parse: instrs;
+instrs: (instr)* <<#0=createASTlist(_sibling);>>;
 
-asig: input|lit;
+asig: input|empty|lit|size;
+empty: EMPTY^ ID;
 input: INPUT^ ID;
 lit: ID ASIG^ nexpr;
+size: SIZE^ ID ID;
 
 nexpr: nfact (ADD^ nfact)*;
 nfact: natom (MULT^ natom)*;
@@ -178,22 +182,21 @@ print: PRINT^ ID;
 
 
 /////////////////////////
-cond: IF^ bexpr cond_then cond_else END;
-// Note that it's allowed, like in regular programming languages
-// to have an empty if
+cond: IF^ bexpr cond_then cond_else END!;
+// Note that it's allowed,
+// like in regular programming languages,
+// to have an empty ifs
 cond_then: (THEN^ instrs|);
 cond_else: (ELSE^ instrs|);
+
+loop: WHILE^ bexpr DO! instrs END!;
 
 bexpr: band (OR^ band)*;
 band: batom2 (AND^ batom2)*;
 batom2: batom|NOT^ batom2;
 batom: (nexpr BOP^ nexpr)|"true"|"false";
 
-instr: asig|print|cond;
+push: PUSH^ ID nexpr;
+pop: POP^ ID ID;
 
-//push:;
-//pop:;
-//cond:;
-//loop:;
-//
-//instr: print|asig|push|pop|cond|loop|asig;
+instr: asig|print|cond|loop|push|pop;

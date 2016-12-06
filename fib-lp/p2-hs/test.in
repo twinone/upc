@@ -1,6 +1,14 @@
-IF NOT B > 0 AND NOT C > 0 OR B = 0
-THEN
-	PRINT TRUE
+INPUT X
+INPUT Y
+
+IF X > 0 OR X = 0 OR NOT 0 > Y THEN
+	Z := 1
+	WHILE X > Y DO
+		X := X - 1
+		Z := Z * Z
+	END
 ELSE
-	PRINT FALSE
+	Z := 0
 END
+
+PRINT Z
