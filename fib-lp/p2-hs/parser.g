@@ -203,8 +203,8 @@ int main() {
 #token ID    "[a-zA-Z][a-zA-Z0-9]*"
 
 exec: parse;
-parse: instrs;
-instrs: (instr)* <<#0=createASTlist(_sibling);>>;
+parse: commands;
+commands: (command)* <<#0=createASTlist(_sibling);>>;
 
 asig: input|empty|lit|size;
 empty: EMPTY^ ID;
@@ -224,10 +224,10 @@ cond: IF^ bexpr cond_then cond_else END!;
 // Note that it's allowed,
 // like in regular programming languages,
 // to have an empty ifs
-cond_then: (THEN^ instrs|);
-cond_else: (ELSE^ instrs|);
+cond_then: (THEN^ commands|);
+cond_else: (ELSE^ commands|);
 
-loop: WHILE^ bexpr DO! instrs END!;
+loop: WHILE^ bexpr DO! commands END!;
 
 bexpr: band (OR^ band)*;
 band: batom2 (AND^ batom2)*;
@@ -237,4 +237,4 @@ batom: (nexpr BOP^ nexpr)|"true"|"false";
 push: PUSH^ ID nexpr;
 pop: POP^ ID ID;
 
-instr: asig|print|cond|loop|push|pop;
+command: asig|print|cond|loop|push|pop;
