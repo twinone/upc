@@ -43,8 +43,7 @@ data Seq a
   deriving (Read)
 
 instance (Show a) => Show (Seq a) where
-  show (Seq []) = ""
-  show (Seq (x:xs)) = show x ++ show (Seq xs)
+  show x = unlines $ (map (drop 2)) $ lines $ (nest x)
 
 
 data Command a
@@ -75,9 +74,9 @@ instance (Show a) => Show (Command a) where
 
 -- nest handles the recursive calls to show
 nest :: (Show a) => Seq a -> String
-nest (Seq x) = unlines (map (indent . rstrip . show) x)
+nest (Seq x) = unlines (map (rstrip. indent . show) x)
   where
-    indent = ("  "++)
+    indent = (unlines . (map ("  "++)) . lines)
     rstrip = reverse . dropWhile (=='\n') . reverse
 
 
