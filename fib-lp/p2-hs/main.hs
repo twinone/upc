@@ -5,6 +5,9 @@ type Ident = String
 -- Can be any Number
 type Value = Int
 
+--------------------------------------------------------------------------------
+--------------------------         PARSING          ----------------------------
+--------------------------------------------------------------------------------
 
 data NExpr a
   = Var     Ident
@@ -42,8 +45,7 @@ data Seq a
   = Seq [Command a]
   deriving (Read)
 
-instance (Show a) => Show (Seq a) where
-  show x = unlines $ (map (drop 2)) $ lines $ (nest x)
+
 
 
 data Command a
@@ -66,19 +68,33 @@ instance (Show a) => Show (Command a) where
   show (Pop i j)    = "POP " ++ i ++ " " ++ j ++ "\n"
   show (Push i j)   = "PUSH " ++ i ++ " " ++ show j ++ "\n"
   show (Size i j)   = "SIZE " ++ i ++ " " ++ j ++ "\n"
-  show (Cond c x y) = "IF " ++ show c ++ " THEN\n" ++ nest x ++ elseVal y ++ "END\n"
+  show (Loop c x)   = "WHILE " ++ show c ++ "\nDO\n" ++ show' x ++ "END\n"
+  show (Cond c x y) = "IF " ++ show c ++ " THEN\n" ++ iv ++ ev y ++ "END\n"
     where
-      elseVal (Seq []) = ""
-      elseVal _ = "ELSE\n" ++ nest y
-  show (Loop c x) = "WHILE " ++ show c ++ "\nDO\n" ++ nest x ++ "END\n"
+      iv = show' x
+      ev (Seq []) = ""
+      ev _ = "ELSE\n" ++ show' y
 
--- nest handles the recursive calls to show
-nest :: (Show a) => Seq a -> String
-nest (Seq x) = unlines (map (rstrip. indent . show) x)
+instance (Show a) => Show (Seq a) where
+  show x = unlines $ (map (drop 2)) $ lines $ (show' x)
+
+show' :: (Show a) => Seq a -> String
+show' (Seq x) = unlines (map (rstrip. indent . show) x)
   where
     indent = (unlines . (map ("  "++)) . lines)
     rstrip = reverse . dropWhile (=='\n') . reverse
 
+--------------------------------------------------------------------------------
+--------------------------        EVALUATION        ----------------------------
+--------------------------------------------------------------------------------
+
+
+
+
+
+--------------------------------------------------------------------------------
+--------------------------           MAIN           ----------------------------
+--------------------------------------------------------------------------------
 
 main = do
   input <- getContents
