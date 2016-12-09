@@ -8,11 +8,19 @@ type Value = Int
 
 data NExpr a
   = Var     Ident
-  | Const   a -- TODO parameterize
+  | Const   a
   | Plus    (NExpr a) (NExpr a)
   | Minus   (NExpr a) (NExpr a)
   | Times   (NExpr a) (NExpr a)
-  deriving (Read, Show)
+  deriving (Read)
+
+instance (Show a) => Show (NExpr a) where
+  show (Var x) = x
+  show (Const x) = show x
+  show (Plus x y) = show x ++ " + " ++ show y
+  show (Minus x y) = show x ++ " - " ++ show y
+  show (Times x y) = show x ++ " * " ++ show y
+
 
 data BExpr a
   = AND   (BExpr a) (BExpr a)
@@ -20,11 +28,24 @@ data BExpr a
   | NOT   (BExpr a)
   | Gt    (NExpr a) (NExpr a)
   | Eq    (NExpr a) (NExpr a)
-  deriving (Read, Show)
+  deriving (Read)
+
+instance (Show a) => Show (BExpr a) where
+  show (AND x y) = show x ++ " AND " ++ show y
+  show (OR x y) = show x ++ " OR " ++ show y
+  show (NOT x) = "NOT " ++ show x
+  show (Gt x y) = show x ++ " > " ++ show y
+  show (Eq x y) = show x ++ " = " ++ show y
+
 
 data Seq a
   = Seq [Command a]
-  deriving (Read, Show)
+  deriving (Read)
+
+instance (Show a) => Show (Seq a) where
+  show (Seq []) = ""
+  show (Seq (x:xs)) = show x ++ show (Seq xs)
+
 
 data Command a
   = Assign  Ident (NExpr a)  -- Assign x y assigns a constant value y to x
@@ -50,11 +71,15 @@ instance (Show a) => Show (Command a) where
     where
       elseVal (Seq []) = ""
       elseVal _ = "ELSE\n" ++ nest y
-  show (Loop c x)   = "WHILE " ++ show c ++ "\nDO\n" ++ nest x ++ "END\n"
+  show (Loop c x) = "WHILE " ++ show c ++ "\nDO\n" ++ nest x ++ "END\n"
 
 -- nest handles the recursive calls to show
 nest :: (Show a) => Seq a -> String
-nest (Seq x) = unlines (map (("  "++).show) x)
+nest (Seq x) = unlines (map (indent . rstrip . show) x)
+  where
+    indent = ("  "++)
+    rstrip = reverse . dropWhile (=='\n') . reverse
+
 
 main = do
   input <- getContents

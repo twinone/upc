@@ -78,7 +78,7 @@ AST* createASTnode(Attrib* attr, int type, char* text) {
 /// create a new "list" AST node with one element
 AST* createASTlist(AST *child) {
  AST *as=new AST;
- as->kind="list";
+ as->kind="seq";
  as->right=NULL;
  as->down=child;
  return as;
@@ -126,64 +126,129 @@ void ASTPrint(AST *a)
     a=a->right;
   }
 }
-
-
-/// print AST, recursively, with indentation
-void ASTPrintIndent2(AST *a,string s)
-{
-  if (a==NULL) return;
-  cout << "(";
-  cout<<a->kind;
-  if (a->text!="") cout<<"["<<a->text<<"]";
-  cout<<endl;
-
-  AST *i = a->down;
-  while (i!=NULL && i->right!=NULL) {
-    cout<<s+"  ";
-    ASTPrintIndent2(i,s+"  "+string(i->kind.size()+i->text.size(),' '));
-    i=i->right;
-  }
-
-// Last node
-  if (i!=NULL) {
-      cout<<s+"  ";
-      ASTPrintIndent2(i,s+"  "+string(i->kind.size()+i->text.size(),' '));
-      i=i->right;
-      cout << ")";
-  }
+void print(AST *a);
+// print with parentheses or not if it's a leaf
+void ppl(AST *a) {
+  cout << "("; print(a); cout << ")";
 }
 
+void printBexpr(AST *a);
+
+void ppb(AST *a) {
+  cout << "("; printBexpr(a); cout << ")";
+}
+
+void printBexpr(AST *a) {
+  if (a->type == OR||a->type == AND) {
+    cout << (a->type == OR ? "OR" : "AND") << " ";
+    ppb(a->down); cout << " ";
+    ppb(a->down->right);
+  }
+  else if (a->type == NOT) {
+    cout << "NOT" << " ";
+    ppb(a->down);
+  }
+  else if (a->type == BOP) {
+    cout << (a->text == ">" ? "Gt" : "Eq") << " ";
+    ppb(a->down); cout << " ";
+    ppb(a->down->right);
+  }
+  else if (a->type == ID) { cout << "Var "<< '"' << a->text << '"'; }
+  else if (a->type == INT) { cout << "Const " << a->text; }
+  else if (a->type == ADD) {
+    cout << (a->text=="+"?"Plus":"Minus") << " ";
+    cout << "("; printBexpr(a->down);        cout << ") ";
+    cout << "("; printBexpr(a->down->right); cout << ")";
+  }
+  else if (a->type == MULT) {
+    cout << "Times ";
+    cout << "("; printBexpr(a->down);        cout << ") ";
+    cout << "("; printBexpr(a->down->right); cout << ")";
+  }
+}
+/// print AST, recursively, with indentation
+void print(AST *a) {
+  if (a==NULL) return;
+  if (a->kind == "seq") {
+    cout << "Seq [";
+    AST *i = a->down;
+    while (i != NULL) {
+      print(i);
+      if (i->right != NULL) cout << ", ";
+      i = i->right;
+    }
+    cout << "]";
+  }
+  else if (a->type == ASSIGN) {
+    cout << "Assign " << '"' << a->down->text << '"';
+    cout << " ";
+    cout << "(";
+    printBexpr(a->down->right);
+    cout << ")";
+  }
+  else if (a->type == ID) { cout << "Var "<< '"' << a->text << '"'; }
+  else if (a->type == INT) { cout << "Const " << a->text; }
+  else if (a->type == PRINT) { cout << "Print " << '"' << a->down->text << '"'; }
+  else if (a->type == INPUT) { cout << "Input " << '"' << a->down->text << '"'; }
+  else if (a->type == EMPTY) { cout << "Empty " << '"' << a->down->text << '"'; }
+  else if (a->type == POP) { cout << "Pop " << '"' << a->down->text << "\" \"" << a->down->right->text << '"'; }
+  else if (a->type == SIZE) { cout << "Size " << '"' << a->down->text << "\" \"" << a->down->right->text << '"'; }
+  else if (a->type == PUSH) {
+    cout << "Push " << '"' << a->down->text << '"' << " ";
+    cout << "(";
+    printBexpr(a->down->right);
+    cout << ")";
+  }
+  else if (a->type == IF) {
+    cout << "Cond ";
+    cout << "("; printBexpr(a->down); cout << ") "; // bool
+    if (a->down->right == NULL) cout << "(Seq []) ";
+    else { cout << "("; print(a->down->right); cout << ") "; }
+    if (a->down->right->right == NULL) cout << "(Seq [])";
+    else { cout << "("; print(a->down->right->right); cout << ")"; }
+  }
+  else if (a->type == WHILE) {
+    cout << "Loop ";
+    cout << "("; printBexpr(a->down); cout << ") "; // bool
+    if (a->down->right == NULL) cout << "(Seq [])";
+    else { cout << "("; print(a->down->right); cout << ")"; }
+  }
+}
 /// print AST
 void ASTPrint2(AST *a)
 {
+
+  cout <<  endl << endl;
+  cout << "(";
   while (a!=NULL) {
-    //cout<<"(";
-    ASTPrintIndent2(a,"");
+    print(a);
     a=a->right;
   }
+  cout << ")";
+
+  cout <<  endl << endl;
+
   //cout << endl << ")" << endl;
 }
 
 
-int main() {
-  root = NULL;
+int main(int argc, char **argv) {
   ANTLR(parse(&root), stdin);
-  ASTPrint(root);
+  if (argc == 1)
+    ASTPrint(root);
   ASTPrint2(root);
-  exec(&root);
 }
 >>
 
 #lexclass START
 
-
 // Tokens defined higher have a higher precedence
 #token SPACE "[\ \n\t]" << zzskip();>>
 
-#token ASIG  "\:\="
+#token ASSIGN  "\:\="
 #token BOP    "\=|\>"
 #token ADD   "\+|\-"
-#token MULT  "\*|\/"
+#token MULT  "\*"
 #token INPUT "INPUT"
 #token EMPTY "EMPTY"
 #token PRINT "PRINT"
@@ -203,13 +268,13 @@ int main() {
 #token ID    "[a-zA-Z][a-zA-Z0-9]*"
 
 exec: parse;
-parse: commands;
-commands: (command)* <<#0=createASTlist(_sibling);>>;
+parse: seq;
+seq: (command)* <<#0=createASTlist(_sibling);>>;
 
 asig: input|empty|lit|size;
 empty: EMPTY^ ID;
 input: INPUT^ ID;
-lit: ID ASIG^ nexpr;
+lit: ID ASSIGN^ nexpr;
 size: SIZE^ ID ID;
 
 nexpr: nfact (ADD^ nfact)*;
@@ -224,10 +289,10 @@ cond: IF^ bexpr cond_then cond_else END!;
 // Note that it's allowed,
 // like in regular programming languages,
 // to have an empty ifs
-cond_then: (THEN^ commands|);
-cond_else: (ELSE^ commands|);
+cond_then: (THEN! seq|);
+cond_else: (ELSE! seq|);
 
-loop: WHILE^ bexpr DO! commands END!;
+loop: WHILE^ bexpr DO! seq END!;
 
 bexpr: band (OR^ band)*;
 band: batom2 (AND^ batom2)*;

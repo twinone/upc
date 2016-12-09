@@ -1,5 +1,7 @@
 #!/bin/bash
 
-make all
+CPLUS_INCLUDE_PATH=~/Downloads/pccts/h/ make all
 
-./parser.o < test.in | main.o
+./parser < test.in
+
+./parser --noast < test.in | ./main
