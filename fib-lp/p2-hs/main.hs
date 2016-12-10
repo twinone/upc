@@ -198,7 +198,11 @@ instance Evaluable BExpr where
   eval f (Eq x y)   = evalOp' f (\a b -> btoi (a == b)) x y
 
   -- bools always type, because at this stage we passed parsing already
-  typeCheck f _ = True
+  typeCheck f (AND x y) = typeCheck f x && typeCheck f y
+  typeCheck f (OR x y)  = typeCheck f x && typeCheck f y
+  typeCheck f (NOT x )  = typeCheck f x
+  typeCheck f (Gt x y)  = typeCheck f x && typeCheck f y
+  typeCheck f (Eq x y)  = typeCheck f x && typeCheck f y
 
 --------------------------------------------------------------------------------
 --------------------------        EVALUATION        ----------------------------
