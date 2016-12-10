@@ -88,16 +88,38 @@ show' (Seq x) = unlines (map (rstrip. indent . show) x)
 --------------------------        EVALUATION        ----------------------------
 --------------------------------------------------------------------------------
 
+-- utility functions
+isLeft :: Either a b -> Bool
+isLeft (Left a) = True
+isLeft _ = False
+
+isNothing :: Maybe a -> Bool
+isNothing Nothing = True
+isNothing _ = False
+
+just :: Maybe a -> a
+just (Just a) = a
+
+left :: Either a b -> a
+left (Left a) = a
+
+right :: Either a b -> b
+right (Right b) = b
+
 -- SymTable holds all variables
 -- TODO: Make this a RB tree maybe for efficiency
 -- We're not allowed to use Haskell's data structures
-type Sym a = Either a [a]
+data Sym a = Sym a | Stack [a] deriving (Show)
 data Entry a = Entry Ident (Sym a) deriving (Show)
 data SymTable a = SymTable [Entry a] deriving (Show)
 
 isStack :: Sym a -> Bool
-isStack (Left a) = False
+isStack (Sym a) = False
 isStack _ = True
+
+sym :: Sym a -> Maybe a
+sym (Sym a) = Just a
+sym _ = Nothing
 
 -- destructuring functions
 key :: Entry a -> Ident
@@ -120,10 +142,67 @@ delSym (SymTable t) k = SymTable r
 getSym :: SymTable a -> Ident -> Maybe (Sym a)
 getSym (SymTable []) _ = Nothing
 getSym t k = if k == key hd then Just (val hd) else getSym (SymTable tl) k
-  where
-    hd = (head . elems) t
-    tl = (tail . elems) t
+ where
+   hd = (head . elems) t
+   tl = (tail . elems) t
 
+
+class Evaluable e where
+  eval      :: (Num a, Ord a) => (Ident -> Maybe a) -> (e a) -> (Either String a)
+  typeCheck :: (Ident -> String) -> (e a) -> Bool
+
+
+instance Evaluable NExpr where
+  eval _ (Const a) = Right a
+  eval f (Var x)
+    | isNothing v  = Left ("ReferenceError: " ++ x ++ " is not defined")
+    | otherwise    = Right (just v)
+    where v = f x
+  eval f (Plus x y)   = evalOp' f (+) x y
+  eval f (Minus x y)  = evalOp' f (-) x y
+  eval f (Times x y)  = evalOp' f (*) x y
+
+  typeCheck _ (Const _)   = True
+  typeCheck f (Var x)     = f x == "sym"
+  typeCheck f (Plus x y)  = typeCheck f x && typeCheck f y
+  typeCheck f (Minus x y) = typeCheck f x && typeCheck f y
+  typeCheck f (Times x y) = typeCheck f x && typeCheck f y
+
+
+evalOp' f op x y
+  | isLeft xv = xv
+  | isLeft yv = yv
+  | otherwise = Right ((right xv) `op` (right yv))
+  where
+    xv = eval f x
+    yv = eval f y
+
+
+btoi :: Num a => Bool -> a
+btoi True  = 1
+btoi False = 0
+
+itob :: (Eq a, Num a) => a -> Bool
+itob 0 = False
+itob 1 = True
+
+bop :: (Eq a, Num a) => (Bool -> Bool -> Bool) -> a -> a -> a
+bop f x y = btoi ((itob x) `f` (itob y))
+
+instance Evaluable BExpr where
+  eval f (AND x y)  = evalOp' f (bop (&&)) x y
+  eval f (OR x y)   = evalOp' f (bop (||)) x y
+  -- I know, I know... ugly hack to avoid rewriting the whole function...
+  eval f (NOT x)    = evalOp' f (bop (\x y -> not x)) x x
+  eval f (Gt x y)   = evalOp' f (\a b -> btoi (a > b)) x y
+  eval f (Eq x y)   = evalOp' f (\a b -> btoi (a == b)) x y
+
+  -- bools always type, because at this stage we passed parsing already
+  typeCheck f _ = True
+
+--------------------------------------------------------------------------------
+--------------------------        EVALUATION        ----------------------------
+--------------------------------------------------------------------------------
 
 
 
