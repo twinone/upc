@@ -41,10 +41,6 @@ instance (Show a) => Show (BExpr a) where
   show (Eq x y) = show x ++ " = " ++ show y
 
 
-data Seq a
-  = Seq [Command a]
-  deriving (Read)
-
 
 
 
@@ -56,8 +52,9 @@ data Command a
   | Pop     Ident Ident      -- Pop x y pops the top of x to y
   | Push    Ident (NExpr a)  -- Push x y pushes y onto x
   | Size    Ident Ident      -- Size x y assigns the len(x) to y
-  | Cond    (BExpr a) (Seq a) (Seq a) -- Cond x y z executes if x then y else z
-  | Loop    (BExpr a) (Seq a) -- Loop x y executes y while x
+  | Cond    (BExpr a) (Command a) (Command a) -- Cond x y z executes if x then y else z
+  | Loop    (BExpr a) (Command a) -- Loop x y executes y while x
+  | Seq     [Command a]
   deriving (Read)
 
 instance (Show a) => Show (Command a) where
@@ -74,11 +71,10 @@ instance (Show a) => Show (Command a) where
       iv = show' x
       ev (Seq []) = ""
       ev _ = "ELSE\n" ++ show' y
-
-instance (Show a) => Show (Seq a) where
   show x = unlines $ (map (drop 2)) $ lines $ (show' x)
 
-show' :: (Show a) => Seq a -> String
+-- show a sequence
+show' :: (Show a) => Command a -> String
 show' (Seq x) = unlines (map (rstrip. indent . show) x)
   where
     indent = (unlines . (map ("  "++)) . lines)
@@ -204,11 +200,13 @@ instance Evaluable BExpr where
   typeCheck f (Gt x y)  = typeCheck f x && typeCheck f y
   typeCheck f (Eq x y)  = typeCheck f x && typeCheck f y
 
---------------------------------------------------------------------------------
---------------------------        EVALUATION        ----------------------------
---------------------------------------------------------------------------------
 
+--interpretCommand :: (Num a, Ord a) =>
+--   SymTable a -> [a] -> Command a -> ((Either String [a]),SymTable a, [a])
+-- SymTable      Inputs Commands     Err|Outputs, SymTable, Input
 
+--interpretProgram :: (Num a, Ord a) =>
+--  [a] -> Command a -> (Either String [a])
 
 
 --------------------------------------------------------------------------------
@@ -217,4 +215,4 @@ instance Evaluable BExpr where
 
 main = do
   input <- getContents
-  putStrLn (show (read input :: (Seq Value)))
+  putStrLn (show (read input :: (Command Value)))
