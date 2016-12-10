@@ -88,6 +88,42 @@ show' (Seq x) = unlines (map (rstrip. indent . show) x)
 --------------------------        EVALUATION        ----------------------------
 --------------------------------------------------------------------------------
 
+-- SymTable holds all variables
+-- TODO: Make this a RB tree maybe for efficiency
+-- We're not allowed to use Haskell's data structures
+type Sym a = Either a [a]
+data Entry a = Entry Ident (Sym a) deriving (Show)
+data SymTable a = SymTable [Entry a] deriving (Show)
+
+isStack :: Sym a -> Bool
+isStack (Left a) = False
+isStack _ = True
+
+-- destructuring functions
+key :: Entry a -> Ident
+key (Entry k _) = k
+
+val :: Entry a -> Sym a
+val (Entry _ v) = v
+
+elems :: SymTable a -> [Entry a]
+elems (SymTable t) = t
+
+-- manipulation of a symtable
+setSym :: SymTable a -> Ident -> Sym a -> SymTable a
+setSym t k v = SymTable $ (Entry k v):(elems $ delSym t k)
+
+delSym :: SymTable a -> Ident -> SymTable a
+delSym (SymTable t) k = SymTable r
+  where r = filter ((/=k).key) t
+
+getSym :: SymTable a -> Ident -> Maybe (Sym a)
+getSym (SymTable []) _ = Nothing
+getSym t k = if k == key hd then Just (val hd) else getSym (SymTable tl) k
+  where
+    hd = (head . elems) t
+    tl = (tail . elems) t
+
 
 
 
