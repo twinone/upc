@@ -8,6 +8,8 @@ typeNil = "nil"
 typeStack = "stack"
 typeSym = "sym"
 
+file = "programhs.txt"
+
 
 
 -- Identifier for a variable
@@ -15,7 +17,7 @@ type Ident = String
 -- Only used in main
 -- Current type used for the values of the program
 -- Can be any Num
-type Value = Int
+type Value = Double
 
 --------------------------------------------------------------------------------
 --------------------------         PARSING          ----------------------------
@@ -256,7 +258,7 @@ tc :: (Evaluable e) => SymTable a -> (e a) -> Bool
 tc t x = typeCheck (typeOf t) x
 
 
-interpretCommand :: (Num a, Ord a, Show a) =>
+interpretCommand :: (Num a, Ord a) =>
    SymTable a -> [a] -> Command a -> (Either String [a], SymTable a, [a])
 
 -- Seq
@@ -353,18 +355,29 @@ interpretCommand t i (Loop c x)
     intval  = right val
     val     = eval (getSym t) c
 
--- interpretProgram :: (Num a, Ord a) =>
---   [a] -> Command a -> (Either String [a])
+interpretProgram :: (Num a, Ord a) => [a] -> Command a -> (Either String [a])
+interpretProgram i c = res
+  where
+    (res, _, _) = interpretCommand (SymTable []) i c
 
+rund :: [Double] -> String -> (Either String [Double])
+rund i c = interpretProgram i (read c :: (Command Double))
 
+runi :: [Int] -> String -> (Either String [Int])
+runi i c = interpretProgram i (read c :: (Command Int))
 
 --------------------------------------------------------------------------------
 --------------------------           MAIN           ----------------------------
 --------------------------------------------------------------------------------
 
+
 main = do
   input <- getContents
-  putStrLn (show (read input :: (Command Value)))
-  putStrLn (st (interpretCommand (SymTable []) [1..30] (read input :: (Command Value))))
+  program <- readFile file
+
+  putStrLn $ show $ rund [30..100] program
+  putStrLn "---"
+  putStrLn $ show $ runi [30..100] program
+--  putStrLn (show (read program :: (Command Value)))
   where
     st (o, a, x) = show o ++"\n" ++show a ++"\n"++ show x
