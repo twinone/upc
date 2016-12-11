@@ -3,7 +3,7 @@
 OUT="programhs.txt"
 
 if [[ -z "$1" ]]; then
-	TEST="test/test.in"
+	TEST="tests/test.in"
 else
 	TEST="$1"
 fi
