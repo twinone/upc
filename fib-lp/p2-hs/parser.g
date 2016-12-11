@@ -98,13 +98,13 @@ void ppl(AST *a) {
   cout << "("; print(a); cout << ")";
 }
 
-void printBexpr(AST *a);
+void printExpr(AST *a);
 
 void ppb(AST *a) {
-  cout << "("; printBexpr(a); cout << ")";
+  cout << "("; printExpr(a); cout << ")";
 }
 
-void printBexpr(AST *a) {
+void printExpr(AST *a) {
   if (a->type == OR||a->type == AND) {
     cout << (a->type == OR ? "OR" : "AND") << " ";
     ppb(a->down); cout << " ";
@@ -123,13 +123,13 @@ void printBexpr(AST *a) {
   else if (a->type == INT) { cout << "Const " << a->text; }
   else if (a->type == ADD) {
     cout << (a->text=="+"?"Plus":"Minus") << " ";
-    cout << "("; printBexpr(a->down);        cout << ") ";
-    cout << "("; printBexpr(a->down->right); cout << ")";
+    cout << "("; printExpr(a->down);        cout << ") ";
+    cout << "("; printExpr(a->down->right); cout << ")";
   }
   else if (a->type == MULT) {
     cout << "Times ";
-    cout << "("; printBexpr(a->down);        cout << ") ";
-    cout << "("; printBexpr(a->down->right); cout << ")";
+    cout << "("; printExpr(a->down);        cout << ") ";
+    cout << "("; printExpr(a->down->right); cout << ")";
   }
 }
 /// print AST, recursively, with indentation
@@ -148,14 +148,14 @@ void print(AST *a) {
   else if (a->type == PRINT) {
     cout << "Print ";
     cout << "(";
-    printBexpr(a->down);
+    printExpr(a->down);
     cout << ")";
   }
   else if (a->type == ASSIGN) {
     cout << "Assign " << '"' << a->down->text << '"';
     cout << " ";
     cout << "(";
-    printBexpr(a->down->right);
+    printExpr(a->down->right);
     cout << ")";
   }
   else if (a->type == ID) { cout << "Var "<< '"' << a->text << '"'; }
@@ -167,12 +167,12 @@ void print(AST *a) {
   else if (a->type == PUSH) {
     cout << "Push " << '"' << a->down->text << '"' << " ";
     cout << "(";
-    printBexpr(a->down->right);
+    printExpr(a->down->right);
     cout << ")";
   }
   else if (a->type == IF) {
     cout << "Cond ";
-    cout << "("; printBexpr(a->down); cout << ") "; // bool
+    cout << "("; printExpr(a->down); cout << ") "; // bool
     if (a->down->right == NULL) cout << "(Seq []) ";
     else { cout << "("; print(a->down->right); cout << ") "; }
     if (a->down->right->right == NULL) cout << "(Seq [])";
@@ -180,7 +180,7 @@ void print(AST *a) {
   }
   else if (a->type == WHILE) {
     cout << "Loop ";
-    cout << "("; printBexpr(a->down); cout << ") "; // bool
+    cout << "("; printExpr(a->down); cout << ") "; // bool
     if (a->down->right == NULL) cout << "(Seq [])";
     else { cout << "("; print(a->down->right); cout << ")"; }
   }
