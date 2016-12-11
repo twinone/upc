@@ -92,40 +92,6 @@ AST* child(AST *a,int n) {
   return c;
 }
 
-
-
-/// print AST, recursively, with indentation
-void ASTPrintIndent(AST *a,string s)
-{
-  if (a==NULL) return;
-
-  cout<<a->kind;
-  if (a->text!="") cout<<"("<<a->text<<")";
-  cout<<endl;
-
-  AST *i = a->down;
-  while (i!=NULL && i->right!=NULL) {
-    cout<<s+"  \\__";
-    ASTPrintIndent(i,s+"  |"+string(i->kind.size()+i->text.size(),' '));
-    i=i->right;
-  }
-
-  if (i!=NULL) {
-      cout<<s+"  \\__";
-      ASTPrintIndent(i,s+"   "+string(i->kind.size()+i->text.size(),' '));
-      i=i->right;
-  }
-}
-
-/// print AST
-void ASTPrint(AST *a)
-{
-  while (a!=NULL) {
-    cout<<" ";
-    ASTPrintIndent(a,"");
-    a=a->right;
-  }
-}
 void print(AST *a);
 // print with parentheses or not if it's a leaf
 void ppl(AST *a) {
@@ -179,6 +145,12 @@ void print(AST *a) {
     }
     cout << "]";
   }
+  else if (a->type == PRINT) {
+    cout << "Print ";
+    cout << "(";
+    printBexpr(a->down);
+    cout << ")";
+  }
   else if (a->type == ASSIGN) {
     cout << "Assign " << '"' << a->down->text << '"';
     cout << " ";
@@ -188,7 +160,6 @@ void print(AST *a) {
   }
   else if (a->type == ID) { cout << "Var "<< '"' << a->text << '"'; }
   else if (a->type == INT) { cout << "Const " << a->text; }
-  else if (a->type == PRINT) { cout << "Print " << '"' << a->down->text << '"'; }
   else if (a->type == INPUT) { cout << "Input " << '"' << a->down->text << '"'; }
   else if (a->type == EMPTY) { cout << "Empty " << '"' << a->down->text << '"'; }
   else if (a->type == POP) { cout << "Pop " << '"' << a->down->text << "\" \"" << a->down->right->text << '"'; }
@@ -234,8 +205,6 @@ void ASTPrint2(AST *a)
 
 int main(int argc, char **argv) {
   ANTLR(parse(&root), stdin);
-  if (argc == 1)
-    ASTPrint(root);
   ASTPrint2(root);
 }
 >>
@@ -281,10 +250,8 @@ nexpr: nfact (ADD^ nfact)*;
 nfact: natom (MULT^ natom)*;
 natom: INT|ID;
 
-print: PRINT^ ID;
+print: PRINT^ nexpr;
 
-
-/////////////////////////
 cond: IF^ bexpr cond_then cond_else END!;
 // Note that it's allowed,
 // like in regular programming languages,

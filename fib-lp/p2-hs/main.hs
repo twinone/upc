@@ -46,7 +46,7 @@ instance (Show a) => Show (BExpr a) where
 
 data Command a
   = Assign  Ident (NExpr a)  -- Assign x y assigns a constant value y to x
-  | Print   Ident            -- Print x prints the value of x to stdout
+  | Print   (NExpr a)        -- Print x prints the value of x to stdout
   | Input   Ident            -- Input x reads a value from stdin into x
   | Empty   Ident            -- Return an empty list
   | Pop     Ident Ident      -- Pop x y pops the top of x to y
@@ -59,7 +59,7 @@ data Command a
 
 instance (Show a) => Show (Command a) where
   show (Assign i x) = i ++ " := " ++ show x ++ "\n"
-  show (Print i)    = "PRINT " ++ i ++ "\n"
+  show (Print i)    = "PRINT " ++ show i ++ "\n"
   show (Input i)    = "INPUT " ++ i ++ "\n"
   show (Empty i)    = "EMPTY " ++ i ++ "\n"
   show (Pop i j)    = "POP " ++ i ++ " " ++ j ++ "\n"
@@ -149,6 +149,18 @@ getSym t k = if k == key hd then Just ((sym . val) hd) else getSym (SymTable tl)
    tl = (tail . elems) t
 
 
+getSymOrErrF :: (Ident -> Maybe a) -> Ident -> Either String a
+getSymOrErrF f x
+  | isNothing v  = Left ("ReferenceError: " ++ x ++ " is not defined")
+  | otherwise    = Right (just v)
+  where v = f x
+
+
+getSymOrErr :: SymTable a -> Ident -> Either String a
+getSymOrErr t x = getSymOrErrF (getSym t) x
+
+
+
 class Evaluable e where
   eval      :: (Num a, Ord a) => (Ident -> Maybe a) -> (e a) -> (Either String a)
   typeCheck :: (Ident -> String) -> (e a) -> Bool
@@ -156,10 +168,7 @@ class Evaluable e where
 
 instance Evaluable NExpr where
   eval _ (Const a) = Right a
-  eval f (Var x)
-    | isNothing v  = Left ("ReferenceError: " ++ x ++ " is not defined")
-    | otherwise    = Right (just v)
-    where v = f x
+  eval f (Var x) = getSymOrErrF f x
   eval f (Plus x y)   = evalOp' f (+) x y
   eval f (Minus x y)  = evalOp' f (-) x y
   eval f (Times x y)  = evalOp' f (*) x y
@@ -209,23 +218,23 @@ instance Evaluable BExpr where
 
 interpretCommand :: (Num a, Ord a, Show a) =>
    SymTable a -> [a] -> Command a -> (Either String [a], SymTable a, [a])
-interpretCommand = ic
 
-
-ic  :: (Num a, Ord a, Show a) =>
-   SymTable a -> [a] -> Command a -> (Either String [a], SymTable a, [a])
--- SymTable      Inputs Commands     Err|Outputs, SymTable, Input
-ic t i (Seq []) = (Right [], t, i)
-ic t i (Seq (c:cs)) = (oo, ot, oi)
+-- Seq
+interpretCommand t i (Seq []) = (Right [], t, i)
+interpretCommand t i (Seq (c:cs))
+  | isLeft co = (co, SymTable [], [])
+  | isLeft ro = (ro, SymTable [], [])
+  | otherwise = (Right ((right co) ++ (right ro)), rt, ri)
   where
-    (co, ct, ci) = ic t i c
-    (ro, rt, ri) = ic ct ci (Seq cs)
-    (oo, ot, oi) --lazy, only used if needed
-      | isLeft co = (co, SymTable [], [])
-      | isLeft ro = (ro, SymTable [], [])
-      | otherwise =
-        (Right ((right co) ++ (right ro)), rt, ri)
+    (co, ct, ci) = interpretCommand t i c
+    (ro, rt, ri) = interpretCommand ct ci (Seq cs)
 
+-- Assign
+interpretCommand t i (Assign k v)
+  | isLeft val = (Left (left val), SymTable [], [])
+  | otherwise  = (Right [], setSym t k (Sym (right val)), i)
+  where
+    val = eval (getSym t) v
 
 --  data Command a
 --    = Assign  Ident (NExpr a)  -- Assign x y assigns a constant value y to x
@@ -240,22 +249,23 @@ ic t i (Seq (c:cs)) = (oo, ot, oi)
 --    | Seq     [Command a]
 --    deriving (Read)
 
-ic t i (Assign k v) = (oo, ot, oi)
+--   SymTable a -> [a] -> Command a -> (Either String [a], SymTable a, [a])
+--   SymTable      Inputs Commands  ->   Err|Outputs, SymTable, Input
+
+
+interpretCommand t i (Print v)
+  | isLeft val = (Left  (left val), SymTable [], [])
+  | otherwise  = (Right [right val], t, i)
   where
     val = eval (getSym t) v
---    ot = setSym t k (Sym x)
-    (oo, ot, oi)
-      | isLeft val = (Left (left val), SymTable [], [])
-      | otherwise  = (Right [], setSym t k (Sym (right val)), i)
 
-ic t i (Print  k) = (Left "OK2", t, i)
-ic t i (Input  k) = (Left "OK3", t, i)
-ic t i (Empty  k) = (Left "OK4", t, i)
-ic t i (Pop  k v) = (Left "OK5", t, i)
-ic t i (Push   k v) = (Left "OK6", t, i)
-ic t i (Size   k v) = (Left "OK7", t, i)
-ic t i (Cond   k v l) = (Left "OK8", t, i)
-ic t i (Loop   k v) = (Left "OK9", t, i)
+interpretCommand t i (Input  k) = (Left "OK3", t, i)
+interpretCommand t i (Empty  k) = (Left "OK4", t, i)
+interpretCommand t i (Pop  k v) = (Left "OK5", t, i)
+interpretCommand t i (Push   k v) = (Left "OK6", t, i)
+interpretCommand t i (Size   k v) = (Left "OK7", t, i)
+interpretCommand t i (Cond   k v l) = (Left "OK8", t, i)
+interpretCommand t i (Loop   k v) = (Left "OK9", t, i)
 
 
 -- interpretProgram :: (Num a, Ord a) =>
