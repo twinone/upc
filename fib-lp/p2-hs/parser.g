@@ -188,18 +188,11 @@ void print(AST *a) {
 /// print AST
 void ASTPrint2(AST *a)
 {
-
-  cout <<  endl << endl;
-  cout << "(";
   while (a!=NULL) {
     print(a);
     a=a->right;
   }
-  cout << ")";
-
-  cout <<  endl << endl;
-
-  //cout << endl << ")" << endl;
+  cout << endl;
 }
 
 
