@@ -236,6 +236,14 @@ interpretCommand t i (Assign k v)
   where
     val = eval (getSym t) v
 
+interpretCommand t i (Print v)
+  | isLeft val = (Left  (left val), SymTable [], [])
+  | otherwise  = (Right [right val], t, i)
+  where
+    val = eval (getSym t) v
+
+interpretCommand t i (Input k) = (Right [], setSym t k (Sym (head i)), tail i)
+
 --  data Command a
 --    = Assign  Ident (NExpr a)  -- Assign x y assigns a constant value y to x
 --    | Print   Ident            -- Print x prints the value of x to stdout
@@ -252,14 +260,6 @@ interpretCommand t i (Assign k v)
 --   SymTable a -> [a] -> Command a -> (Either String [a], SymTable a, [a])
 --   SymTable      Inputs Commands  ->   Err|Outputs, SymTable, Input
 
-
-interpretCommand t i (Print v)
-  | isLeft val = (Left  (left val), SymTable [], [])
-  | otherwise  = (Right [right val], t, i)
-  where
-    val = eval (getSym t) v
-
-interpretCommand t i (Input  k) = (Left "OK3", t, i)
 interpretCommand t i (Empty  k) = (Left "OK4", t, i)
 interpretCommand t i (Pop  k v) = (Left "OK5", t, i)
 interpretCommand t i (Push   k v) = (Left "OK6", t, i)
@@ -280,6 +280,6 @@ interpretCommand t i (Loop   k v) = (Left "OK9", t, i)
 main = do
   input <- getContents
   putStrLn (show (read input :: (Command Value)))
-  putStrLn (st (interpretCommand (SymTable []) [] (read input :: (Command Value))))
+  putStrLn (st (interpretCommand (SymTable []) [1..30] (read input :: (Command Value))))
   where
     st (o, a, x) = show o ++"\n" ++show a ++"\n"++ show x
