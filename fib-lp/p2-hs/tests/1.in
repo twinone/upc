@@ -1,5 +1,0 @@
-X := 10
-WHILE X > 0 OR X = 0 DO
-	PRINT X
-	X := X - 1
-END

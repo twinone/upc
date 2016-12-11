@@ -17,7 +17,8 @@ Running
 Execute ./test <file> to execute the file
 I hope you're not on windows ^^
 
-For a nicer output: ./dbg.sh test/testcase.in
+For a nicer output: ./dbg.sh tests/testcase.in
+To test all test cases: ./testall.sh
 
 Notes
 =====

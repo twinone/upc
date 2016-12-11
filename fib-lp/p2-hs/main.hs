@@ -20,6 +20,7 @@ typeSym = "sym"
 
 file = "programhs.txt"
 
+
 -- Identifier for a variable
 type Ident = String
 
@@ -401,9 +402,13 @@ genInput i rg s = ins ++ rands
 
 run :: (Eq a, Num a) => String -> a -> String -> Int -> String
 run prog mode is s
-  | mode == 0 = showEither (runi (genInput is (-1000, 1000) s) prog)
-  | mode == 1 = showEither (rund (genInput is (-1000, 1000) s) prog)
-
+  | mode == 0 = out runi (-1000) 1000
+  | mode == 1 = out rund (-1000) 1000
+  where
+    out f a b = show' $ f (genInput is (a, b) s) prog
+    show' (Left x) = x
+    show' (Right x) = show $ reverse x -- we need to reverse the outputs
+    
 main = do
   prog <- readFile file
 
