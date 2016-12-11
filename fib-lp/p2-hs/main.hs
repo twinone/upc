@@ -1,6 +1,9 @@
 -- Author: Twinone (Luuk W.)
 -- Code commented with love for a correction with love
 
+import System.Random
+
+
 --------------------------------------------------------------------------------
 ---------------------------    CONSTANTS    ------------------------------------
 --------------------------------------------------------------------------------
@@ -150,6 +153,10 @@ left (Left a) = a
 right :: Either a b -> b
 right (Right b) = b
 
+showEither :: (Show a, Show b) => Either a b -> String
+showEither (Left a)  = show a
+showEither (Right a) = show a
+
 isStack :: Sym a -> Bool
 isStack (Sym a) = False
 isStack _ = True
@@ -179,6 +186,10 @@ typeOf t k
   where
     val = just mb
     mb = get t k
+
+-- string to int
+stoi :: String -> Int
+stoi x = read x :: Int
 
 -- bool to int
 btoi :: Num a => Bool -> a
@@ -335,7 +346,6 @@ interpretCommand t i (Push k v)
 interpretCommand t i (Size k v)
   | isNothing mb    = err $ referenceError
   | not (isStack r) = err $ typeError
-  | s == []         = err emptyStackError
   | otherwise       = (Right [], ot, i)
   where
     s   = stack r
@@ -373,8 +383,6 @@ err x = (Left x, SymTable [], [])
 tc :: (Evaluable e) => SymTable a -> (e a) -> Bool
 tc t x = typeCheck (typeOf t) x
 
-
-
 --------------------------------------------------------------------------------
 --------------------------           MAIN           ----------------------------
 --------------------------------------------------------------------------------
@@ -385,18 +393,38 @@ rund i c = interpretProgram i (read c :: (Command Double))
 runi :: [Int] -> String -> (Either String [Int])
 runi i c = interpretProgram i (read c :: (Command Int))
 
-main = do
-  program <- readFile file
+genInput :: (Read a, Random a) => String -> (a, a) -> Int -> [a]
+genInput i rg s = ins ++ rands
+  where
+    ins   = map read (words i)
+    rands = randomRs rg (mkStdGen s)
 
-  putStrLn "Select type of variable:"
+run :: (Eq a, Num a) => String -> a -> String -> Int -> String
+run prog mode is s
+  | mode == 0 = showEither (runi (genInput is (-1000, 1000) s) prog)
+  | mode == 1 = showEither (rund (genInput is (-1000, 1000) s) prog)
+
+main = do
+  prog <- readFile file
+
+  putStrLn "Select Variable type:"
   putStrLn "  0: Int"
   putStrLn "  1: Double"
-  putStr " > "
-  varType <- getLine
+  t <- getLine
 
-  putStrLn $ show $ rund [30..100] program
-  putStrLn "---"
-  putStrLn $ show $ runi [30..100] program
---  putStrLn (show (read program :: (Command Value)))
-  where
-    st (o, a, x) = show o ++"\n" ++show a ++"\n"++ show x
+  putStrLn "Select execution mode:"
+  putStrLn "  0: Manual"
+  putStrLn "  1: Single Test"
+  putStrLn "  2: Multiple Test"
+  m <- getLine
+
+  case read m of
+    0 -> do
+      input <- getContents
+      putStrLn (run prog (stoi t) input 42)
+    1 -> do
+      putStrLn (run prog (stoi t) "" 42)
+    2 -> do
+      putStrLn ("Enter number of test cases:")
+      n <- getLine
+      putStr $ unlines $ map (\x -> run prog (stoi t) "" (42+x)) [1..(stoi n)]

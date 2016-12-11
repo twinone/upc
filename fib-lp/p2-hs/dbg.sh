@@ -10,7 +10,7 @@ fi
 
 
 
-CPLUS_INCLUDE_PATH=~/Downloads/pccts/h/ make clean all
+make all
 
 ./parser < $TEST > $OUT
 
@@ -30,7 +30,7 @@ echo ""
 echo "====================== OUTPUT  ========================"
 echo ""
 
-./main < $OUT
+./main
 
 echo ""
 echo "======================================================="
