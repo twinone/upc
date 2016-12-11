@@ -1,8 +1,0 @@
-// right associative:
-//nexpr: natom (ADD^ nexpr|);
-//natom: (ID|INT) (MULT^ natom|);
-
-// left associative
-//nexpr: nmult (ADD^ nmult)*;
-//nmult: natom (MULT^ natom)*;
-

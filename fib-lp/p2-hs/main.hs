@@ -1,3 +1,9 @@
+typeError = "type error "
+referenceError x = "ReferenceError: " ++ x ++ " is not defined"
+emptyStackError = "empty stack"
+
+
+
 -- Identifier for a variable
 type Ident = String
 -- Only used in main
@@ -116,6 +122,9 @@ isStack _ = True
 sym :: Sym a -> a
 sym (Sym a) = a
 
+stack :: Sym a -> [a]
+stack (Stack a) = a
+
 -- destructuring functions
 key :: Entry a -> Ident
 key (Entry k _) = k
@@ -127,38 +136,47 @@ elems :: SymTable a -> [Entry a]
 elems (SymTable t) = t
 
 -- manipulation of a symtable
-setSym :: SymTable a -> Ident -> Sym a -> SymTable a
-setSym t k v = SymTable $ (Entry k v):(elems $ delSym t k)
+set :: SymTable a -> Ident -> Sym a -> SymTable a
+set t k v = SymTable $ (Entry k v):(elems $ del t k)
 
 -- sets adds all the values from the first table to the second
 -- overwriting any existing values
 setAll :: SymTable a -> SymTable a -> SymTable a
 setAll (SymTable []) b = b
-setAll (SymTable (x:xs)) b = setAll (SymTable xs) (setSym b (key x) (val x))
+setAll (SymTable (x:xs)) b = setAll (SymTable xs) (set b (key x) (val x))
 
 
-delSym :: SymTable a -> Ident -> SymTable a
-delSym (SymTable t) k = SymTable r
+del :: SymTable a -> Ident -> SymTable a
+del (SymTable t) k = SymTable r
   where r = filter ((/=k).key) t
 
-getSym :: SymTable a -> Ident -> Maybe a
-getSym (SymTable []) _ = Nothing
-getSym t k = if k == key hd then Just ((sym . val) hd) else getSym (SymTable tl) k
- where
+get :: SymTable a -> Ident -> Maybe (Sym a)
+get (SymTable []) _ = Nothing
+get t k
+  | k == key hd = Just (val hd)
+  | otherwise   = get (SymTable tl) k
+  where
    hd = (head . elems) t
    tl = (tail . elems) t
 
+getSym :: SymTable a -> Ident -> Maybe a
+getSym (SymTable []) _ = Nothing
+getSym t k
+  | k == key hd = Just ((sym . val) hd)
+  | otherwise   = getSym (SymTable tl) k
+  where
+   hd = (head . elems) t
+   tl = (tail . elems) t
 
 getSymOrErrF :: (Ident -> Maybe a) -> Ident -> Either String a
 getSymOrErrF f x
-  | isNothing v  = Left ("ReferenceError: " ++ x ++ " is not defined")
+  | isNothing v  = Left (referenceError x)
   | otherwise    = Right (just v)
   where v = f x
 
 
 getSymOrErr :: SymTable a -> Ident -> Either String a
 getSymOrErr t x = getSymOrErrF (getSym t) x
-
 
 
 class Evaluable e where
@@ -216,14 +234,17 @@ instance Evaluable BExpr where
   typeCheck f (Eq x y)  = typeCheck f x && typeCheck f y
 
 
+err :: String -> (Either String [a], SymTable a, [a])
+err x = (Left x, SymTable [], [])
+
 interpretCommand :: (Num a, Ord a, Show a) =>
    SymTable a -> [a] -> Command a -> (Either String [a], SymTable a, [a])
 
 -- Seq
 interpretCommand t i (Seq []) = (Right [], t, i)
 interpretCommand t i (Seq (c:cs))
-  | isLeft co = (co, SymTable [], [])
-  | isLeft ro = (ro, SymTable [], [])
+  | isLeft co = err (left co)
+  | isLeft ro = err (left ro)
   | otherwise = (Right ((right co) ++ (right ro)), rt, ri)
   where
     (co, ct, ci) = interpretCommand t i c
@@ -231,24 +252,51 @@ interpretCommand t i (Seq (c:cs))
 
 -- Assign
 interpretCommand t i (Assign k v)
-  | isLeft val = (Left (left val), SymTable [], [])
-  | otherwise  = (Right [], setSym t k (Sym (right val)), i)
+  | isLeft val = err (left val)
+  | otherwise  = (Right [], set t k (Sym (right val)), i)
   where
     val = eval (getSym t) v
 
 interpretCommand t i (Print v)
-  | isLeft val = (Left  (left val), SymTable [], [])
+  | isLeft val = err (left val)
   | otherwise  = (Right [right val], t, i)
   where
     val = eval (getSym t) v
 
-interpretCommand t i (Input k) = (Right [], setSym t k (Sym (head i)), tail i)
+interpretCommand t i (Input k) = (Right [], set t k (Sym (head i)), tail i)
 
---  data Command a
---    = Assign  Ident (NExpr a)  -- Assign x y assigns a constant value y to x
---    | Print   Ident            -- Print x prints the value of x to stdout
---    | Input   Ident            -- Input x reads a value from stdin into x
---    | Empty   Ident            -- Return an empty list
+interpretCommand t i (Empty k) = (Right [], set t k (Stack []), i)
+
+interpretCommand t i (Pop k v)
+  | isNothing mb    = err (referenceError k)
+  | not (isStack r) = err (typeError ++ ": "++ k ++ " is not a stack")
+  | s == []         = err emptyStackError
+  | otherwise       = (Right [], ot, i)
+  where
+    s = stack r
+    r = just mb
+    mb = get t k
+
+    h = head s
+    t1 = set t k (Stack (tail s)) -- table with new stack
+    ot = set t1 v (Sym h) -- table with the output variable set
+
+
+interpretCommand t i (Push k v)
+  | isNothing mb    = err (referenceError k)
+  | not (isStack r) = err (typeError ++ ": "++ k ++ " is not a stack")
+  | isLeft val      = err (left val)
+  | otherwise       = (Right [], ot, i)
+  where
+    s = stack r
+    r = just mb
+    mb = get t k
+    ot = set t k (Stack (num:s))
+
+    num = right val
+    val = eval (getSym t) v
+
+
 --    | Pop     Ident Ident      -- Pop x y pops the top of x to y
 --    | Push    Ident (NExpr a)  -- Push x y pushes y onto x
 --    | Size    Ident Ident      -- Size x y assigns the len(x) to y
@@ -260,9 +308,6 @@ interpretCommand t i (Input k) = (Right [], setSym t k (Sym (head i)), tail i)
 --   SymTable a -> [a] -> Command a -> (Either String [a], SymTable a, [a])
 --   SymTable      Inputs Commands  ->   Err|Outputs, SymTable, Input
 
-interpretCommand t i (Empty  k) = (Left "OK4", t, i)
-interpretCommand t i (Pop  k v) = (Left "OK5", t, i)
-interpretCommand t i (Push   k v) = (Left "OK6", t, i)
 interpretCommand t i (Size   k v) = (Left "OK7", t, i)
 interpretCommand t i (Cond   k v l) = (Left "OK8", t, i)
 interpretCommand t i (Loop   k v) = (Left "OK9", t, i)
