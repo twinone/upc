@@ -2,7 +2,7 @@
 type Ident = String
 -- Only used in main
 -- Current type used for the values of the program
--- Can be any Number
+-- Can be any Num
 type Value = Int
 
 --------------------------------------------------------------------------------
@@ -113,9 +113,8 @@ isStack :: Sym a -> Bool
 isStack (Sym a) = False
 isStack _ = True
 
-sym :: Sym a -> Maybe a
-sym (Sym a) = Just a
-sym _ = Nothing
+sym :: Sym a -> a
+sym (Sym a) = a
 
 -- destructuring functions
 key :: Entry a -> Ident
@@ -131,13 +130,20 @@ elems (SymTable t) = t
 setSym :: SymTable a -> Ident -> Sym a -> SymTable a
 setSym t k v = SymTable $ (Entry k v):(elems $ delSym t k)
 
+-- sets adds all the values from the first table to the second
+-- overwriting any existing values
+setAll :: SymTable a -> SymTable a -> SymTable a
+setAll (SymTable []) b = b
+setAll (SymTable (x:xs)) b = setAll (SymTable xs) (setSym b (key x) (val x))
+
+
 delSym :: SymTable a -> Ident -> SymTable a
 delSym (SymTable t) k = SymTable r
   where r = filter ((/=k).key) t
 
-getSym :: SymTable a -> Ident -> Maybe (Sym a)
+getSym :: SymTable a -> Ident -> Maybe a
 getSym (SymTable []) _ = Nothing
-getSym t k = if k == key hd then Just (val hd) else getSym (SymTable tl) k
+getSym t k = if k == key hd then Just ((sym . val) hd) else getSym (SymTable tl) k
  where
    hd = (head . elems) t
    tl = (tail . elems) t
@@ -201,12 +207,60 @@ instance Evaluable BExpr where
   typeCheck f (Eq x y)  = typeCheck f x && typeCheck f y
 
 
---interpretCommand :: (Num a, Ord a) =>
---   SymTable a -> [a] -> Command a -> ((Either String [a]),SymTable a, [a])
--- SymTable      Inputs Commands     Err|Outputs, SymTable, Input
+interpretCommand :: (Num a, Ord a, Show a) =>
+   SymTable a -> [a] -> Command a -> (Either String [a], SymTable a, [a])
+interpretCommand = ic
 
---interpretProgram :: (Num a, Ord a) =>
---  [a] -> Command a -> (Either String [a])
+
+ic  :: (Num a, Ord a, Show a) =>
+   SymTable a -> [a] -> Command a -> (Either String [a], SymTable a, [a])
+-- SymTable      Inputs Commands     Err|Outputs, SymTable, Input
+ic t i (Seq []) = (Right [], t, i)
+ic t i (Seq (c:cs)) = (oo, ot, oi)
+  where
+    (co, ct, ci) = ic t i c
+    (ro, rt, ri) = ic ct ci (Seq cs)
+    (oo, ot, oi) --lazy, only used if needed
+      | isLeft co = (co, SymTable [], [])
+      | isLeft ro = (ro, SymTable [], [])
+      | otherwise =
+        (Right ((right co) ++ (right ro)), rt, ri)
+
+
+--  data Command a
+--    = Assign  Ident (NExpr a)  -- Assign x y assigns a constant value y to x
+--    | Print   Ident            -- Print x prints the value of x to stdout
+--    | Input   Ident            -- Input x reads a value from stdin into x
+--    | Empty   Ident            -- Return an empty list
+--    | Pop     Ident Ident      -- Pop x y pops the top of x to y
+--    | Push    Ident (NExpr a)  -- Push x y pushes y onto x
+--    | Size    Ident Ident      -- Size x y assigns the len(x) to y
+--    | Cond    (BExpr a) (Command a) (Command a) -- Cond x y z executes if x then y else z
+--    | Loop    (BExpr a) (Command a) -- Loop x y executes y while x
+--    | Seq     [Command a]
+--    deriving (Read)
+
+ic t i (Assign k v) = (oo, ot, oi)
+  where
+    val = eval (getSym t) v
+--    ot = setSym t k (Sym x)
+    (oo, ot, oi)
+      | isLeft val = (Left (left val), SymTable [], [])
+      | otherwise  = (Right [], setSym t k (Sym (right val)), i)
+
+ic t i (Print  k) = (Left "OK2", t, i)
+ic t i (Input  k) = (Left "OK3", t, i)
+ic t i (Empty  k) = (Left "OK4", t, i)
+ic t i (Pop  k v) = (Left "OK5", t, i)
+ic t i (Push   k v) = (Left "OK6", t, i)
+ic t i (Size   k v) = (Left "OK7", t, i)
+ic t i (Cond   k v l) = (Left "OK8", t, i)
+ic t i (Loop   k v) = (Left "OK9", t, i)
+
+
+-- interpretProgram :: (Num a, Ord a) =>
+--   [a] -> Command a -> (Either String [a])
+
 
 
 --------------------------------------------------------------------------------
@@ -216,3 +270,6 @@ instance Evaluable BExpr where
 main = do
   input <- getContents
   putStrLn (show (read input :: (Command Value)))
+  putStrLn (st (interpretCommand (SymTable []) [] (read input :: (Command Value))))
+  where
+    st (o, a, x) = show o ++"\n" ++show a ++"\n"++ show x
