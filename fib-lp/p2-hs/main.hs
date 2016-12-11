@@ -1,6 +1,12 @@
+-- errors
 typeError = "type error "
 referenceError x = "ReferenceError: " ++ x ++ " is not defined"
 emptyStackError = "empty stack"
+
+-- types
+typeNil = "nil"
+typeStack = "stack"
+typeSym = "sym"
 
 
 
@@ -192,7 +198,7 @@ instance Evaluable NExpr where
   eval f (Times x y)  = evalOp' f (*) x y
 
   typeCheck _ (Const _)   = True
-  typeCheck f (Var x)     = f x == "sym"
+  typeCheck f (Var x)     = f x == typeSym
   typeCheck f (Plus x y)  = typeCheck f x && typeCheck f y
   typeCheck f (Minus x y) = typeCheck f x && typeCheck f y
   typeCheck f (Times x y) = typeCheck f x && typeCheck f y
@@ -206,6 +212,15 @@ evalOp' f op x y
     xv = eval f x
     yv = eval f y
 
+
+typeOf :: SymTable a -> Ident -> String
+typeOf t k
+  | isNothing mb  = typeNil
+  | isStack val   = typeStack
+  | otherwise     = typeSym
+  where
+    val = just mb
+    mb = get t k
 
 btoi :: Num a => Bool -> a
 btoi True  = 1
@@ -237,29 +252,36 @@ instance Evaluable BExpr where
 err :: String -> (Either String [a], SymTable a, [a])
 err x = (Left x, SymTable [], [])
 
+tc :: (Evaluable e) => SymTable a -> (e a) -> Bool
+tc t x = typeCheck (typeOf t) x
+
+
 interpretCommand :: (Num a, Ord a, Show a) =>
    SymTable a -> [a] -> Command a -> (Either String [a], SymTable a, [a])
 
 -- Seq
 interpretCommand t i (Seq []) = (Right [], t, i)
 interpretCommand t i (Seq (c:cs))
-  | isLeft co = err (left co)
-  | isLeft ro = err (left ro)
+  | isLeft co = err $ left co
+  | isLeft ro = err $ left ro
   | otherwise = (Right ((right co) ++ (right ro)), rt, ri)
   where
     (co, ct, ci) = interpretCommand t i c
     (ro, rt, ri) = interpretCommand ct ci (Seq cs)
 
+
 -- Assign
 interpretCommand t i (Assign k v)
-  | isLeft val = err (left val)
-  | otherwise  = (Right [], set t k (Sym (right val)), i)
+  | isLeft val    = err $ left val
+  | not (tc t v)  = err $ typeError ++ " no type assign nexpr"
+  | otherwise     = (Right [], set t k (Sym (right val)), i)
   where
     val = eval (getSym t) v
 
 interpretCommand t i (Print v)
-  | isLeft val = err (left val)
-  | otherwise  = (Right [right val], t, i)
+  | isLeft val    = err $ left val
+  | not (tc t v)  = err $ typeError ++ " no type print nexpr"
+  | otherwise     = (Right [right val], t, i)
   where
     val = eval (getSym t) v
 
@@ -268,8 +290,8 @@ interpretCommand t i (Input k) = (Right [], set t k (Sym (head i)), tail i)
 interpretCommand t i (Empty k) = (Right [], set t k (Stack []), i)
 
 interpretCommand t i (Pop k v)
-  | isNothing mb    = err (referenceError k)
-  | not (isStack r) = err (typeError ++ ": "++ k ++ " is not a stack")
+  | isNothing mb    = err $ referenceError k
+  | not (isStack r) = err $ typeError ++ ": "++ k ++ " is not a stack"
   | s == []         = err emptyStackError
   | otherwise       = (Right [], ot, i)
   where
@@ -283,35 +305,53 @@ interpretCommand t i (Pop k v)
 
 
 interpretCommand t i (Push k v)
-  | isNothing mb    = err (referenceError k)
-  | not (isStack r) = err (typeError ++ ": "++ k ++ " is not a stack")
-  | isLeft val      = err (left val)
+  | isNothing mb    = err $ referenceError k
+  | not (tc t v)    = err $ typeError ++ " no type push nexpr"
+  | not (isStack r) = err $ typeError ++ ": "++ k ++ " is not a stack"
+  | isLeft val      = err $ left val
   | otherwise       = (Right [], ot, i)
   where
-    s = stack r
-    r = just mb
-    mb = get t k
-    ot = set t k (Stack (num:s))
-
+    s   = stack r
+    r   = just mb
+    mb  = get t k
+    ot  = set t k (Stack (num:s))
     num = right val
     val = eval (getSym t) v
 
 
---    | Pop     Ident Ident      -- Pop x y pops the top of x to y
---    | Push    Ident (NExpr a)  -- Push x y pushes y onto x
---    | Size    Ident Ident      -- Size x y assigns the len(x) to y
---    | Cond    (BExpr a) (Command a) (Command a) -- Cond x y z executes if x then y else z
---    | Loop    (BExpr a) (Command a) -- Loop x y executes y while x
---    | Seq     [Command a]
---    deriving (Read)
+interpretCommand t i (Size k v)
+  | isNothing mb    = err $ referenceError k
+  | not (isStack r) = err $ typeError ++ ": "++ k ++ " is not a stack"
+  | s == []         = err emptyStackError
+  | otherwise       = (Right [], ot, i)
+  where
+    s   = stack r
+    r   = just mb
+    mb  = get t k
+    h   = fromIntegral $ length s
+    ot  = set t v (Sym h)
 
---   SymTable a -> [a] -> Command a -> (Either String [a], SymTable a, [a])
---   SymTable      Inputs Commands  ->   Err|Outputs, SymTable, Input
 
-interpretCommand t i (Size   k v) = (Left "OK7", t, i)
-interpretCommand t i (Cond   k v l) = (Left "OK8", t, i)
-interpretCommand t i (Loop   k v) = (Left "OK9", t, i)
+interpretCommand t i (Cond c x y)
+  | not (tc t c)  = err $ typeError ++ " no type if bexpr"
+  | isLeft val    = err $ left val
+  | bval          = interpretCommand t i x
+  | otherwise     = interpretCommand t i y
+  where
+    bval    = itob intval
+    intval  = right val
+    val     = eval (getSym t) c
 
+
+interpretCommand t i (Loop c x)
+  | not (tc t c)  = err $ typeError ++ " no type if bexpr"
+  | isLeft val    = err $ left val
+  | bval          = interpretCommand t i (Seq [x,Loop c x])
+  | otherwise     = (Right [], t, i)
+  where
+    bval    = itob intval
+    intval  = right val
+    val     = eval (getSym t) c
 
 -- interpretProgram :: (Num a, Ord a) =>
 --   [a] -> Command a -> (Either String [a])

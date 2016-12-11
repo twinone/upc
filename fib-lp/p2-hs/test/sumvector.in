@@ -1,9 +1,10 @@
 INPUT X
 EMPTY P
-WHILE X > 0 OR X = 0
+WHILE X > 0
 DO
   INPUT Y
   PUSH P Y
+  X := X - 1
 END
 S := 0
 SIZE P L
