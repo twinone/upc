@@ -422,7 +422,8 @@ runi i c = interpretProgram i (read c :: (Command Int))
 genInput :: (Read a, Random a) => String -> (a, a) -> Int -> [a]
 genInput i rg s = ins ++ rands
   where
-    ins   = map read (words i)
+    --ins   = map read (words i)
+    ins   = read (i)
     rands = randomRs rg (mkStdGen s)
 
 run :: (Eq a, Num a) => String -> a -> String -> Int -> String
@@ -432,12 +433,12 @@ run prog mode is s
   where
     out f a b = show' $ f (genInput is (a, b) s) prog
     show' (Left x) = x
-    show' (Right x) = i ++ o ++ n
+    show' (Right x) = i ++ o ++ n ++ a
       where
         i = "------- INPUTS ----------\n" ++ show xi ++ "\n"
         o = "------- OUTPUTS ---------\n" ++ show xo ++ "\n"
         n = "----- INSTRUCTIONS ------\n" ++      xn ++ "\n"
-        a = "-------------------------\n"
+        a = "ALL:" ++ show x ++ "\n"
         (xi, xo) = inout x
         xn = instrs x
 
