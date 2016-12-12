@@ -20,7 +20,6 @@ typeSym = "sym"
 
 file = "programhs.txt"
 
-
 -- Identifier for a variable
 type Ident = String
 
@@ -298,27 +297,27 @@ interpretCommand t i (Seq (c:cs))
 -- Assign
 interpretCommand t i (Assign k v)
   | isLeft val    = err $ left val
-  | not (tc t v)  = err $ typeError ++ " no type assign nexpr"
-  | otherwise     = (Right [], set t k (Sym (right val)), i)
+  | not (tc t v)  = err $ typeError
+  | otherwise     = (Right (cc "Assign"), set t k (Sym (right val)), i)
   where
     val = eval (getSym t) v
 
 interpretCommand t i (Print v)
   | isLeft val    = err $ left val
-  | not (tc t v)  = err $ typeError ++ " no type print nexpr"
-  | otherwise     = (Right [right val], t, i)
+  | not (tc t v)  = err $ typeError
+  | otherwise     = (Right ([1,right val]++(cc "Print")), t, i)
   where
     val = eval (getSym t) v
 
-interpretCommand t i (Input k) = (Right [], set t k (Sym (head i)), tail i)
+interpretCommand t i (Input k) = (Right ([0,(head i)]++(cc "Input")), set t k (Sym (head i)), tail i)
 
-interpretCommand t i (Empty k) = (Right [], set t k (Stack []), i)
+interpretCommand t i (Empty k) = (Right (cc "Empty"), set t k (Stack []), i)
 
 interpretCommand t i (Pop k v)
   | isNothing mb    = err $ referenceError
   | not (isStack r) = err $ typeError
   | s == []         = err emptyStackError
-  | otherwise       = (Right [], ot, i)
+  | otherwise       = (Right (cc "Pop"), ot, i)
   where
     s = stack r
     r = just mb
@@ -334,7 +333,7 @@ interpretCommand t i (Push k v)
   | not (tc t v)    = err $ typeError
   | not (isStack r) = err $ typeError
   | isLeft val      = err $ left val
-  | otherwise       = (Right [], ot, i)
+  | otherwise       = (Right (cc "Push"), ot, i)
   where
     s   = stack r
     r   = just mb
@@ -347,7 +346,7 @@ interpretCommand t i (Push k v)
 interpretCommand t i (Size k v)
   | isNothing mb    = err $ referenceError
   | not (isStack r) = err $ typeError
-  | otherwise       = (Right [], ot, i)
+  | otherwise       = (Right (cc "Size"), ot, i)
   where
     s   = stack r
     r   = just mb
@@ -368,7 +367,7 @@ interpretCommand t i (Cond c x y)
 
 
 interpretCommand t i (Loop c x)
-  | not (tc t c)  = err $ typeError ++ " no type if bexpr"
+  | not (tc t c)  = err $ typeError
   | isLeft val    = err $ left val
   | bval          = interpretCommand t i (Seq [x,Loop c x])
   | otherwise     = (Right [], t, i)
@@ -384,9 +383,35 @@ err x = (Left x, SymTable [], [])
 tc :: (Evaluable e) => SymTable a -> (e a) -> Bool
 tc t x = typeCheck (typeOf t) x
 
+cc :: (Num a, Eq a) => String -> [a]
+cc x = [nb x, 1]
+
+nb :: (Num a, Eq a) => String -> a
+nb x = case x of
+  "Assign"  -> 2
+  "Print"   -> 3
+  "Input"   -> 4
+  "Empty"   -> 5
+  "Pop"     -> 6
+  "Push"    -> 7
+  "Size"    -> 8
+
+txt :: (Eq a, Num a) => a -> String
+txt x = case x of
+  2 -> "Assign"
+  3 -> "Print"
+  4 -> "Input"
+  5 -> "Empty"
+  6 -> "Pop"
+  7 -> "Push"
+  8 -> "Size"
+
 --------------------------------------------------------------------------------
 --------------------------           MAIN           ----------------------------
 --------------------------------------------------------------------------------
+
+csep = "=======================================\n"
+lsep = "---------------------------------------\n"
 
 rund :: [Double] -> String -> (Either String [Double])
 rund i c = interpretProgram i (read c :: (Command Double))
@@ -407,8 +432,39 @@ run prog mode is s
   where
     out f a b = show' $ f (genInput is (a, b) s) prog
     show' (Left x) = x
-    show' (Right x) = show $ reverse x -- we need to reverse the outputs
-    
+    show' (Right x) = i ++ o ++ n ++ a
+      where
+        i = "------- INPUTS ----------\n" ++ show xi ++ "\n"
+        o = "------- OUTPUTS ---------\n" ++ show xo ++ "\n"
+        n = "----- INSTRUCTIONS ------\n" ++      xn ++ "\n"
+        a = "-------------------------\n"
+        (xi, xo) = inout x
+        xn = instrs x
+
+----------------------INOUT HACK -----------------------------------------------
+pairs :: [a] -> [(a,a)]
+pairs [] = []
+pairs (x:y:xs) = (x,y):(pairs xs)
+
+
+inout :: (Eq a, Num a) => [a] -> ([a], [a])
+inout x = (ins, outs)
+  where
+    ins = map sec $ filter (\(x,y) -> x==0) (pairs x)
+    outs = map sec $ filter (\(x,y) -> x==1) (pairs x)
+    sec (a,b) = b
+
+instrs :: (Enum a, Eq a, Num a, Show a, Ord a) => [a] -> String
+instrs x = init $ tot++inst -- init to remove the trailing \n
+  where
+    tot = "Total: " ++ show (cnt (>=2)) ++ "\n"
+    inst = unlines $ map (\x -> n x) [2..8]
+    n t = (txt t) ++ ": " ++ show (cnt (==t))
+    cnt f = toint $ sum $ map sec $ filter (\(x,y) -> f x) $ pairs x
+    sec (a,b) = b
+    toint x = read (show x) :: Int
+
+
 main = do
   prog <- readFile file
 
@@ -432,4 +488,5 @@ main = do
     2 -> do
       putStrLn ("Enter number of test cases:")
       n <- getLine
-      putStr $ unlines $ map (\x -> run prog (stoi t) "" (42+x)) [1..(stoi n)]
+      putStr $ unlines $ map (\x -> p x) [1..(stoi n)]
+        where p x = "============= Case #" ++ show x ++ " =============\n" ++ run prog (stoi t) "" (42+x)
