@@ -226,7 +226,7 @@ int main(int argc, char **argv) {
 #token OR    "OR"
 #token AND   "AND"
 #token NOT   "NOT"
-#token INT   "[0-9]+"
+#token INT   "[0-9]+|[0-9]+\.[0-9]+"
 #token ID    "[a-zA-Z][a-zA-Z0-9]*"
 
 exec: parse;

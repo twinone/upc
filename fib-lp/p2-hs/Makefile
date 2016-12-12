@@ -1,15 +1,15 @@
 CC := g++
-PARSER := parser
-MAIN := main
+PARSER := reader
+MAIN := program
 CC_FLAGS := -Wno-write-strings
 
-all: parser main
+all: reader program
 
 
-main:
+program:
 	ghc $(MAIN).hs
 
-parser:
+reader:
 	antlr -gt $(PARSER).g
 	dlg -ci parser.dlg scan.c
 	$(ENV) $(CC) $(CC_FLAGS) -o $(PARSER) $(PARSER).c scan.c err.c

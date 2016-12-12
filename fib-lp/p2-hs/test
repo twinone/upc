@@ -11,6 +11,6 @@ OUT="programhs.txt"
 
 make
 
-./parser < $PROG > $OUT
+./reader < $PROG > $OUT
 
-./main
+./program
