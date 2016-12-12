@@ -1,3 +1,7 @@
+# Invented language interpreter in Haskell
+
+Complete project at https://github.com/twinone/fib-lp
+
 Installation
 ============
 
