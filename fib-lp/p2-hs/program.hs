@@ -432,7 +432,7 @@ run prog mode is s
   where
     out f a b = show' $ f (genInput is (a, b) s) prog
     show' (Left x) = x
-    show' (Right x) = i ++ o ++ n ++ a
+    show' (Right x) = i ++ o ++ n
       where
         i = "------- INPUTS ----------\n" ++ show xi ++ "\n"
         o = "------- OUTPUTS ---------\n" ++ show xo ++ "\n"
@@ -457,12 +457,12 @@ inout x = (ins, outs)
 instrs :: (Enum a, Eq a, Num a, Show a, Ord a) => [a] -> String
 instrs x = init $ tot++inst -- init to remove the trailing \n
   where
-    tot = "Total: " ++ show (cnt (>=2)) ++ "\n"
+    tot = "Total:     " ++ show (cnt (>=2)) ++ "\n"
     inst = unlines $ map (\x -> n x) [2..8]
-    n t = (txt t) ++ ": " ++ show (cnt (==t))
+    n t = (txt t) ++ ":" ++ (replicate (10 - (length $ txt t)) ' ') ++ show (cnt (==t))
     cnt f = toint $ sum $ map sec $ filter (\(x,y) -> f x) $ pairs x
     sec (a,b) = b
-    toint x = read (show x) :: Int
+    toint x = floor (read (show x) :: Double)
 
 
 main = do
