@@ -22,10 +22,36 @@ To test all test cases: ./testall.sh
 
 Notes
 =====
-1. Printing the number of instructions executed would require a different approach to the interpreter
-2. Printing the randomly generated inputs would require a different approach to the interpreter
-Either those, or use *very* ugly hacks (like storing the count in the symtable or the inputs list)
+1. The statement is not clear as to how to count the instructions.
+Quoted:
+> Es mostrarà la llista d’entrada, la de sortida i s’indicarà el
+> nombre d’instruccions que s’han executat en el test. Cada instrucció s’ha
+> de comptar un sol cop. 
 
+How many instructions will there be for the following snippet?:
+> INPUT X
+> INPUT X
+
+And what about:
+> X := 2
+> WHILE X > 0 DO X := X - 1 END
+
+Since this is not clear in the statement, I've increased a counter each time an instruction is executed (everytime it's executed)
+
+
+We were given a function signature which we could explicitly not modify:
+interpretCommand :: (Num a, Ord a) =>SymTable a -> [a] -> Command a -> (Either String [a], SymTable a, [a])
+
+To be able to track the number of instructions executed, as well as the inputs (without creating state hacks)
+I've made a workaround to be able to track them:
+The [a] of the return value of interpretCommand is supposed to store the output list. Instead of that, it will contain the
+following protocol:
+The number of elements of the list is always even.
+A number preceded by 0 means this number was on the input list
+A number preceded by 1 means this number was on the output list
+A 1preceded by 2..8 means a command of type (Assign, Print, Input, Empty, Pop, Push, Size) has been executed, in that order.
+
+So after a command has been executed, we can show the number of instructions, as well as the input parameters.
 
 Assumptions
 ===========
