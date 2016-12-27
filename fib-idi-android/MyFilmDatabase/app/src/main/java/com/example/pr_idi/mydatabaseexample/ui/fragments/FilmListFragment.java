@@ -16,6 +16,8 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.example.pr_idi.mydatabaseexample.model.Film;
@@ -29,8 +31,10 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+
 /**
  * @author Luuk W. (Twinone).
+ * @author David W. (Hoturan).
  */
 public class FilmListFragment extends Fragment implements View.OnClickListener, MainActivity.Listener {
 
@@ -67,7 +71,6 @@ public class FilmListFragment extends Fragment implements View.OnClickListener, 
         LinearLayoutManager llm = new LinearLayoutManager(getActivity());
         llm.setOrientation(LinearLayoutManager.VERTICAL);
         mRecycler.setLayoutManager(llm);
-
 
         mRecycler.setOnTouchListener(new View.OnTouchListener() {
             @Override
@@ -185,6 +188,7 @@ public class FilmListFragment extends Fragment implements View.OnClickListener, 
     private class MyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         private Set<Long> mExpandedFilmIds = new HashSet<>();
 
+
         @Override
         public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             View v = LayoutInflater.from(getActivity()).inflate(R.layout.film_list_item, null);
@@ -194,11 +198,13 @@ public class FilmListFragment extends Fragment implements View.OnClickListener, 
         @Override
         public void onBindViewHolder(final RecyclerView.ViewHolder holder, int position) {
             final MyViewHolder h = (MyViewHolder) holder;
-            Film f = mFilteredFilms.get(position);
+            final Film f = mFilteredFilms.get(position);
             boolean isExpanded = mExpandedFilmIds.contains(f.getId());
 
             View v = h.getView();
             v.setActivated(isExpanded);
+
+
             v.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -218,7 +224,16 @@ public class FilmListFragment extends Fragment implements View.OnClickListener, 
             TextView country = (TextView) v.findViewById(R.id.tv_country);
             TextView year = (TextView) v.findViewById(R.id.tv_year);
             TextView protagonist = (TextView) v.findViewById(R.id.tv_protagonist);
-            TextView critics_rate = (TextView) v.findViewById(R.id.tv_critics_rate);
+            RatingBar critics_rate = (RatingBar) v.findViewById(R.id.ratingBar);
+
+            critics_rate.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
+                @Override
+                public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
+                    float r = rating * 2;
+                    f.setCritics_rate((int)r);
+                    System.out.println("Value has been changed to " + (int)r);
+                }
+            });
 
             title.setText(f.getTitle());
             if (f.getDirector().isEmpty()) director.setVisibility(View.GONE);
@@ -229,8 +244,11 @@ public class FilmListFragment extends Fragment implements View.OnClickListener, 
             year.setText(String.valueOf(f.getYear()));
             if (f.getProtagonist().isEmpty()) protagonist.setVisibility(View.GONE);
             protagonist.setText(f.getProtagonist());
-            if (f.getCritics_rate() == 0) critics_rate.setVisibility(View.GONE);
-            critics_rate.setText(String.valueOf(f.getCritics_rate()));
+            //if (f.getCritics_rate() == 0) critics_rate.setVisibility(View.GONE);
+            //critics_rate.setText(String.valueOf(f.getCritics_rate()));
+            if (!isExpanded) critics_rate.setVisibility(View.GONE);
+            else if (isExpanded) critics_rate.setVisibility(View.VISIBLE);
+            critics_rate.setRating((float)f.getCritics_rate()/2);
         }
 
         @Override
