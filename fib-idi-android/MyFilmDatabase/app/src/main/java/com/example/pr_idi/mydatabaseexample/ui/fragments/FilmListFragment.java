@@ -232,6 +232,7 @@ public class FilmListFragment extends Fragment implements View.OnClickListener, 
                     float r = rating * 2;
                     f.setCritics_rate((int)r);
                     System.out.println("Value has been changed to " + (int)r);
+                    getMainActivity().updateFilm(f); //THIS HERE CAUSES ERROR
                 }
             });
 

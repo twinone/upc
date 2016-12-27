@@ -72,6 +72,14 @@ public class FilmData {
                 + " = " + id, null);
     }
 
+    public void updateFilm(Film film) {
+        long id = film.getId(); //Really not sure what I'm doing here
+        ContentValues cv = new ContentValues();
+        cv.put(MySQLiteHelper.COLUMN_ID, id);
+        db.update(MySQLiteHelper.TABLE_FILMS, cv,
+                 "_id="+id, null);
+    }
+
     public List<Film> getAllFilms() {
         List<Film> comments = new ArrayList<>();
 

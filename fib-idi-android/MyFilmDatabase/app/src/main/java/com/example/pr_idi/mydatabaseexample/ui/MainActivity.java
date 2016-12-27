@@ -133,6 +133,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         updateFilms();
     }
 
+    public void updateFilm(Film f) {
+        mFilmData.updateFilm(f);
+
+        updateFilms();
+    }
+
     /**
      * Updates the list of films (should be called after a new insertion or deletion)
      */
