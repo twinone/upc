@@ -217,7 +217,8 @@ public class FilmListFragment extends Fragment implements View.OnClickListener, 
                     notifyDataSetChanged();
                 }
             });
-            v.findViewById(R.id.rl_detail).setVisibility(isExpanded ? View.VISIBLE : View.GONE);
+            //v.findViewById(R.id.rl_detail).setVisibility(isExpanded ? View.VISIBLE : View.GONE);
+            v.findViewById(R.id.rl_detail).setVisibility(View.VISIBLE);
 
             TextView title = (TextView) v.findViewById(R.id.tv_title);
             TextView director = (TextView) v.findViewById(R.id.tv_director);
@@ -249,10 +250,7 @@ public class FilmListFragment extends Fragment implements View.OnClickListener, 
             year.setText(String.valueOf(f.getYear()));
             if (f.getProtagonist().isEmpty()) protagonist.setVisibility(View.GONE);
             protagonist.setText(f.getProtagonist());
-            //if (f.getCritics_rate() == 0) critics_rate.setVisibility(View.GONE);
-            //critics_rate.setText(String.valueOf(f.getCritics_rate()));
-            if (!isExpanded) critics_rate.setVisibility(View.GONE);
-            else if (isExpanded) critics_rate.setVisibility(View.VISIBLE);
+
             critics_rate.setRating((float)f.getCritics_rate()/2);
         }
 

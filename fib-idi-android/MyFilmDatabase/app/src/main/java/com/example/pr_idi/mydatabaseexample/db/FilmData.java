@@ -11,6 +11,7 @@ import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
+import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.example.pr_idi.mydatabaseexample.model.Film;
@@ -47,6 +48,22 @@ public class FilmData {
     }
 
     public void insertFilm(Film f) {
+        ContentValues values = getContentValues(f);
+        db.insert(MySQLiteHelper.TABLE_FILMS, null,
+                values);
+    }
+
+    public void updateFilm(Film f) {
+        ContentValues values = getContentValues(f);
+
+        db.update(MySQLiteHelper.TABLE_FILMS,
+                values, MySQLiteHelper.COLUMN_ID + " = ?",
+                new String[] {String.valueOf(f.getId())});
+    }
+
+
+    @NonNull
+    private ContentValues getContentValues(Film f) {
         ContentValues values = new ContentValues();
 
         values.put(MySQLiteHelper.COLUMN_TITLE, f.getTitle());
@@ -55,10 +72,9 @@ public class FilmData {
         values.put(MySQLiteHelper.COLUMN_YEAR_RELEASE, f.getYear());
         values.put(MySQLiteHelper.COLUMN_PROTAGONIST, f.getProtagonist());
         values.put(MySQLiteHelper.COLUMN_CRITICS_RATE, f.getCritics_rate());
-
-        db.insert(MySQLiteHelper.TABLE_FILMS, null,
-                values);
+        return values;
     }
+
 
     public void deleteFilm(long id) {
         Film f = new Film();
@@ -70,14 +86,6 @@ public class FilmData {
         long id = film.getId();
         db.delete(MySQLiteHelper.TABLE_FILMS, MySQLiteHelper.COLUMN_ID
                 + " = " + id, null);
-    }
-
-    public void updateFilm(Film film) {
-        long id = film.getId(); //Really not sure what I'm doing here
-        ContentValues cv = new ContentValues();
-        cv.put(MySQLiteHelper.COLUMN_ID, id);
-        db.update(MySQLiteHelper.TABLE_FILMS, cv,
-                 "_id="+id, null);
     }
 
     public List<Film> getAllFilms() {
