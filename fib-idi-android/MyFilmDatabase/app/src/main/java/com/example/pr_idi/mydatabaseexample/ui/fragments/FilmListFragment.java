@@ -286,7 +286,7 @@ public class FilmListFragment extends Fragment implements View.OnClickListener, 
         Collections.sort(mFilteredFilms, new Comparator<Film>() {
             @Override
             public int compare(Film a, Film b) {
-                return (int) (b.getId() - a.getId());
+                return (int) (a.getTitle().compareTo(b.getTitle()));
             }
         });
 
