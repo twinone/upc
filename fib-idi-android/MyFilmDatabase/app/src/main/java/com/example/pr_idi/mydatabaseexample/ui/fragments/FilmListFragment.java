@@ -114,6 +114,8 @@ public class FilmListFragment extends Fragment implements View.OnClickListener, 
      * Adds a film pending for removal
      */
     private void queueRemoval(Film f) {
+
+
         long id = f.getId();
         flushRemoval();
         mRemovalId = id;
@@ -121,6 +123,7 @@ public class FilmListFragment extends Fragment implements View.OnClickListener, 
                 getView(),
                 getString(R.string.deleted, f.getTitle()),
                 Snackbar.LENGTH_INDEFINITE);
+
 
         mSnackBar.setAction(R.string.undo, new View.OnClickListener() {
             @Override
@@ -278,11 +281,13 @@ public class FilmListFragment extends Fragment implements View.OnClickListener, 
     public void onFilmsChanged() {
         mFilteredFilms = new ArrayList<>();
         if (!isAdded()) return;
+        Log.d("Main", "Query: " + getMainActivity().getQuery());
         for (Film f : getMainActivity().getFilms()) {
             if (mRemovalId != -1 && f.getId() == mRemovalId) continue;
-            if (!f.toString().contains(getMainActivity().getQuery())) continue;
+            if (!f.toString().toLowerCase().contains(getMainActivity().getQuery().toLowerCase())) continue;
             mFilteredFilms.add(f);
         }
+
         Collections.sort(mFilteredFilms, new Comparator<Film>() {
             @Override
             public int compare(Film a, Film b) {

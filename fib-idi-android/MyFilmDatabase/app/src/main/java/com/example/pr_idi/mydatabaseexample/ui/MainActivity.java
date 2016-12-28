@@ -16,8 +16,10 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 import com.example.pr_idi.mydatabaseexample.R;
 import com.example.pr_idi.mydatabaseexample.db.FilmData;
@@ -39,6 +41,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private FilmData mFilmData;
     private List<Film> mFilms;
     private List<Listener> mListeners = new ArrayList<>();
+    private SearchView mSearchView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,12 +81,32 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 menu.findItem(R.id.search);
         tintWhite(item);
 
-        SearchView searchView = (SearchView) MenuItemCompat.getActionView(item);
-        searchView.setSearchableInfo(
+        mSearchView = (SearchView) MenuItemCompat.getActionView(item);
+        mSearchView.setSearchableInfo(
                 searchManager.getSearchableInfo(getComponentName()));
 
 
+        mSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                setQuery(query);
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                setQuery(newText);
+                return false;
+            }
+        });
+
         return true;
+    }
+
+    private void setQuery(String query) {
+        mQuery = query;
+        updateFilms();
     }
 
     private void tintWhite(MenuItem item) {
