@@ -198,7 +198,7 @@ public class FilmListFragment extends Fragment implements View.OnClickListener, 
         @Override
         public void onBindViewHolder(final RecyclerView.ViewHolder holder, int position) {
             final MyViewHolder h = (MyViewHolder) holder;
-            final Film f = mFilteredFilms.get(position);
+            Film f = mFilteredFilms.get(position);
             boolean isExpanded = mExpandedFilmIds.contains(f.getId());
 
             View v = h.getView();
@@ -229,10 +229,14 @@ public class FilmListFragment extends Fragment implements View.OnClickListener, 
             critics_rate.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
                 @Override
                 public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
+                    // Don't trigger the listener when setting the value programatically
+                    if (!fromUser) return;
+
+                    Film f = mFilteredFilms.get(holder.getAdapterPosition());
                     float r = rating * 2;
                     f.setCritics_rate((int)r);
                     System.out.println("Value has been changed to " + (int)r);
-                    getMainActivity().updateFilm(f); //THIS HERE CAUSES ERROR
+                    getMainActivity().updateFilm(f);
                 }
             });
 
