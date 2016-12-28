@@ -2,13 +2,21 @@ package com.example.pr_idi.mydatabaseexample.ui;
 
 import android.app.Fragment;
 
+import android.app.SearchManager;
+import android.content.Context;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
 import android.view.MenuItem;
 
 import com.example.pr_idi.mydatabaseexample.R;
@@ -56,6 +64,35 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 
         navigateToFragment(new FilmListFragment());
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main, menu);
+
+
+        // Associate searchable configuration with the SearchView
+        SearchManager searchManager =
+                (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        MenuItem item =
+                menu.findItem(R.id.search);
+        tintWhite(item);
+
+        SearchView searchView = (SearchView) MenuItemCompat.getActionView(item);
+        searchView.setSearchableInfo(
+                searchManager.getSearchableInfo(getComponentName()));
+
+
+        return true;
+    }
+
+    private void tintWhite(MenuItem item) {
+        Drawable drawable = item.getIcon();
+        if (drawable != null) {
+            drawable.mutate();
+            drawable.setColorFilter(Color.parseColor("#ffffff"), PorterDuff.Mode.SRC_ATOP);
+            drawable.setAlpha(255);
+        }
     }
 
     private void navigateToFragment(Fragment f) {

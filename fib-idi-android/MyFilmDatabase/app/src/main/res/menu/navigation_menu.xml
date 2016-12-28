@@ -7,11 +7,6 @@
             android:checked="true"
             android:icon="@drawable/ic_local_movies_black_24dp"
             android:title="@string/film_list" />
-        <item
-            android:id="@+id/nav_settings"
-            android:checked="true"
-            android:icon="@drawable/ic_settings_black_24dp"
-            android:title="@string/action_settings" />
 
     </group>
 
