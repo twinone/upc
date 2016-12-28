@@ -239,7 +239,6 @@ public class FilmListFragment extends Fragment implements View.OnClickListener, 
                     Film f = mFilteredFilms.get(holder.getAdapterPosition());
                     float r = rating * 2;
                     f.setCritics_rate((int)r);
-                    System.out.println("Value has been changed to " + (int)r);
                     getMainActivity().updateFilm(f);
                 }
             });
@@ -281,7 +280,6 @@ public class FilmListFragment extends Fragment implements View.OnClickListener, 
     public void onFilmsChanged() {
         mFilteredFilms = new ArrayList<>();
         if (!isAdded()) return;
-        Log.d("Main", "Query: " + getMainActivity().getQuery());
         for (Film f : getMainActivity().getFilms()) {
             if (mRemovalId != -1 && f.getId() == mRemovalId) continue;
             if (!f.toString().toLowerCase().contains(getMainActivity().getQuery().toLowerCase())) continue;
@@ -302,16 +300,17 @@ public class FilmListFragment extends Fragment implements View.OnClickListener, 
         SharedPreferences sp = getActivity().getSharedPreferences("init", Context.MODE_PRIVATE);
         boolean init = sp.getBoolean("init", false);
 
-        // TODO
-        //if (init) return;
-        if (getMainActivity().getFilms().size() >= 10) return;
+        if (init) return;
+        // TO debug:
+        // if (getMainActivity().getFilms().size() > 0) return;
 
         sp.edit().putBoolean("init", true).apply();
+        // Insert the 4 initial films asked for by the teachers
         insertFilm("Captain America", "Joe Russo", "USA", 2016, "", 0);
         insertFilm("Finding Dory", "Andrew Stanton", "USA", 2016, "", 0);
         insertFilm("Doctor Strange", "Scott Derrickson", "USA", 2016, "", 0);
         insertFilm("Suicide Squad", "David Ayer", "USA", 2016, "", 0);
-        insertFilm("Star Trek Beyond", "Justin Lin", "USA", 2016, "", 0);
+        //insertFilm("Star Trek Beyond", "Justin Lin", "USA", 2016, "", 0);
     }
 
     private void insertFilm(
