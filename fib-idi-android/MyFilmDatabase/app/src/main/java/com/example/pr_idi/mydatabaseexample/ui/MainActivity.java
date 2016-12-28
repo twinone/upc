@@ -15,7 +15,6 @@ import com.example.pr_idi.mydatabaseexample.R;
 import com.example.pr_idi.mydatabaseexample.db.FilmData;
 import com.example.pr_idi.mydatabaseexample.model.Film;
 import com.example.pr_idi.mydatabaseexample.ui.fragments.AboutDialog;
-import com.example.pr_idi.mydatabaseexample.ui.fragments.SettingsFragment;
 import com.example.pr_idi.mydatabaseexample.ui.fragments.FilmListFragment;
 import com.example.pr_idi.mydatabaseexample.ui.fragments.HelpFragment;
 
@@ -78,6 +77,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 
     @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
@@ -89,9 +93,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 break;
             case R.id.nav_help:
                 showHelpDialog();
-                break;
-            case R.id.nav_settings:
-                f = new SettingsFragment();
                 break;
             case R.id.nav_about:
                 showAboutDialog();

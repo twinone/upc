@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.RatingBar;
 
 import com.example.pr_idi.mydatabaseexample.model.Film;
 import com.example.pr_idi.mydatabaseexample.R;
@@ -26,7 +27,7 @@ public class AddFilmFragment extends DialogFragment {
     private EditText country;
     private EditText year;
     private EditText protagonist;
-    private EditText critics_rate;
+    private RatingBar critics_rate;
 
     private MainActivity getMainActivity() {
         return (MainActivity) getActivity();
@@ -43,7 +44,7 @@ public class AddFilmFragment extends DialogFragment {
         country = (EditText) v.findViewById(R.id.et_country);
         year = (EditText) v.findViewById(R.id.et_year);
         protagonist = (EditText) v.findViewById(R.id.et_protagonist);
-        critics_rate = (EditText) v.findViewById(R.id.et_critics_rate);
+        critics_rate = (RatingBar) v.findViewById(R.id.ratingBar);
 
         return v;
     }
@@ -56,8 +57,7 @@ public class AddFilmFragment extends DialogFragment {
         if (!year.getText().toString().isEmpty())
             f.setYear(Integer.parseInt(year.getText().toString()));
         f.setProtagonist(protagonist.getText().toString());
-        if (!critics_rate.getText().toString().isEmpty())
-            f.setCritics_rate(Integer.parseInt(critics_rate.getText().toString()));
+        f.setCritics_rate((int)(critics_rate.getRating()*2));
 
         getMainActivity().insertFilm(f);
     }
