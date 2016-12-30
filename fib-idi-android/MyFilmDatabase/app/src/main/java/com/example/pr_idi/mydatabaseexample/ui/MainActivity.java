@@ -39,9 +39,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private FilmData mFilmData;
     private List<Film> mFilms;
     private List<Listener> mListeners = new ArrayList<>();
-    private SearchView mSearchView;
 
     private boolean mSortByTitle = true;
+    private Menu mMenu;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,6 +73,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main, menu);
 
+        mMenu = menu;
 
         // Associate searchable configuration with the SearchView
         SearchManager searchManager =
@@ -80,12 +81,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         MenuItem search = menu.findItem(R.id.search);
         tintWhite(search);
 
-        mSearchView = (SearchView) MenuItemCompat.getActionView(search);
-        mSearchView.setSearchableInfo(
+        SearchView sv = (SearchView) MenuItemCompat.getActionView(search);
+        sv.setSearchableInfo(
                 searchManager.getSearchableInfo(getComponentName()));
 
 
-        mSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+        sv.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
 
             @Override
             public boolean onQueryTextSubmit(String query) {
@@ -158,6 +159,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 break;
             case R.id.sort:
                 new SortFragment().show(getFragmentManager(), "");
+                break;
+            case R.id.search:
+                mMenu.findItem(R.id.search).expandActionView();
                 break;
         }
 
