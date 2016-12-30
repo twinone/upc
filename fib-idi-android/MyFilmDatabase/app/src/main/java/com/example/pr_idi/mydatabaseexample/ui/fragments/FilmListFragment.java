@@ -238,7 +238,7 @@ public class FilmListFragment extends Fragment implements View.OnClickListener, 
 
                     Film f = mFilteredFilms.get(holder.getAdapterPosition());
                     float r = rating * 2;
-                    f.setCritics_rate((int)r);
+                    f.setCritics_rate((int) r);
                     getMainActivity().updateFilm(f);
                 }
             });
@@ -253,7 +253,7 @@ public class FilmListFragment extends Fragment implements View.OnClickListener, 
             if (f.getProtagonist().isEmpty()) protagonist.setVisibility(View.GONE);
             protagonist.setText(f.getProtagonist());
 
-            critics_rate.setRating((float)f.getCritics_rate()/2);
+            critics_rate.setRating((float) f.getCritics_rate() / 2);
         }
 
         @Override
@@ -282,14 +282,18 @@ public class FilmListFragment extends Fragment implements View.OnClickListener, 
         if (!isAdded()) return;
         for (Film f : getMainActivity().getFilms()) {
             if (mRemovalId != -1 && f.getId() == mRemovalId) continue;
-            if (!f.toString().toLowerCase().contains(getMainActivity().getQuery().toLowerCase())) continue;
+            if (!f.toString().toLowerCase().contains(getMainActivity().getQuery().toLowerCase()))
+                continue;
             mFilteredFilms.add(f);
         }
 
         Collections.sort(mFilteredFilms, new Comparator<Film>() {
             @Override
             public int compare(Film a, Film b) {
-                return (int) (a.getTitle().compareToIgnoreCase(b.getTitle()));
+                if (getMainActivity().getSortByTitle())
+                    return (int) (a.getTitle().compareToIgnoreCase(b.getTitle()));
+                else
+                    return (int) (b.getYear() - a.getYear());
             }
         });
 
@@ -301,14 +305,14 @@ public class FilmListFragment extends Fragment implements View.OnClickListener, 
         boolean init = sp.getBoolean("init", false);
 
         if (init) return;
-        // TO debug:
+        // To debug:
         // if (getMainActivity().getFilms().size() > 0) return;
 
         sp.edit().putBoolean("init", true).apply();
         // Insert the 4 initial films asked for by the teachers
-        insertFilm("Captain America", "Joe Russo", "USA", 2016, "", 0);
+        insertFilm("Captain America", "Joe Russo", "USA", 2011, "", 0);
         insertFilm("Finding Dory", "Andrew Stanton", "USA", 2016, "", 0);
-        insertFilm("Doctor Strange", "Scott Derrickson", "USA", 2016, "", 0);
+        insertFilm("Doctor Strange", "Scott Derrickson", "USA", 2010, "", 0);
         insertFilm("Suicide Squad", "David Ayer", "USA", 2016, "", 0);
         //insertFilm("Star Trek Beyond", "Justin Lin", "USA", 2016, "", 0);
     }

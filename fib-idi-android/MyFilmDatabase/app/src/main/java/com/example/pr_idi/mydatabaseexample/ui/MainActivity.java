@@ -16,17 +16,15 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 
 import com.example.pr_idi.mydatabaseexample.R;
 import com.example.pr_idi.mydatabaseexample.db.FilmData;
 import com.example.pr_idi.mydatabaseexample.model.Film;
-import com.example.pr_idi.mydatabaseexample.ui.fragments.AboutDialog;
 import com.example.pr_idi.mydatabaseexample.ui.fragments.FilmListFragment;
 import com.example.pr_idi.mydatabaseexample.ui.fragments.HelpFragment;
+import com.example.pr_idi.mydatabaseexample.ui.fragments.SortFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,6 +40,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private List<Film> mFilms;
     private List<Listener> mListeners = new ArrayList<>();
     private SearchView mSearchView;
+
+    private boolean mSortByTitle = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,11 +77,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         // Associate searchable configuration with the SearchView
         SearchManager searchManager =
                 (SearchManager) getSystemService(Context.SEARCH_SERVICE);
-        MenuItem item =
-                menu.findItem(R.id.search);
-        tintWhite(item);
+        MenuItem search = menu.findItem(R.id.search);
+        tintWhite(search);
 
-        mSearchView = (SearchView) MenuItemCompat.getActionView(item);
+        mSearchView = (SearchView) MenuItemCompat.getActionView(search);
         mSearchView.setSearchableInfo(
                 searchManager.getSearchableInfo(getComponentName()));
 
@@ -152,10 +151,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 f = new FilmListFragment();
                 break;
             case R.id.nav_help:
-                showHelpDialog();
+                new HelpFragment().show(getFragmentManager(), "");
                 break;
             case R.id.nav_about:
-                showAboutDialog();
+                new HelpFragment().show(getFragmentManager(), "");
+                break;
+            case R.id.sort:
+                new SortFragment().show(getFragmentManager(), "");
                 break;
         }
 
@@ -165,14 +167,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
-    }
-
-    private void showHelpDialog() {
-        new HelpFragment().show(getFragmentManager(), "");
-    }
-
-    private void showAboutDialog() {
-        new AboutDialog().show(getFragmentManager(), "");
     }
 
 
@@ -228,6 +222,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         mFilmData.deleteFilm(id);
 
         updateFilms();
+    }
+
+    public void setSortByTitle(boolean sortByTitle) {
+        mSortByTitle = sortByTitle;
+
+        updateFilms();
+    }
+
+    public boolean getSortByTitle() {
+        return mSortByTitle;
     }
 
     public interface Listener {

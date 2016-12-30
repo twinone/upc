@@ -7,6 +7,11 @@
             android:checked="true"
             android:icon="@drawable/ic_local_movies_black_24dp"
             android:title="@string/film_list" />
+        <item
+            android:id="@+id/sort"
+            android:checkable="false"
+            android:icon="@drawable/ic_sort_black_24dp"
+            android:title="@string/action_sort" />
 
     </group>
 
