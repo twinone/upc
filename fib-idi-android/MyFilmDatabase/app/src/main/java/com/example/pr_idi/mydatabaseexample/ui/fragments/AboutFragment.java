@@ -12,7 +12,7 @@ import com.example.pr_idi.mydatabaseexample.R;
 /**
  * @author Luuk W. (Twinone).
  */
-public class AboutDialog extends DialogFragment {
+public class AboutFragment extends DialogFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_text, null);

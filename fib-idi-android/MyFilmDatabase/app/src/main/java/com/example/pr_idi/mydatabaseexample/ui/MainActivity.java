@@ -22,6 +22,7 @@ import android.view.MenuItem;
 import com.example.pr_idi.mydatabaseexample.R;
 import com.example.pr_idi.mydatabaseexample.db.FilmData;
 import com.example.pr_idi.mydatabaseexample.model.Film;
+import com.example.pr_idi.mydatabaseexample.ui.fragments.AboutFragment;
 import com.example.pr_idi.mydatabaseexample.ui.fragments.AddFilmFragment;
 import com.example.pr_idi.mydatabaseexample.ui.fragments.FilmListFragment;
 import com.example.pr_idi.mydatabaseexample.ui.fragments.HelpFragment;
@@ -156,7 +157,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 new HelpFragment().show(getFragmentManager(), "");
                 break;
             case R.id.nav_about:
-                new HelpFragment().show(getFragmentManager(), "");
+                new AboutFragment().show(getFragmentManager(), "");
                 break;
             case R.id.sort:
                 new SortFragment().show(getFragmentManager(), "");

@@ -19,7 +19,7 @@ public class HelpFragment extends DialogFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_text, null);
         ((TextView)v.findViewById(android.R.id.text1)).setText(R.string.dialog_help);
-        getDialog().setTitle(R.string.about);
+        getDialog().setTitle(R.string.help);
         return v;
     }
 }
