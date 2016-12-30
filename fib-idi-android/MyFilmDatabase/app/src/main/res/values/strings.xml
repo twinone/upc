@@ -21,10 +21,11 @@
     <string name="film_list">Film List</string>
     <string name="help">Help</string>
     <string name="about">About</string>
-    <string name="dialog_help">To add an element tap the + button\n\nTo remove an element swipe it horizontally\n\nTo edit a rating click the rating bar\n\nMore actions are found in the left menu</string>
+    <string name="dialog_help">To add an element tap the + button\n\nTo remove an element swipe it horizontally\n\nTo edit a rating click the rating bar\n\nTo search, click the search icon at the top\n\nMore actions are found in the left menu</string>
     <string name="dialog_about">MyFilmDatabase\n\nBy Luuk Willemsen and David Williams</string>
     <string name="search">Search</string>
     <string name="action_sort">Sort</string>
     <string name="sort_title">By title</string>
     <string name="sort_year">By release year</string>
+    <string name="add">Add film</string>
 </resources>

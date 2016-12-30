@@ -171,17 +171,13 @@ public class FilmListFragment extends Fragment implements View.OnClickListener, 
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.fab_add:
-                showAddDialog();
+                new AddFilmFragment().show(getActivity().getFragmentManager(), null);
                 break;
         }
 
     }
 
 
-    private void showAddDialog() {
-        AddFilmFragment aff = new AddFilmFragment();
-        aff.show(getActivity().getFragmentManager(), null);
-    }
 
     private MainActivity getMainActivity() {
         return (MainActivity) getActivity();

@@ -22,6 +22,7 @@ import android.view.MenuItem;
 import com.example.pr_idi.mydatabaseexample.R;
 import com.example.pr_idi.mydatabaseexample.db.FilmData;
 import com.example.pr_idi.mydatabaseexample.model.Film;
+import com.example.pr_idi.mydatabaseexample.ui.fragments.AddFilmFragment;
 import com.example.pr_idi.mydatabaseexample.ui.fragments.FilmListFragment;
 import com.example.pr_idi.mydatabaseexample.ui.fragments.HelpFragment;
 import com.example.pr_idi.mydatabaseexample.ui.fragments.SortFragment;
@@ -162,6 +163,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 break;
             case R.id.search:
                 mMenu.findItem(R.id.search).expandActionView();
+                break;
+            case R.id.add:
+                new AddFilmFragment().show(getFragmentManager(), null);
                 break;
         }
 

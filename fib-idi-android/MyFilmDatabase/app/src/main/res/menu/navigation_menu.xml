@@ -18,6 +18,11 @@
             android:checkable="false"
             android:icon="@drawable/ic_search_black_24dp"
             android:title="@string/action_search" />
+        <item
+            android:id="@+id/add"
+            android:checkable="false"
+            android:icon="@drawable/ic_add_black_24dp"
+            android:title="@string/add" />
 
     </group>
 
