@@ -15,6 +15,7 @@ th, td {
     text-align: left;
     padding: 8px;
     border-left: 1px solid #4CAF50;
+    vertical-align: top;
 }
 
 
@@ -24,15 +25,23 @@ td span.name {
     display: inline-block;
 }
 
-td .address {
+td .tooltip {
     font-style: italic;
     font-size: .9em;
 }
 
-td span.proxdate {
-    font-size: .8em;
+.small {
+    font-size: .9em;
     color: #888888;
 }
+
+
+.green {
+    font-size: .9em;
+    font-weight: bold;
+    color: #4CAF50;
+}
+
 
 tr:nth-child(even){background-color: #f2f2f2}
 
@@ -49,15 +58,29 @@ th {
     border-bottom: 1px dotted black;
 }
 
-.tooltip .inner {
+.framecont {
+  position: fixed;
+  top:0;
+  left:0;
+  bottom: 0;
+  right: 0;
+  text-align: center;
+  width: 100%;
+  vertical-align: middle !important;
+  height: 100%;
+}
+
+.inner {
     background-color: #4CAF50;
     text-align: center;
     border-radius: 6px;
     padding: 5px 5px;
     position: absolute;
+    top: 20%;
+    left: 20%;
+    width: 60%;
+    height: 60%;
     z-index: 1;
-    top: -5px;
-    left: 110%;
 }
 
 .tooltip .inner::after {
@@ -86,30 +109,35 @@ function onClick(ev) {
   var el = ev.target
   if (el.tooltip) {
     setTimeout(function() {el.tooltip.focus()} , 0)
-    el.tooltip.style.visibility = 'visible'
+    el.tooltip.parentNode.style.visibility = 'visible'
     return
   }
 
   console.log("hover over", el)
-  var iframe = document.createElement('iframe')
-  iframe.setAttribute('class', 'inner')
+  var div = document.createElement('div')
+  div.setAttribute('class', 'framecont')
+
+  var child = document.createElement('iframe')
+  child.setAttribute('class', 'inner')
   // AIzaSyBNIp87_yb-HNAdRnd-XTH5kWH0Xz0eDss
-  iframe.setAttribute('width', 480)
-  iframe.setAttribute('height', 320)
-  iframe.setAttribute('frameborder', "0")
-  iframe.setAttribute('style', "border:0;")
-  iframe.setAttribute('src', query(el.textContent + ", Barcelona"))
-  iframe.addEventListener('blur', function() {
+//  child.setAttribute('width', 480)
+  //child.setAttribute('height', 320)
+  child.setAttribute('frameborder', "0")
+  child.setAttribute('style', "border:0;")
+  var latlong = el.parentNode.getAttribute('data-lat') + "," + el.parentNode.getAttribute('data-long')
+  child.setAttribute('src', query(latlong))
+  child.addEventListener('blur', function() {
     console.log("blurring")
-    iframe.style.visibility = 'hidden'
+    div.style.visibility = 'hidden'
   })
+  div.appendChild(child)
   // delay until appended
-  setTimeout(function() {iframe.focus()} , 0)
-  el.appendChild(iframe)
-  el.tooltip = iframe
+  setTimeout(function() {child.focus()} , 0)
+  document.body.appendChild(div)
+  el.tooltip = child
 }
 function onLoaded() {
-  document.querySelectorAll('.address').forEach(function(el) {
+  document.querySelectorAll('.tooltip').forEach(function(el) {
     console.log("el:", el)
     el.addEventListener('click', onClick)
   })
