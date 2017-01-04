@@ -111,7 +111,7 @@ def match_str(node):
             ])
 
 def out_str(node):
-    return ('<span class="name">' + node.find('name').text + '</span>' +
+    return ('<span class="name">' + node.find('name').text + '</span><br>' +
             '<span class="address">' + node.find('address').text + '</span><br>' +
             '<span class="proxdate">' + node.find('proxdate').text + " - " +
                 node.find('proxhour').text + '<br>' + '</span>')
