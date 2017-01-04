@@ -20,10 +20,55 @@ ENDPOINTS = {
     'parkings': "http://www.bcn.cat/tercerlloc/Aparcaments.xml",
 }
 
+HEADER = """
+<style>
+
+table {
+    border-collapse: collapse;
+    width: 1000px;
+    border: 2px solid #4CAF50;
+    margin: 0 auto;
+}
+
+th, td {
+    width: 400px;
+    margin: auto;
+    text-align: left;
+    padding: 8px;
+    border-left: 1px solid #4CAF50;
+}
+
+
+td span.name {
+    font-weight: bold;
+    margin-bottom: 1em;
+    display: inline-block;
+}
+
+td span.address {
+    font-style: italic;
+    font-size: .9em;
+}
+
+td span.proxdate {
+    font-size: .8em;
+    color: #888888;
+}
+
+tr:nth-child(even){background-color: #f2f2f2}
+
+th {
+    background-color: #4CAF50;
+    color: white;
+    text-align: center;
+}
+</style>
+"""
+
 
 def d(msg):
     """ Print a message to the screen, or do nothing in release """
-    print(msg)
+    print('<!--' + msg + '-->')
 
 
 def cache_name(name):
@@ -58,8 +103,18 @@ def clean(input_str):
     only_ascii = nfkd_form.encode('ASCII', 'ignore')
     return only_ascii.lower()
 
-def item_str(node):
-    return node.find('name').text
+def match_str(node):
+    return ''.join([
+                node.find('name').text,
+                node.find('address').text,
+                node.find('proxdate').text + " - " + node.find('proxhour').text
+            ])
+
+def out_str(node):
+    return ('<span class="name">' + node.find('name').text + '</span>' +
+            '<span class="address">' + node.find('address').text + '</span><br>' +
+            '<span class="proxdate">' + node.find('proxdate').text + " - " +
+                node.find('proxhour').text + '<br>' + '</span>')
 
 def matches(s, q):
     """ returns true if the selected query object q matches the string s """
@@ -80,21 +135,44 @@ def parse_args():
     parser.add_argument('--key', help=key_help)
     return parser.parse_args()
 
+
+def wrap(t, el):
+    """ wraps an element el in a tag t """
+    return "<"+t+">"+el+"</"+t+">"
+
 def main():
     items = get('data').findall('.//row/item[address][name]')
-
     args = parse_args()
+
     try:
         query = literal_eval(args.key) if args.key else ''
     except:
         print("Invalid query (forgot quotes?)")
         exit(1)
-    
+
     d("query: " + str(query))
 
-    res = [x for x in items if matches(item_str(x), query)]
+    print("<html><body>")
+    print(HEADER)
+    print("<table>")
+    print("<tr>")
+    print(wrap('th', "Details"))
+    print(wrap('th', "Bicing Stations<br>with free slots"))
+    print(wrap('th', "Bicing Stations<br>with available bikes"))
+    print(wrap('th', "Public Parkings<br>with free spots"))
+    print('</tr>')
+
+    res = [x for x in items if matches(match_str(x), query)]
     for item in res:
-        print("hi", item_str(item))
+        print("<tr>")
+        print(wrap('td', out_str(item)))
+        print(wrap('td', "TODO"))
+        print(wrap('td', "TODO"))
+        print(wrap('td', "TODO"))
+        print("</tr>")
+    print("</table>")
+    print("</body></html>")
+
 
 if __name__ == '__main__':
     main()
