@@ -165,7 +165,7 @@ def map_span(text, coords):
 
 def out_st(stdst, bikes):
     t = 'BIKES' if bikes else 'SLOTS'
-    return '<br>'.join([
+    return ''.join([
         (map_span(st.find('street').text, st_pos(st)) +
         '<br><span class="green">' + str(free) + ' ' + t + '</span>'
         '<span class="small"> - ' + str(int(dst*1000)) + 'm</span><br>')
