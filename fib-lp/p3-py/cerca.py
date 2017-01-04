@@ -20,52 +20,6 @@ ENDPOINTS = {
     'parkings': "http://www.bcn.cat/tercerlloc/Aparcaments.xml",
 }
 
-HEADER = """
-<style>
-
-table {
-    border-collapse: collapse;
-    width: 1000px;
-    border: 2px solid #4CAF50;
-    margin: 0 auto;
-}
-
-th, td {
-    width: 400px;
-    margin: auto;
-    text-align: left;
-    padding: 8px;
-    border-left: 1px solid #4CAF50;
-}
-
-
-td span.name {
-    font-weight: bold;
-    margin-bottom: 1em;
-    display: inline-block;
-}
-
-td span.address {
-    font-style: italic;
-    font-size: .9em;
-}
-
-td span.proxdate {
-    font-size: .8em;
-    color: #888888;
-}
-
-tr:nth-child(even){background-color: #f2f2f2}
-
-th {
-    background-color: #4CAF50;
-    color: white;
-    text-align: center;
-}
-</style>
-"""
-
-
 def d(msg):
     """ Print a message to the screen, or do nothing in release """
     print('<!--' + msg + '-->')
@@ -111,10 +65,10 @@ def match_str(node):
             ])
 
 def out_str(node):
-    return ('<span class="name">' + node.find('name').text + '</span><br>' +
-            '<span class="address">' + node.find('address').text + '</span><br>' +
-            '<span class="proxdate">' + node.find('proxdate').text + " - " +
-                node.find('proxhour').text + '<br>' + '</span>')
+    return ('<span class="name">{0}</span><br>'.format(node.find('name').text) +
+            '<div class="address tooltip"><span><a href="#">{0}</a></span></div><br>'.format(node.find('address').text) +
+            '<span class="proxdate">{0}</span>'.format(node.find('proxdate').text + " - " +
+                node.find('proxhour').text))
 
 def matches(s, q):
     """ returns true if the selected query object q matches the string s """
@@ -136,10 +90,6 @@ def parse_args():
     return parser.parse_args()
 
 
-def wrap(t, el):
-    """ wraps an element el in a tag t """
-    return "<"+t+">"+el+"</"+t+">"
-
 def main():
     items = get('data').findall('.//row/item[address][name]')
     args = parse_args()
@@ -152,26 +102,28 @@ def main():
 
     d("query: " + str(query))
 
-    print("<html><body>")
-    print(HEADER)
-    print("<table>")
-    print("<tr>")
-    print(wrap('th', "Details"))
-    print(wrap('th', "Bicing Stations<br>with free slots"))
-    print(wrap('th', "Bicing Stations<br>with available bikes"))
-    print(wrap('th', "Public Parkings<br>with free spots"))
-    print('</tr>')
+    content = ""
+    content += "<table>"
+    content += "<tr>"
+    content += "<th>{0}</th>".format("Details")
+    content += "<th>{0}</th>".format("Bicing Stations<br>with free slots")
+    content += "<th>{0}</th>".format("Bicing Stations<br>with available bikes")
+    content += "<th>{0}</th>".format("Public Parkings<br>with free spots")
+    content += '</tr>'
 
     res = [x for x in items if matches(match_str(x), query)]
     for item in res:
-        print("<tr>")
-        print(wrap('td', out_str(item)))
-        print(wrap('td', "TODO"))
-        print(wrap('td', "TODO"))
-        print(wrap('td', "TODO"))
-        print("</tr>")
-    print("</table>")
-    print("</body></html>")
+        content += "<tr>"
+        content += "<td>{0}</td>".format(out_str(item))
+        content += "<td>{0}</td>".format("TODO")
+        content += "<td>{0}</td>".format("TODO")
+        content += "<td>{0}</td>".format("TODO")
+        content += "</tr>"
+    content += "</table>"
+
+    out = open('template.tmpl').read()
+    out = out.replace('<!-- [[CONTENT]] -->', content)
+    print(out)
 
 
 if __name__ == '__main__':
