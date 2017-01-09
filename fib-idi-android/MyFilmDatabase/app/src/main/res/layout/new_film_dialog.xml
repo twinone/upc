@@ -37,8 +37,8 @@
         android:hint="@string/newfilm_protagonist" />
 
     <RatingBar
-        android:layout_width="230dp"
-        android:layout_height="40dp"
+        android:layout_width="240dp"
+        android:layout_height="50dp"
         android:id="@+id/ratingBar"
         android:stepSize="0.5"
         android:rating="0.0"
