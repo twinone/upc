@@ -16,6 +16,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewParent;
 import android.widget.Button;
 import android.widget.RatingBar;
 import android.widget.TextView;
@@ -178,7 +179,6 @@ public class FilmListFragment extends Fragment implements View.OnClickListener, 
     }
 
 
-
     private MainActivity getMainActivity() {
         return (MainActivity) getActivity();
     }
@@ -198,26 +198,12 @@ public class FilmListFragment extends Fragment implements View.OnClickListener, 
         public void onBindViewHolder(final RecyclerView.ViewHolder holder, int position) {
             final MyViewHolder h = (MyViewHolder) holder;
             Film f = mFilteredFilms.get(position);
-            boolean isExpanded = mExpandedFilmIds.contains(f.getId());
+
+
+            Log.d("List", "positon:" + position + ", size=" + mFilteredFilms.size() + ", film=" + f.toString());
 
             View v = h.getView();
-            v.setActivated(isExpanded);
 
-
-            v.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Film f = mFilteredFilms.get(holder.getAdapterPosition());
-                    boolean isExpanded = mExpandedFilmIds.contains(f.getId());
-
-                    if (isExpanded) mExpandedFilmIds.remove(f.getId());
-                    else mExpandedFilmIds.add(f.getId());
-
-                    notifyDataSetChanged();
-                }
-            });
-            //v.findViewById(R.id.rl_detail).setVisibility(isExpanded ? View.VISIBLE : View.GONE);
-            v.findViewById(R.id.rl_detail).setVisibility(View.VISIBLE);
 
             TextView title = (TextView) v.findViewById(R.id.tv_title);
             TextView director = (TextView) v.findViewById(R.id.tv_director);
@@ -229,7 +215,7 @@ public class FilmListFragment extends Fragment implements View.OnClickListener, 
             critics_rate.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
                 @Override
                 public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
-                    // Don't trigger the listener when setting the value programatically
+                    // Don't trigger the listener when setting the value programmatically
                     if (!fromUser) return;
 
                     Film f = mFilteredFilms.get(holder.getAdapterPosition());
@@ -240,13 +226,13 @@ public class FilmListFragment extends Fragment implements View.OnClickListener, 
             });
 
             title.setText(f.getTitle());
-            if (f.getDirector().isEmpty()) director.setVisibility(View.GONE);
+            director.setVisibility(f.getDirector().isEmpty() ? View.GONE : View.VISIBLE);
             director.setText(f.getDirector());
-            if (f.getCountry().isEmpty()) country.setVisibility(View.GONE);
+            country.setVisibility(f.getCountry().isEmpty() ? View.GONE : View.VISIBLE);
             country.setText(f.getCountry());
-            if (f.getYear() == 0) year.setVisibility(View.GONE);
+            year.setVisibility(f.getYear() == 0 ? View.GONE : View.VISIBLE);
             year.setText(String.valueOf(f.getYear()));
-            if (f.getProtagonist().isEmpty()) protagonist.setVisibility(View.GONE);
+            protagonist.setVisibility(f.getProtagonist().isEmpty() ? View.GONE : View.VISIBLE);
             protagonist.setText(f.getProtagonist());
 
             critics_rate.setRating((float) f.getCritics_rate() / 2);
@@ -260,7 +246,7 @@ public class FilmListFragment extends Fragment implements View.OnClickListener, 
     }
 
     private static class MyViewHolder extends RecyclerView.ViewHolder {
-        private View mView;
+        private final View mView;
 
         public MyViewHolder(View itemView) {
             super(itemView);
