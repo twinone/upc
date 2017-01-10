@@ -292,10 +292,10 @@ public class FilmListFragment extends Fragment implements View.OnClickListener, 
 
         sp.edit().putBoolean("init", true).apply();
         // Insert the 4 initial films asked for by the teachers
-        insertFilm("Captain America", "Joe Russo", "USA", 2011, "Chris Evans", 0);
-        insertFilm("Finding Dory", "Andrew Stanton", "USA", 2016, "Ellen DeGeneres", 0);
-        insertFilm("Doctor Strange", "Scott Derrickson", "USA", 2010, "Benedict Cumberbatch", 0);
-        insertFilm("Suicide Squad", "David Ayer", "USA", 2016, "Will Smith", 0);
+        insertFilm("Captain America", "Joe Russo", "USA", 2011, "Chris Evans", 7);
+        insertFilm("Finding Dory", "Andrew Stanton", "USA", 2016, "Ellen DeGeneres", 8);
+        insertFilm("Doctor Strange", "Scott Derrickson", "USA", 2010, "Benedict Cumberbatch", 8);
+        insertFilm("Suicide Squad", "David Ayer", "USA", 2016, "Will Smith", 4);
         //insertFilm("Star Trek Beyond", "Justin Lin", "USA", 2016, "", 0);
     }
 
