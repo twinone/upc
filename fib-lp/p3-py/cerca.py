@@ -27,6 +27,9 @@ from ast import literal_eval
 # see .data.cache, .parkings.cache, .stations.cache
 # Default cache time is 20 minutes
 
+# Note:
+# Since we can only deliver a single python file,
+# the HTML is embedded as a string.
 
 
 # See original (unminified HTML) at
@@ -65,7 +68,7 @@ class HttpGetCache:
 
     @staticmethod
     def file_age(path):
-        """ Function that returns the age of a file or -1 if it doesn't exist """
+        """Function that returns the age of a file or -1"""
         if not os.path.isfile(path):
             return -1
         return time.time() - os.stat(path)[stat.ST_MTIME]
@@ -79,7 +82,7 @@ class Coords:
 
     @staticmethod
     def from_xml(node):
-        """Returns a Coords from an XML node"""
+        """Returns a Coords object from an XML node"""
         try:
             if node.tag == 'station':  # stations use lat long nodes
                 x = float(node.find('lat').text)
@@ -91,10 +94,12 @@ class Coords:
                 return Coords(x, y)
         except:
             return Coords(0, 0)  # Is not going to be in 500m anyway
-    # see
-    # http://stackoverflow.com/questions/27928/calculate-distance-between-two-latitude-longitude-points-haversine-formula
+
     def distance(self, other):
-        """Distance from this node to other in km"""
+        """Distance from this coords to other in km"""
+        # see
+        # http://stackoverflow.com/questions/27928/calculate-distance-between-two-latitude-longitude-points-haversine-formula
+
         (a1, a2) = self.lat, self.lng
         (b1, b2) = other.lat, other.lng
         p = 0.017453292519943295
@@ -104,23 +109,6 @@ class Coords:
         return res
 
 
-class Printer:
-    """Class used to format the output of the results"""
-
-    @staticmethod
-    def event(node):
-        """Prints an event"""
-        return """
-        <span class="name">{0}</span><br>
-        {1}
-        <br><span class="proxdate small">{2}</span>
-        """.format(
-            node.find('name').text,
-            map_span(node.find('address').text, Coords.from_xml(node)),
-            get_date(node).strftime('%d/%m/%Y')
-        )
-
-
 # Event, Parking, Station classes
 # are used to only parse the info once, which is much faster
 # than traversing the XML every time
@@ -128,8 +116,10 @@ class Event:
     def __init__(self, node):
         self.node = node
         self.coords = Coords.from_xml(node)
+        self.name = node.find('name').text
+        self.address = node.find('address').text
         self.date = get_date(node)
-        self.out = Printer.event(node)
+        self.out = self.get_output()
         self.match = clean(''.join([
             self.node.find('name').text,
             self.node.find('address').text,  # includes Barri
@@ -148,11 +138,14 @@ class Event:
     def matches_date(self, q):
         """Returns true if this Event matches the date q"""
         d = self.date
-        if q is None: return True
-        if not isinstance(q, list): q = [q]
+        if q is None:
+            return True
+        if not isinstance(q, list):
+            q = [q]
         for o in q:
             [a, b] = to_range(o)
-            if a <= d and d < b: return True
+            if a <= d and d < b:
+                return True
         return False
 
     def bikes(self, stations):
@@ -190,6 +183,16 @@ class Event:
         res = sorted(res, key=lambda x: x[1])
         return '<br>'.join([p.out(d) for (p, d) in res])
 
+    def get_output(self):
+        return """
+        <span class="name">{0}</span><br>
+        {1}
+        <br><span class="proxdate small">{2}</span>
+        """.format(
+            self.node.find('name').text,
+            map_span(self.address, self.coords),
+            self.date.strftime('%d/%m/%Y')
+        )
 
 
 class Parking:
@@ -203,6 +206,7 @@ class Parking:
             map_span(self.name, self.coords),
             str(int(d*1000))
         )
+
 
 class Station:
     def __init__(self, node):
@@ -234,6 +238,7 @@ def get_date(n):
         except:
             return datetime.now()
 
+
 def parse_date(s):
     """Returns the datetime corresponding to s"""
     return datetime.strptime(s, "%d/%m/%Y")
@@ -248,8 +253,6 @@ def to_range(o):
         d = parse_date(o[0])
         return [d+timedelta(days=o[1]),
                 d+timedelta(days=o[2]+1)]
-
-
 
 
 def map_span(text, coords):
@@ -270,11 +273,10 @@ def d(msg):
 # see
 # http://stackoverflow.com/questions/517923/what-is-the-best-way-to-remove-accents-in-a-python-unicode-string
 def clean(input_str):
-    """ removes accents and returns only lowercase ascii text of a string """
+    """removes accents and returns only lowercase ascii text of a string"""
     nfkd_form = unicodedata.normalize('NFKD', input_str)
     only_ascii = nfkd_form.encode('ASCII', 'ignore')
     return only_ascii.lower()
-
 
 
 def date_and_query():
@@ -297,6 +299,7 @@ def date_and_query():
         exit(1)
     return (date, query)
 
+
 def main():
     edata = HttpGetCache.get('data').findall('.//row/item[address][name]')
     sdata = HttpGetCache.get('stations').findall('station')
@@ -305,7 +308,6 @@ def main():
     events = [Event(x) for x in edata]
     stations = [Station(x) for x in sdata]
     parkings = [Parking(x) for x in pdata]
-
 
     (date, query) = date_and_query()
 
