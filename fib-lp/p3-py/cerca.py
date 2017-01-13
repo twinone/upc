@@ -120,32 +120,6 @@ class Printer:
             get_date(node).strftime('%d/%m/%Y')
         )
 
-    # @staticmethod
-    # def stations(stdst, bikes):
-    #     t = 'BIKES' if bikes else 'SLOTS'
-    #     return ''.join([
-    #         """
-    #         {0}<br>
-    #         <span class="green">{1}</span>
-    #         <span class="small"> - {2}m</span><br>
-    #         """.format(
-    #             map_span(st.find('street').text, Coords.from_xml(st)),
-    #             str(free) + ' ' + t,
-    #             str(int(dst*1000)))
-    #         for (st, dst, free) in stdst
-    #     ])
-
-    # @staticmethod
-    # def parking(pkdst):
-    #     return '<br>'.join([
-    #         '{0} <span class="small"> - {1}m</span>'.format(
-    #             map_span(
-    #                 pk.find('name').text.replace("Aparcament", "Ap."),
-    #                 Coords.from_xml(pk)),
-    #             str(int(dst*1000))
-    #         )
-    #         for (pk, dst) in pkdst
-    #     ])
 
 # Event, Parking, Station classes
 # are used to only parse the info once, which is much faster
@@ -250,9 +224,6 @@ class Station:
             str(int(d*1000)))
 
 
-
-
-
 def get_date(n):
     """Get the date of a node or now()"""
     try:
@@ -342,10 +313,8 @@ def main():
 
     res = [
         ev for ev in events
-        if ev.matches_query(query)
-        and ev.matches_date(date)
-        # if matches_date(x, date)
-        # and matches(match_str(x), query)
+        if ev.matches_date(date)
+        and ev.matches_query(query)
     ]
     res = sorted(res, key=lambda x: get_date(x))
 
@@ -357,9 +326,6 @@ def main():
             ev.bikes(stations),
             ev.slots(stations),
             ev.parkings(parkings)
-            # Printer.stations(bicing(item, stations, True), True),
-            # Printer.stations(bicing(item, stations, False), False),
-            # Printer.parking(parking(item, parkings))
         )
 
     # to read from template file:
