@@ -22,6 +22,11 @@ from ast import literal_eval
 # A lot of events don't have a 'begindate' node. The 'proxdate' attribute
 # will be used in those cases.
 
+# Note:
+# We store the data in a cache so it's faster when executed multiple times
+# see .data.cache, .parkings.cache, .stations.cache
+# Default cache time is 20 minutes
+
 
 
 # See original (unminified HTML) at
@@ -41,21 +46,17 @@ class HttpGetCache:
 
     # Time in seconds until a new copy of the data is retrieved
     # set to 0 for always
-    CACHE_TIMEOUT = 60 * 60
+    CACHE_TIMEOUT = 20 * 60
 
     @staticmethod
     def get(name, cache=True):
         """GET ENDPOINTS['name'] and if cache, store it in the cache"""
-        d('getting ' + name + ' endpoint')
         f = HttpGetCache.cache_name(name)
         age = HttpGetCache.file_age(f)
         if not cache or age == -1 or age > HttpGetCache.CACHE_TIMEOUT:
-            d('Getting fresh copy')
             data = (urllib.request.urlopen(HttpGetCache.ENDPOINTS[name])
                     .read().decode('utf-8'))
             open(f, 'w').write(data)
-        else:
-            d('Using cached data')
         return xml.etree.ElementTree.parse(f).getroot()
 
     @staticmethod
@@ -119,32 +120,32 @@ class Printer:
             get_date(node).strftime('%d/%m/%Y')
         )
 
-    @staticmethod
-    def stations(stdst, bikes):
-        t = 'BIKES' if bikes else 'SLOTS'
-        return ''.join([
-            """
-            {0}<br>
-            <span class="green">{1}</span>
-            <span class="small"> - {2}m</span><br>
-            """.format(
-                map_span(st.find('street').text, Coords.from_xml(st)),
-                str(free) + ' ' + t,
-                str(int(dst*1000)))
-            for (st, dst, free) in stdst
-        ])
+    # @staticmethod
+    # def stations(stdst, bikes):
+    #     t = 'BIKES' if bikes else 'SLOTS'
+    #     return ''.join([
+    #         """
+    #         {0}<br>
+    #         <span class="green">{1}</span>
+    #         <span class="small"> - {2}m</span><br>
+    #         """.format(
+    #             map_span(st.find('street').text, Coords.from_xml(st)),
+    #             str(free) + ' ' + t,
+    #             str(int(dst*1000)))
+    #         for (st, dst, free) in stdst
+    #     ])
 
-    @staticmethod
-    def parking(pkdst):
-        return '<br>'.join([
-            '{0} <span class="small"> - {1}m</span>'.format(
-                map_span(
-                    pk.find('name').text.replace("Aparcament", "Ap."),
-                    Coords.from_xml(pk)),
-                str(int(dst*1000))
-            )
-            for (pk, dst) in pkdst
-        ])
+    # @staticmethod
+    # def parking(pkdst):
+    #     return '<br>'.join([
+    #         '{0} <span class="small"> - {1}m</span>'.format(
+    #             map_span(
+    #                 pk.find('name').text.replace("Aparcament", "Ap."),
+    #                 Coords.from_xml(pk)),
+    #             str(int(dst*1000))
+    #         )
+    #         for (pk, dst) in pkdst
+    #     ])
 
 # Event, Parking, Station classes
 # are used to only parse the info once, which is much faster
@@ -154,23 +155,102 @@ class Event:
         self.node = node
         self.coords = Coords.from_xml(node)
         self.date = get_date(node)
+        self.out = Printer.event(node)
+        self.match = clean(''.join([
+            self.node.find('name').text,
+            self.node.find('address').text,  # includes Barri
+            self.date.strftime("%d/%m/%Y")
+        ]))
+
+    def matches_query(self, q):
+        """Returns true if this Event matches the query q"""
+        if isinstance(q, str):
+            return clean(q) in self.match
+        if isinstance(q, tuple):
+            return True in [self.matches(x) for x in q]
+        # else isinstance(q, list)
+        return False not in [self.matches(x) for x in q]
+
+    def matches_date(self, q):
+        """Returns true if this Event matches the date q"""
+        d = self.date
+        if q is None: return True
+        if not isinstance(q, list): q = [q]
+        for o in q:
+            [a, b] = to_range(o)
+            if a <= d and d < b: return True
+        return False
+
+    def bikes(self, stations):
+        return self.stations(stations, True)
+
+    def slots(self, stations):
+        return self.stations(stations, False)
+
+    def stations(self, stations, bikes):
+        """
+        Get the 5 nearest bicing stations with
+        If bikes=True: at least 1 available bike
+        otherwise: at least 1 free slot
+        Returns the station, distance and free bikes/slots
+        """
+
+        pos = self.coords
+        distances = [s.coords.distance(pos) for s in stations]
+        res = [
+            (s, d)
+            for (s, d) in zip(stations, distances)
+            if d and d < .5
+            and (s.bikes if bikes else s.slots) >= 1
+        ]
+        # return closest 5 stations that match
+        res = sorted(res, key=lambda x: x[1])[:5]
+        return '<br>'.join([s.out(d, bikes) for (s, d) in res])
+
+    def parkings(self, parkings):
+        """Get the public parkings within 500m of the item"""
+        pos = self.coords
+        distances = [p.coords.distance(pos) for p in parkings]
+        res = [(p, d) for (p, d) in zip(parkings, distances) if d < 0.5]
+        # return closest 5 stations that match
+        res = sorted(res, key=lambda x: x[1])
+        return '<br>'.join([p.out(d) for (p, d) in res])
+
+
 
 class Parking:
     def __init__(self, node):
+        self.node = node
+        self.coords = Coords.from_xml(node)
+        self.name = node.find('name').text.replace("Aparcament", "Ap.")
+
+    def out(self, d):
+        return '{0} <span class="small"> - {1}m</span>'.format(
+            map_span(self.name, self.coords),
+            str(int(d*1000))
+        )
 
 class Station:
     def __init__(self, node):
+        self.node = node
+        self.coords = Coords.from_xml(node)
+        self.bikes = int(node.find('bikes').text)
+        self.slots = int(node.find('slots').text)
+        self.street = node.find('street').text
+
+    def out(self, d, bikes):
+        return """
+        {0}<br>
+        <span class="green">{1} {2}</span>
+        <span class="small"> - {3}m</span>
+        """.format(
+            map_span(self.street, self.coords),
+            str(self.bikes if bikes else self.slots),
+            'BIKES' if bikes else 'SLOTS',
+            str(int(d*1000)))
 
 
 
-def matches(s, q):
-    """Returns true if the string s matches the query q"""
-    if isinstance(q, str):
-        return clean(q) in clean(s)
-    if isinstance(q, tuple):
-        return True in [matches(s, x) for x in q]
-    # else isinstance(q, list)
-    return False not in [matches(s, x) for x in q]
 
 
 def get_date(n):
@@ -198,49 +278,7 @@ def to_range(o):
         return [d+timedelta(days=o[1]),
                 d+timedelta(days=o[2]+1)]
 
-def matches_date(n, q):
-    """Returns true if the node n matches the query q"""
-    d = get_date(n)
-    if q is None: return True
-    if d is None: return True
-    if not isinstance(q, list): q = [q]
-    for o in q:
-        [a, b] = to_range(o)
-        if a <= d and d < b: return True
-    return False
 
-
-
-
-
-def bicing(item, stations, bikes):
-    """
-    Get the 5 nearest bicing stations to loc with
-    If bikes=True: at least 1 available bike
-    otherwise: at least 1 free slot
-    Returns the station, distance and free bikes/slots
-    """
-
-    t = 'bikes' if bikes else 'slots'
-    pos = Coords.from_xml(item)
-    distances = [Coords.from_xml(s).distance(pos) for s in stations]
-    res = [
-        (s, d, int(s.find(t).text))
-        for (s, d) in zip(stations, distances)
-        if d and d < .5
-        and int(s.find(t).text) >= 1
-    ]
-    # return closest 5 stations that match
-    return sorted(res, key=lambda x: x[1])[:5]
-
-
-def parking(item, parkings):
-    """Get the public parkings within 500m of the item"""
-    pos = Coords.from_xml(item)
-    distances = [Coords.from_xml(p).distance(pos) for p in parkings]
-    res = [(p, d) for (p, d) in zip(parkings, distances) if d and d < 0.5]
-    # return closest 5 stations that match
-    return sorted(res, key=lambda x: x[1])
 
 
 def map_span(text, coords):
@@ -267,17 +305,6 @@ def clean(input_str):
     return only_ascii.lower()
 
 
-def match_str(node):
-    """
-    The string representation of an item, for matching,
-    includes the fields Name, Address, Date, Barri
-    """
-    return ''.join([
-        node.find('name').text,
-        node.find('address').text,  # includes Barri
-        node.find('begindate').text if node.find('begindate') else ''
-    ])
-
 
 def date_and_query():
     # see https://docs.python.org/3/library/argparse.html
@@ -300,29 +327,39 @@ def date_and_query():
     return (date, query)
 
 def main():
-    items = HttpGetCache.get('data').findall('.//row/item[address][name]')
-    stations = HttpGetCache.get('stations').findall('station')
-    parkings = HttpGetCache.get('parkings').findall('.//row/item[name]')
+    edata = HttpGetCache.get('data').findall('.//row/item[address][name]')
+    sdata = HttpGetCache.get('stations').findall('station')
+    pdata = HttpGetCache.get('parkings').findall('.//row/item[name]')
+
+    events = [Event(x) for x in edata]
+    stations = [Station(x) for x in sdata]
+    parkings = [Parking(x) for x in pdata]
+
 
     (date, query) = date_and_query()
 
     c = ""
 
     res = [
-        x for x in items
-        if matches_date(x, date)
-        and matches(match_str(x), query)
+        ev for ev in events
+        if ev.matches_query(query)
+        and ev.matches_date(date)
+        # if matches_date(x, date)
+        # and matches(match_str(x), query)
     ]
     res = sorted(res, key=lambda x: get_date(x))
 
-    for item in res:
+    for ev in res:
         c += """
         <tr><td>{0}</td><td>{1}</td><td>{2}</td><td>{3}</td></tr>
         """.format(
-            Printer.event(item),
-            Printer.stations(bicing(item, stations, True), True),
-            Printer.stations(bicing(item, stations, False), False),
-            Printer.parking(parking(item, parkings))
+            ev.out,
+            ev.bikes(stations),
+            ev.slots(stations),
+            ev.parkings(parkings)
+            # Printer.stations(bicing(item, stations, True), True),
+            # Printer.stations(bicing(item, stations, False), False),
+            # Printer.parking(parking(item, parkings))
         )
 
     # to read from template file:
