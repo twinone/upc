@@ -16,6 +16,12 @@ vector<int> modelStack;
 uint indexOfNextLitToPropagate;
 uint decisionLevel;
 
+// if litClauseMap[lit][clause] is TRUE
+// then the literal is in the clause positively
+// if it's FALSE it's negated
+// and if it's UNDEF the literal is not in the clause
+vector<vector<int> > litClauseMap;
+
 
 void readClauses( ){
   // Skip comments
@@ -27,12 +33,23 @@ void readClauses( ){
   // Read "cnf numVars numClauses"
   string aux;
   cin >> aux >> numVars >> numClauses;
-  clauses.resize(numClauses);  
+  clauses.resize(numClauses);
+
+  // ADDITION: Initialize litClauseMap
+  litClauseMap.resize(numVars+1);
+  for (uint i = 0; i < numVars+1; ++i) litClauseMap[i].resize(numClauses);
+
   // Read clauses
   for (uint i = 0; i < numClauses; ++i) {
     int lit;
-    while (cin >> lit and lit != 0) clauses[i].push_back(lit);
-  }    
+    while (cin >> lit and lit != 0) {
+      clauses[i].push_back(lit);
+
+      // ADDITION: insert the literal into the litClauseMap
+      int var = lit > 0 ? lit : -lit;
+      litClauseMap[var][i] = lit > 0 ? TRUE : FALSE;
+    }
+  }
 }
 
 
@@ -57,6 +74,7 @@ bool propagateGivesConflict ( ) {
   while ( indexOfNextLitToPropagate < modelStack.size() ) {
     ++indexOfNextLitToPropagate;
     for (uint i = 0; i < numClauses; ++i) {
+      // TODO
       bool someLitTrue = false;
       int numUndefs = 0;
       int lastLitUndef = 0;
@@ -125,6 +143,7 @@ int main(){
       if (val == FALSE) {cout << "UNSATISFIABLE" << endl; return 10;}
       else if (val == UNDEF) setLiteralToTrue(lit);
     }
+
   
   // DPLL algorithm
   while (true) {
@@ -132,6 +151,7 @@ int main(){
       if ( decisionLevel == 0) { cout << "UNSATISFIABLE" << endl; return 10; }
       backtrack();
     }
+    // propagated a literal
     int decisionLit = getNextDecisionLiteral();
     if (decisionLit == 0) { checkmodel(); cout << "SATISFIABLE" << endl; return 20; }
     // start new decision level:
