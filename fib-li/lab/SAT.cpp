@@ -16,11 +16,16 @@ vector<int> modelStack;
 uint indexOfNextLitToPropagate;
 uint decisionLevel;
 
-// if litClauseMap[lit][clause] is TRUE
-// then the literal is in the clause positively
-// if it's FALSE it's negated
-// and if it's UNDEF the literal is not in the clause
-vector<vector<int> > litClauseMap;
+
+// Contains in which clauses a literal occurs
+vector<vector<int> > pos;
+vector<vector<int> > neg;
+
+
+// HEURISTIC
+// For each literal, contains the total number of ocurrences
+vector<int> pos_heuristic;
+vector<int> neg_heuristic;
 
 
 void readClauses( ){
@@ -35,19 +40,27 @@ void readClauses( ){
   cin >> aux >> numVars >> numClauses;
   clauses.resize(numClauses);
 
-  // ADDITION: Initialize litClauseMap
-  litClauseMap.resize(numVars+1);
-  for (uint i = 0; i < numVars+1; ++i) litClauseMap[i].resize(numClauses);
-
+  // ADDITION: Initialize maps
+  pos.resize(numVars+1);
+  neg.resize(numVars+1);
+  pos_heuristic.resize(numVars+1);
+  neg_heuristic.resize(numVars+1);
+  
   // Read clauses
   for (uint i = 0; i < numClauses; ++i) {
     int lit;
     while (cin >> lit and lit != 0) {
       clauses[i].push_back(lit);
 
-      // ADDITION: insert the literal into the litClauseMap
-      int var = lit > 0 ? lit : -lit;
-      litClauseMap[var][i] = lit > 0 ? TRUE : FALSE;
+      /// ADDITION: Add all the clauses where a literal occurs
+      if (lit > 0) {
+          pos[lit].push_back(i);
+          pos_heuristic[lit] ++;
+      }
+      else {
+          neg[-lit].push_back(i);
+          neg_heuristic[-lit] ++;
+      }
     }
   }
 }
@@ -72,20 +85,32 @@ void setLiteralToTrue(int lit){
 
 bool propagateGivesConflict ( ) {
   while ( indexOfNextLitToPropagate < modelStack.size() ) {
+    int lit = modelStack[indexOfNextLitToPropagate];
     ++indexOfNextLitToPropagate;
-    for (uint i = 0; i < numClauses; ++i) {
-      // TODO
+    
+    // look at the inverted literal only
+    vector<int> v = lit < 0 ? pos[abs(lit)] : neg[abs(lit)];
+    for (uint j = 0; j < v.size(); j++) {
+      int i = v[j];
+      
       bool someLitTrue = false;
       int numUndefs = 0;
       int lastLitUndef = 0;
       for (uint k = 0; not someLitTrue and k < clauses[i].size(); ++k){
-	int val = currentValueInModel(clauses[i][k]);
-	if (val == TRUE) someLitTrue = true;
-	else if (val == UNDEF){ ++numUndefs; lastLitUndef = clauses[i][k]; }
+        int val = currentValueInModel(clauses[i][k]);
+        if (val == TRUE) someLitTrue = true;
+        else if (val == UNDEF){ ++numUndefs; lastLitUndef = clauses[i][k]; }
       }
-      if (not someLitTrue and numUndefs == 0) return true; // conflict! all lits false
-      else if (not someLitTrue and numUndefs == 1) setLiteralToTrue(lastLitUndef);	
-    }    
+      if (not someLitTrue and numUndefs == 0) {
+        // conflict! all lits false
+          pos_heuristic[abs(lit)] += 1;
+          neg_heuristic[abs(lit)] += 1;
+          return true;
+      }
+      else if (not someLitTrue and numUndefs == 1) {
+          setLiteralToTrue(lastLitUndef);	
+      }
+    }
   }
   return false;
 }
@@ -110,9 +135,24 @@ void backtrack(){
 
 // Heuristic for finding the next decision literal:
 int getNextDecisionLiteral(){
-  for (uint i = 1; i <= numVars; ++i) // stupid heuristic:
+    int maxnum = 0;
+    int lit = 0;
+    for (int i = 0; i < pos_heuristic.size(); i++) {
+        if (pos_heuristic[i] > maxnum && model[i] == UNDEF) {
+            maxnum = pos_heuristic[i];
+            lit = i;
+        }
+        if (neg_heuristic[i] > maxnum && model[i] == UNDEF) {
+            maxnum = neg_heuristic[i];
+            lit = -i;
+        }
+    }
+    return lit;
+    
+  /*for (uint i = 1; i <= numVars; ++i) // stupid heuristic:
     if (model[i] == UNDEF) return i;  // returns first UNDEF var, positively
   return 0; // reurns 0 when all literals are defined
+  */
 }
 
 void checkmodel(){
@@ -144,7 +184,6 @@ int main(){
       else if (val == UNDEF) setLiteralToTrue(lit);
     }
 
-  
   // DPLL algorithm
   while (true) {
     while ( propagateGivesConflict() ) {

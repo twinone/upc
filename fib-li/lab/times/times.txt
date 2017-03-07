@@ -1,0 +1,55 @@
+vars-150-1.cnf		0.05	0.00	0.00	SATISFIABLE	
+vars-150-2.cnf		0.06	0.03	0.04	SATISFIABLE	
+vars-150-3.cnf		0.04	0.01	0.00	SATISFIABLE	
+vars-150-4.cnf		0.16	0.01	0.10	SATISFIABLE	
+vars-150-5.cnf		0.17	0.02	0.10	UNSATISFIABLE	
+vars-150-6.cnf		0.03	0.00	0.00	SATISFIABLE	
+vars-150-7.cnf		0.1	0.01	0.05	UNSATISFIABLE	
+vars-150-8.cnf		0	0.00	0.00	SATISFIABLE	
+vars-150-9.cnf		0.16	0.00	0.00	SATISFIABLE	
+vars-150-10.cnf         0.08    0.03    0.10    UNSATISFIABLE
+
+vars-150-1.cnf		0.05	0.00	0.00	SATISFIABLE	
+vars-150-2.cnf		0.06	0.02	0.04	SATISFIABLE	
+vars-150-3.cnf		0.04	0.01	0.00	SATISFIABLE	
+vars-150-4.cnf		0.16	0.01	0.08	SATISFIABLE	
+vars-150-5.cnf		0.17	0.01	0.08	UNSATISFIABLE	
+vars-150-6.cnf		0.03	0.00	0.00	SATISFIABLE	
+vars-150-7.cnf		0.1	0.01	0.04	UNSATISFIABLE	
+vars-150-8.cnf		0	0.00	0.00	SATISFIABLE	
+vars-150-9.cnf		0.16	0.00	0.00	SATISFIABLE
+vars-150-10.cnf         0.08    0.03    0.10    UNSATISFIABLE
+	
+vars-200-1.cnf          1.47    0.14    0.56    UNSATISFIABLE
+vars-200-2.cnf          0.03    0.03    0.04    SATISFIABLE
+vars-200-3.cnf          2.2     0.16    0.55    UNSATISFIABLE
+vars-200-4.cnf          0.62    0.05    0.21    UNSATISFIABLE
+vars-200-5.cnf          2.72    0.09    0.34    UNSATISFIABLE
+vars-200-6.cnf          5.45    0.24    0.65    SATISFIABLE
+vars-200-7.cnf          5.94    0.26    1.25    UNSATISFIABLE
+vars-200-8.cnf          0.45    0.07    0.43    SATISFIABLE
+vars-200-9.cnf          0.63    0.06    0.00    SATISFIABLE
+vars-200-10.cnf         2.53    0.17    0.98    UNSATISFIABLE
+
+vars-250-1.cnf		23.88	1.11	4.55	UNSATISFIABLE	
+vars-250-2.cnf		70.3	1.82	8.56	UNSATISFIABLE	
+vars-250-3.cnf		21.42	0.79	1.77	SATISFIABLE	
+vars-250-4.cnf		2.78	0.27	0.09	SATISFIABLE	
+vars-250-5.cnf		25.4	1.40	8.53	UNSATISFIABLE	
+vars-250-6.cnf		117.89	1.96	10.32	UNSATISFIABLE	
+vars-250-7.cnf		2.18	0.76	2.67	SATISFIABLE	
+vars-250-8.cnf		28.53	1.18	8.02	UNSATISFIABLE	
+vars-250-9.cnf		14.93	0.47	0.98	SATISFIABLE	
+vars-250-10.cnf         5       0.53    0.01    SATISFIABLE
+
+vars-300-1.cnf            63.54   17.57   60.15   SATISFIABLE
+vars-300-2.cnf            1444.74 16.80   67.23   UNSATISFIABLE
+vars-300-3.cnf            284.11  7.47    28.53   UNSATISFIABLE
+vars-300-4.cnf            301.25  10.77   61.79   UNSATISFIABLE
+vars-300-5.cnf            789.79  14.92   49.42   SATISFIABLE
+vars-300-6.cnf            443.43  5.54    52.98   UNSATISFIABLE
+vars-300-7.cnf            7.52    1.75    1.35    SATISFIABLE
+vars-300-8.cnf            920.41  13.53   88.51   UNSATISFIABLE
+vars-300-9.cnf            295.42  4.03    0.26    SATISFIABLE
+vars-300-10.cnf           201.8   4.59    15.43   SATISFIABLE
+
