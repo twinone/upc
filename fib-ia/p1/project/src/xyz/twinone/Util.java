@@ -1,9 +1,13 @@
 package xyz.twinone;
 
 import IA.Red.Centro;
+import IA.Red.CentrosDatos;
 import IA.Red.Sensor;
+import IA.Red.Sensores;
 
 import java.security.InvalidParameterException;
+import java.util.List;
+import java.util.Map;
 
 public class Util {
 
@@ -19,17 +23,38 @@ public class Util {
     }
 
     public static String objectToString(Object o) {
-        if (o instanceof Sensor) return sensorToString((Sensor)o);
-        if (o instanceof Centro) return centerToString((Centro)o);
+        if (o instanceof Sensor) return sensorToString((Sensor) o);
+        if (o instanceof Centro) return centerToString((Centro) o);
         throw new InvalidParameterException("Must be Centro or Sensor");
     }
 
     public static String sensorToString(Sensor s) {
-        return "Sensor (" + s.getCoordX() + "," + s.getCoordY() + "): " + s.getCapacidad();
+        return "Sensor (" + s.getCoordX() + "," + s.getCoordY() + ": " + (int)s.getCapacidad() + ")";
     }
 
     public static String centerToString(Centro s) {
         return "Centro (" + s.getCoordX() + "," + s.getCoordY() + ")";
     }
+
+
+    public static CentrosDatos genCentrosDatos(List<Coords> list) {
+        CentrosDatos cd = new CentrosDatos(0, 0);
+        for (Coords c : list) {
+            cd.add(new Centro(c.x, c.y));
+        }
+        return cd;
+    }
+
+    public static Sensores genSensores(Map<Coords, Integer> map) {
+        Sensores ss = new Sensores(0, 0);
+        for (Map.Entry<Coords, Integer> ci : map.entrySet()) {
+            Coords c = ci.getKey();
+            Integer i = ci.getValue();
+            ss.add(new Sensor(i, c.x, c.y));
+        }
+
+        return ss;
+    }
+
 
 }

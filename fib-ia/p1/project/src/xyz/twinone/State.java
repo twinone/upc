@@ -58,14 +58,20 @@ public class State implements aima.search.framework.SuccessorFunction, aima.sear
      * @param numCentrosDatos El numero de centers de datos
      * @param seed            La semilla para los sensors y estados
      */
-    public State(int numSensores, int numCentrosDatos, int seed) {
+    public static State genRandom(int numSensores, int numCentrosDatos, int seed) {
         if (numSensores <= 0) throw new InvalidParameterException("numSensores should be > 0");
         if (numCentrosDatos <= 0) throw new InvalidParameterException("numCentrosDatos should be > 0");
 
         // Set up the sensors and centers
         Random r = new Random(seed);
-        sensors = new Sensores(numSensores, r.nextInt());
-        centers = new CentrosDatos(numCentrosDatos, r.nextInt());
+        Sensores sensors = new Sensores(numSensores, r.nextInt());
+        CentrosDatos centers = new CentrosDatos(numCentrosDatos, r.nextInt());
+        return new State(sensors, centers);
+    }
+
+    public State(Sensores ss, CentrosDatos cd )  {
+        sensors = ss;
+        centers = cd;
 
         nodes = new ArrayList<>();
         nodes.addAll(sensors);
@@ -74,12 +80,7 @@ public class State implements aima.search.framework.SuccessorFunction, aima.sear
         remainingConnections = new HashMap<>();
         for (Centro c : centers) remainingConnections.put(c, CONNS_CENTER);
         for (Sensor s : sensors) remainingConnections.put(s, CONNS_SENSOR);
-        sensors.sort(new Comparator<Sensor>() {
-            @Override
-            public int compare(Sensor o1, Sensor o2) {
-                return (int) (o2.getCapacidad() - o1.getCapacidad());
-            }
-        });
+        sensors.sort((o1, o2) -> (int) (o2.getCapacidad() - o1.getCapacidad()));
 
         // Initialize the graph
         graph = new HashMap<>();
@@ -127,8 +128,7 @@ public class State implements aima.search.framework.SuccessorFunction, aima.sear
      * @see State#generateInitialSolution()
      */
     public void generateInitialSolution() {
-        generateInitialSolutionComplex();
-
+        generateInitialSolutionSimple();
         if (!isSolution()) {
             throw new IllegalStateException("generateInitialSolution did not generate a valid solution");
         }
@@ -137,18 +137,9 @@ public class State implements aima.search.framework.SuccessorFunction, aima.sear
     /**
      * Generates a naive valid solution for the problem
      * <p>
-     * Basically it adds each sensor to a free node. We begin with
-     * the centers as free nodes. When we add a sensor to it, we make this
-     * sensor a free node too as it can still hold 2 more sensors attached to it
-     * <p>
-     * This will finish correctly because all sensor can be connected no matter
-     * how many
+     *     TODO add explanation
      */
     private void generateInitialSolutionSimple() {
-        // The empty state is a (pretty bad) initial solution
-    }
-
-    private void generateInitialSolutionComplex() {
         List<Object> connectable = new ArrayList<>(centers);
         for (Sensor s : sensors) {
             Object best = connectable.get(0);
@@ -168,6 +159,17 @@ public class State implements aima.search.framework.SuccessorFunction, aima.sear
             if (remainingConnections.get(best) == 0) connectable.remove(best);
         }
 
+
+        // Print state
+        printState();
+
+    }
+
+    private void printState() {
+        for (Sensor s : graph.keySet()) {
+            Object o = graph.get(s);
+            System.out.println(Util.sensorToString(s) + " -> " + Util.objectToString(o));
+        }
     }
 
     private void addEdge(Sensor s, Object o) {
@@ -208,18 +210,17 @@ public class State implements aima.search.framework.SuccessorFunction, aima.sear
             }
         }
 
-/*
+
         for (Map.Entry<Sensor, Object> e : graph.entrySet()) {
             x.remove(e.getKey());
             x.remove(e.getValue());
         }
 
-
         x.removeAll(centers);
 
         if (!x.isEmpty()) throw new IllegalStateException("The graph is not connected");
 
-*/
+
         return true;
     }
 
