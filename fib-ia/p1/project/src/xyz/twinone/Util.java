@@ -1,5 +1,10 @@
 package xyz.twinone;
 
+import IA.Red.Centro;
+import IA.Red.Sensor;
+
+import java.security.InvalidParameterException;
+
 public class Util {
 
     /**
@@ -11,6 +16,20 @@ public class Util {
         int dx = ca.x - cb.x;
         int dy = ca.y - cb.y;
         return Math.sqrt(dx * dx + dy * dy);
+    }
+
+    public static String objectToString(Object o) {
+        if (o instanceof Sensor) return sensorToString((Sensor)o);
+        if (o instanceof Centro) return centerToString((Centro)o);
+        throw new InvalidParameterException("Must be Centro or Sensor");
+    }
+
+    public static String sensorToString(Sensor s) {
+        return "Sensor (" + s.getCoordX() + "," + s.getCoordY() + "): " + s.getCapacidad();
+    }
+
+    public static String centerToString(Centro s) {
+        return "Centro (" + s.getCoordX() + "," + s.getCoordY() + ")";
     }
 
 }
