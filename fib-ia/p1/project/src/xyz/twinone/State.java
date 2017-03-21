@@ -47,7 +47,7 @@ public class State {
     /**
      * The connections between centers and sensors
      */
-    private final Map<Object, List<Sensor>> graph = new HashMap<>();
+    private final Map<Object, List<Sensor>> graph;
 
 
     /**
@@ -74,6 +74,7 @@ public class State {
         for (Sensor s : sensors) remainingConnections.put(s, CONNS_SENSOR);
 
         // Initialize the graph
+        graph = new HashMap<>();
         for (Sensor s : sensors) graph.put(s, new ArrayList<>());
         for (Centro c : centers) graph.put(c, new ArrayList<>());
     }
@@ -87,8 +88,13 @@ public class State {
         this.sensors = src.sensors;
         this.centers = src.centers;
         this.nodes = src.nodes;
+        this.graph = new HashMap<>();
+
 
         // Copies
+        for (Map.Entry<Object, List<Sensor>> e: graph.entrySet()) {
+            this.graph.put(e.getKey(), new ArrayList<>(e.getValue()));
+        }
         this.remainingConnections = new HashMap<>(src.remainingConnections);
     }
 
@@ -126,6 +132,13 @@ public class State {
 
     /**
      * Generates a naive valid solution for the problem
+     *
+     * Basically it adds each sensor to a free node. We begin with
+     * the centers as free nodes. When we add a sensor to it, we make this
+     * sensor a free node too as it can still hold 2 more sensors attached to it
+     *
+     * This will finish correctly because all sensor can be connected no matter
+     * how many
      */
     private void generateInitialSolutionSimple() {
         // For each data center, connect up to 25 sensors to it
@@ -142,7 +155,7 @@ public class State {
             // Add the sensor to the queue of connectable devices
             // When adding a new sensor to the queue,
             // it has exactly 2 connections left
-            pending.add(s);
+            connectable.add(s);
 
             // don't overconnect!
             if (remainingConnections.get(parent) == 0) connectable.remove();
@@ -173,8 +186,25 @@ public class State {
      *
      * @return true if this {@link State} is a solution to the problem
      */
-    private boolean isSolution() {
-        throw new RuntimeException("Stub!");
+    public boolean isSolution() {
+        // Check if it's connected
+        List<Object> x = new ArrayList<>(nodes);
+        for (Object o : nodes) {
+            if (remainingConnections.get(o) < 0) {
+                throw new IllegalStateException("A node has negative remaining connections");
+            }
+        }
+
+        for (Map.Entry<Object, List<Sensor>> e: graph.entrySet()) {
+            if (e.getValue().size() >= 1 || e.getKey() instanceof Centro)
+                x.remove(e.getKey());
+
+            // Remove all nodes from x
+            x.removeAll(e.getValue());
+        }
+        if (!x.isEmpty()) throw new IllegalStateException("The graph is not connected");
+
+        return true;
     }
 
 

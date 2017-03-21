@@ -7,6 +7,8 @@ public class Main {
         State s = new State(100, 100, (int) System.currentTimeMillis());
         s.generateInitialSolution();
 
+        System.out.println("Is solution? " + s.isSolution());
+
     }
 
 }
