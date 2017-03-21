@@ -6,7 +6,6 @@ import IA.Red.Sensor;
 import IA.Red.Sensores;
 import aima.search.framework.Successor;
 
-import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidParameterException;
 import java.util.*;
 
@@ -64,8 +63,9 @@ public class State implements aima.search.framework.SuccessorFunction, aima.sear
         if (numCentrosDatos <= 0) throw new InvalidParameterException("numCentrosDatos should be > 0");
 
         // Set up the sensors and centers
-        sensors = new Sensores(numSensores, seed);
-        centers = new CentrosDatos(numCentrosDatos, seed);
+        Random r = new Random(seed);
+        sensors = new Sensores(numSensores, r.nextInt());
+        centers = new CentrosDatos(numCentrosDatos, r.nextInt());
 
         nodes = new ArrayList<>();
         nodes.addAll(sensors);
@@ -127,7 +127,8 @@ public class State implements aima.search.framework.SuccessorFunction, aima.sear
      * @see State#generateInitialSolution()
      */
     public void generateInitialSolution() {
-        generateInitialSolutionSimple();
+        generateInitialSolutionComplex();
+
         if (!isSolution()) {
             throw new IllegalStateException("generateInitialSolution did not generate a valid solution");
         }
@@ -148,31 +149,25 @@ public class State implements aima.search.framework.SuccessorFunction, aima.sear
     }
 
     private void generateInitialSolutionComplex() {
-        Util u = new Util();
-
-        List<Sensor> pending = new ArrayList<>(sensors);
         List<Object> connectable = new ArrayList<>(centers);
-
-        for (int i = 0; i < pending.size(); ++i) {
-            Sensor s = pending.remove(i);
+        for (Sensor s : sensors) {
             Object best = connectable.get(0);
 
-            for (int j = 1; j < connectable.size(); ++j)
-                if (u.distance(connectable.get(j), s) < u.distance(best, s))
-                    best = connectable.get(j);
+            for (Object o : connectable) {
+                if (Util.distance(o, s) < Util.distance(best, s)) {
+                    best = o;
+                }
+            }
 
 
-            // Add the edge from the parent to the sensor
             addEdge(s, best);
 
-            // Add the sensor to the queue of connectable devices
-            // When adding a new sensor to the queue,
-            // it has exactly 2 connections left
             connectable.add(s);
 
             // don't overconnect!
-            if (remainingConnections.get(best) == 0) connectable.remove(i);
+            if (remainingConnections.get(best) == 0) connectable.remove(best);
         }
+
     }
 
     private void addEdge(Sensor s, Object o) {
@@ -244,7 +239,8 @@ public class State implements aima.search.framework.SuccessorFunction, aima.sear
         double cost = 0;
         for (Map.Entry<Sensor, Object> e : graph.entrySet()) {
             Sensor s = e.getKey();
-            double dst = Util.distance(s, e.getValue());
+            Object v = e.getValue();
+            double dst = Util.distance(s, v);
             double cap = s.getCapacidad();
             cost += dst * dst * cap;
         }
