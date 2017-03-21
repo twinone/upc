@@ -31,4 +31,9 @@ public class Problem {
         return centrosDatos;
     }
 
+    public static Problem getRandomProblem(int boundSensors, int boundCenters, int seed) {
+        Random random = new Random(seed);
+        return new Problem(random.nextInt(boundSensors), random.nextInt(boundCenters), seed);
+    }
+
 }
