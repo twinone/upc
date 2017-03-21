@@ -4,11 +4,12 @@ import IA.Red.Centro;
 import IA.Red.CentrosDatos;
 import IA.Red.Sensor;
 import IA.Red.Sensores;
+import aima.search.framework.Successor;
 
 import java.security.InvalidParameterException;
 import java.util.*;
 
-public class State {
+public class State implements aima.search.framework.SuccessorFunction, aima.search.framework.HeuristicFunction, aima.search.framework.GoalTest {
 
     /**
      * Maximum allowed connections per center
@@ -47,7 +48,7 @@ public class State {
     /**
      * The connections between centers and sensors
      */
-    private final Map<Object, List<Sensor>> graph;
+    private final Map<Sensor, List<Object>> graph;
 
 
     /**
@@ -76,7 +77,6 @@ public class State {
         // Initialize the graph
         graph = new HashMap<>();
         for (Sensor s : sensors) graph.put(s, new ArrayList<>());
-        for (Centro c : centers) graph.put(c, new ArrayList<>());
     }
 
     /**
@@ -92,7 +92,7 @@ public class State {
 
 
         // Copies
-        for (Map.Entry<Object, List<Sensor>> e: graph.entrySet()) {
+        for (Map.Entry<Sensor, List<Object>> e : graph.entrySet()) {
             this.graph.put(e.getKey(), new ArrayList<>(e.getValue()));
         }
         this.remainingConnections = new HashMap<>(src.remainingConnections);
@@ -132,11 +132,11 @@ public class State {
 
     /**
      * Generates a naive valid solution for the problem
-     *
+     * <p>
      * Basically it adds each sensor to a free node. We begin with
      * the centers as free nodes. When we add a sensor to it, we make this
      * sensor a free node too as it can still hold 2 more sensors attached to it
-     *
+     * <p>
      * This will finish correctly because all sensor can be connected no matter
      * how many
      */
@@ -150,7 +150,7 @@ public class State {
             Object parent = connectable.peek();
 
             // Add the edge from the parent to the sensor
-            addEdge(parent, s);
+            addEdge(s, parent);
 
             // Add the sensor to the queue of connectable devices
             // When adding a new sensor to the queue,
@@ -162,9 +162,9 @@ public class State {
         }
     }
 
-    private void addEdge(Object parent, Sensor s) {
-        graph.get(parent).add(s);
-        remainingConnections.put(parent, remainingConnections.get(parent) - 1);
+    private void addEdge(Sensor s, Object o) {
+        graph.get(s).add(o);
+        remainingConnections.put(o, remainingConnections.get(o) - 1);
         remainingConnections.put(s, remainingConnections.get(s) - 1);
     }
 
@@ -196,13 +196,15 @@ public class State {
             }
         }
 
-        for (Map.Entry<Object, List<Sensor>> e: graph.entrySet()) {
-            if (e.getValue().size() >= 1 || e.getKey() instanceof Centro)
+        for (Map.Entry<Sensor, List<Object>> e : graph.entrySet()) {
+            if (e.getValue().size() >= 1)
                 x.remove(e.getKey());
 
             // Remove all nodes from x
             x.removeAll(e.getValue());
         }
+
+        x.removeAll(centers);
 
         // TODO Verify cycles
 
@@ -211,9 +213,41 @@ public class State {
     }
 
 
-    private List<State> generateNextStates() {
-        // TODO
-        throw new RuntimeException("Stub!");
+    /*
+     * AIMA stuff
+     */
+
+    @Override
+    public double getHeuristicValue(Object o) {
+        if (!(o instanceof State)) throw new InvalidParameterException("Should be state");
+        State s = (State) o;
+        return s.getCost();
     }
 
+    private double getCost() {
+        double cost = 0;
+        for (Map.Entry<Sensor, List<Object>> e : graph.entrySet()) {
+
+        }
+        return cost;
+    }
+
+
+    @Override
+    public List getSuccessors(Object o) {
+        if (!(o instanceof State)) throw new InvalidParameterException("Should be state");
+        State s = (State) o;
+
+        List<Successor> res = new ArrayList<>();
+        res.add(new Successor("TODO", s));
+        return res;
+    }
+
+    @Override
+    public boolean isGoalState(Object o) {
+        if (!(o instanceof State)) throw new InvalidParameterException("Should be state");
+        State s = (State) o;
+
+        return false;
+    }
 }
