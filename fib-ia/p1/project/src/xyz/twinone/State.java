@@ -188,7 +188,8 @@ public class State {
      */
     public boolean isSolution() {
         // Check if it's connected
-        List<Object> x = new ArrayList<>(nodes);
+
+        Set<Object> x = new HashSet<>(nodes);
         for (Object o : nodes) {
             if (remainingConnections.get(o) < 0) {
                 throw new IllegalStateException("A node has negative remaining connections");
@@ -202,8 +203,8 @@ public class State {
             // Remove all nodes from x
             x.removeAll(e.getValue());
         }
-        if (!x.isEmpty()) throw new IllegalStateException("The graph is not connected");
 
+        if (!x.isEmpty()) throw new IllegalStateException("The graph is not connected");
         return true;
     }
 
