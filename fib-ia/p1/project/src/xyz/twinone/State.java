@@ -204,6 +204,8 @@ public class State {
             x.removeAll(e.getValue());
         }
 
+        // TODO Verify cycles
+
         if (!x.isEmpty()) throw new IllegalStateException("The graph is not connected");
         return true;
     }
