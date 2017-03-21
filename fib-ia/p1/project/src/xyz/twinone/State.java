@@ -147,6 +147,34 @@ public class State implements aima.search.framework.SuccessorFunction, aima.sear
         // The empty state is a (pretty bad) initial solution
     }
 
+    private void generateInitialSolutionComplex() {
+        Util u = new Util();
+
+        List<Sensor> pending = new ArrayList<>(sensors);
+        List<Object> connectable = new ArrayList<>(centers);
+
+        for (int i = 0; i < pending.size(); ++i) {
+            Sensor s = pending.remove(i);
+            Object best = connectable.get(0);
+
+            for (int j = 1; j < connectable.size(); ++j)
+                if (u.distance(connectable.get(j), s) < u.distance(best, s))
+                    best = connectable.get(j);
+
+
+            // Add the edge from the parent to the sensor
+            addEdge(s, best);
+
+            // Add the sensor to the queue of connectable devices
+            // When adding a new sensor to the queue,
+            // it has exactly 2 connections left
+            connectable.add(s);
+
+            // don't overconnect!
+            if (remainingConnections.get(best) == 0) connectable.remove(i);
+        }
+    }
+
     private void addEdge(Sensor s, Object o) {
         if (graph.get(s) != null) throw new InvalidParameterException("Source node is already in graph");
 
