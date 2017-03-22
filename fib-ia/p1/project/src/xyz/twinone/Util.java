@@ -22,18 +22,18 @@ public class Util {
         return Math.sqrt(dx * dx + dy * dy);
     }
 
-    public static String objectToString(Object o) {
-        if (o instanceof Sensor) return sensorToString((Sensor) o);
-        if (o instanceof Centro) return centerToString((Centro) o);
+    public static String objectToString(Object o, int flow) {
+        if (o instanceof Sensor) return sensorToString((Sensor) o, flow);
+        if (o instanceof Centro) return centerToString((Centro) o, flow);
         throw new InvalidParameterException("Must be Centro or Sensor");
     }
 
-    public static String sensorToString(Sensor s) {
-        return "Sensor (" + s.getCoordX() + "," + s.getCoordY() + ": " + (int)s.getCapacidad() + ")";
+    public static String sensorToString(Sensor s, int flow) {
+        return "Sensor (" + s.getCoordX() + "," + s.getCoordY() + ":" + flow + ")";
     }
 
-    public static String centerToString(Centro s) {
-        return "Centro (" + s.getCoordX() + "," + s.getCoordY() + ")";
+    public static String centerToString(Centro s, int flow) {
+        return "Centro (" + s.getCoordX() + "," + s.getCoordY() + ":" + flow + ")";
     }
 
 
@@ -54,6 +54,14 @@ public class Util {
         }
 
         return ss;
+    }
+
+    /**
+     * Checks whether o is a sensor or a center
+     * @param o the object to check
+     */
+    public static void check(Object o) throws InvalidParameterException {
+        if (!(o instanceof Sensor) && !(o instanceof Centro)) throw new InvalidParameterException("Should be Sensor or Centro");
     }
 
 
