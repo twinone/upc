@@ -24,6 +24,10 @@ public class State implements aima.search.framework.SuccessorFunction, aima.sear
      * Maximum flow a data center can handle
      */
     public static final int CENTER_CAPACITY = 150;
+    /**
+     * Set to true if we count the outgoing edge as a "connection"
+     */
+    private static final boolean COUNT_OUTGOING = false;
 
     /*
      * DO NOT TOUCH SENSORS, CENTERS or NODES!!!
@@ -56,7 +60,7 @@ public class State implements aima.search.framework.SuccessorFunction, aima.sear
      * If we connect it to a data center it will have 10 incoming flow
      * remaining.
      */
-    private final Map<Object, Integer> incomingFlow;
+    private final Map<Object, Integer> flowLeft;
 
     /**
      * The connections between centers and sensors
@@ -82,7 +86,7 @@ public class State implements aima.search.framework.SuccessorFunction, aima.sear
         return new State(sensors, centers);
     }
 
-    public State(Sensores ss, CentrosDatos cd )  {
+    public State(Sensores ss, CentrosDatos cd) {
         sensors = ss;
         centers = cd;
 
@@ -98,9 +102,9 @@ public class State implements aima.search.framework.SuccessorFunction, aima.sear
         // Initialize the graph
         graph = new HashMap<>();
 
-        incomingFlow = new HashMap<>();
-        for (Centro c : centers) incomingFlow.put(c, CENTER_CAPACITY);
-        for (Sensor s : sensors) incomingFlow.put(s, (int) s.getCapacidad() * 3);
+        flowLeft = new HashMap<>();
+        for (Centro c : centers) flowLeft.put(c, CENTER_CAPACITY);
+        for (Sensor s : sensors) flowLeft.put(s, (int) s.getCapacidad() * 3);
 
     }
 
@@ -118,7 +122,7 @@ public class State implements aima.search.framework.SuccessorFunction, aima.sear
         // Copies
         this.graph = new HashMap<>(src.graph);
         this.remainingConnections = new HashMap<>(src.remainingConnections);
-        this.incomingFlow = new HashMap<>(src.incomingFlow);
+        this.flowLeft = new HashMap<>(src.flowLeft);
     }
 
     /**
@@ -151,14 +155,36 @@ public class State implements aima.search.framework.SuccessorFunction, aima.sear
         if (!isSolution()) {
             throw new IllegalStateException("generateInitialSolution did not generate a valid solution");
         }
+        // Print state
+        printState();
     }
 
     /**
-     * Generates a naive valid solution for the problem
+     * This very simple algorithm builds a solution where everything is
+     * connected to the first datacenter until it's full, then to the next, etc.
+     * If we run out of data centers we will connect to the first sensor, then to the second,
+     * and so on<br>
+     * This algorithm guarantees the following restrictions:
+     * <ul>
+     * <li>Every sensor is connected to exactly one node</li>
+     * <li>Every sensor has at most 3 sensor connected to it</li>
+     * <li>Every data center has at most 25 sensor connected to it</li>
+     * </ul>
      * <p>
-     *     TODO add explanation
+     * We do not look at the flows. They might be negative.
      */
     private void generateInitialSolutionSimple() {
+        List<Object> connectable = new ArrayList<>(centers);
+        for (Sensor s : sensors) {
+            Object best = connectable.get(0);
+            addEdge(s, best);
+            connectable.add(s);
+            if (remainingConnections.get(best) == 0) connectable.remove(best);
+        }
+
+    }
+
+    private void generateInitialSolution2() {
         List<Object> connectable = new ArrayList<>(centers);
         for (Sensor s : sensors) {
             Object best = connectable.get(0);
@@ -168,20 +194,11 @@ public class State implements aima.search.framework.SuccessorFunction, aima.sear
                     best = o;
                 }
             }
-
-
             addEdge(s, best);
-
             connectable.add(s);
-
             // don't overconnect!
             if (remainingConnections.get(best) == 0) connectable.remove(best);
         }
-
-
-        // Print state
-        printState();
-
     }
 
     /**
@@ -189,18 +206,21 @@ public class State implements aima.search.framework.SuccessorFunction, aima.sear
      * it's connected to, recursively
      *
      * @param s
+     * @param connect true if we add the edge, false otherwise
      */
-    private boolean updateFlows(Sensor s) {
-        return updateFlowsRecursive(s, (int) s.getCapacidad());
+    private boolean updateFlows(Sensor s, boolean connect) {
+        if (connect) return updateFlowsRecursive(s, (int) s.getCapacidad());
+        // TODO test
+        return updateFlowsRecursive(s, (int) -s.getCapacidad());
     }
 
     /**
      * Adds flow to the flow of o
      */
     private boolean addFlow(Object o, int flow) {
-        int res = incomingFlow.get(o) + flow;
+        int res = flowLeft.get(o) + flow;
         if (res < 0) return false;
-        incomingFlow.put(o, res);
+        flowLeft.put(o, res);
         return true;
     }
 
@@ -226,11 +246,20 @@ public class State implements aima.search.framework.SuccessorFunction, aima.sear
         for (Sensor s : sensors) {
             Object o = graph.get(s);
             System.out.println(
-                    Util.sensorToString(s, incomingFlow.get(s)) +
+                    Util.sensorToString(s, flowLeft.get(s)) +
                             " -> " +
-                            Util.objectToString(o, incomingFlow.get(o))
+                            Util.objectToString(o, flowLeft.get(o))
             );
         }
+
+        for (Centro c : centers) {
+            System.out.println(Util.centerToString(c, flowLeft.get(c)));
+        }
+        System.out.println("Cost     : " + getCost());
+        System.out.println("Flow     : " + getTotalFlow());
+        System.out.println("Max Flow : " + getMaxFlow());
+        System.out.println("Flow %   : " + getFlowRatio() * 100);
+        System.out.println("Centers: " + centers.size() + ", Sensors: " + sensors.size());
     }
 
     private void addEdge(Sensor s, Object o) {
@@ -238,8 +267,8 @@ public class State implements aima.search.framework.SuccessorFunction, aima.sear
 
         graph.put(s, o);
         remainingConnections.put(o, remainingConnections.get(o) - 1);
-        remainingConnections.put(s, remainingConnections.get(s) - 1);
-        updateFlows(s);
+        if (COUNT_OUTGOING) remainingConnections.put(s, remainingConnections.get(s) - 1);
+        updateFlows(s, true);
     }
 
     private void removeEdge(Object parent, Sensor s) {
@@ -247,7 +276,8 @@ public class State implements aima.search.framework.SuccessorFunction, aima.sear
 
         graph.remove(s);
         remainingConnections.put(parent, remainingConnections.get(parent) + 1);
-        remainingConnections.put(s, remainingConnections.get(s) + 1);
+        if (COUNT_OUTGOING) remainingConnections.put(s, remainingConnections.get(s) + 1);
+        updateFlows(s, false);
     }
 
     /**
@@ -295,6 +325,7 @@ public class State implements aima.search.framework.SuccessorFunction, aima.sear
     public double getHeuristicValue(Object o) {
         if (!(o instanceof State)) throw new InvalidParameterException("Should be state");
         State s = (State) o;
+        // TODO take flow into account here
         return s.getCost();
     }
 
@@ -307,8 +338,23 @@ public class State implements aima.search.framework.SuccessorFunction, aima.sear
             double cap = s.getCapacidad();
             cost += dst * dst * cap;
         }
-        System.out.println("Cost:" + cost);
         return cost;
+    }
+
+    private double getFlowRatio() {
+        return getTotalFlow() / (double) getMaxFlow();
+    }
+
+    private int getMaxFlow() {
+        int sum = 0;
+        for (Sensor s : sensors) sum += s.getCapacidad();
+        return Math.min(sum, centers.size() * CENTER_CAPACITY);
+    }
+
+    private int getTotalFlow() {
+        int sum = 0;
+        for (Centro c : centers) sum += CENTER_CAPACITY - flowLeft.get(c);
+        return sum;
     }
 
 
