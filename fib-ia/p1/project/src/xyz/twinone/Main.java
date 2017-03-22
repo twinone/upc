@@ -11,26 +11,34 @@ import java.util.*;
 public class Main {
 
 
-
     public static void main(String[] args) throws Exception {
-        long start = System.currentTimeMillis();
 
 
 
-        //State s = State.genRandom(100, 100, (int) System.currentTimeMillis());
-        State s = Test.getCurrent();
-        s.generateInitialSolution();
-
-        Problem p = new Problem(s, s, s, s);
-        Search search = new HillClimbingSearch();
-
-        SearchAgent ag = new SearchAgent(p, search);
-        printActions(ag.getActions());
-        printInstrumentation(ag.getInstrumentation());
+        State orig = State.genRandom(100, 8, (int) System.currentTimeMillis());
+        //State s = Test.getCurrent();
 
 
-        long time = System.currentTimeMillis() - start;
-        System.out.println("Execution took " + time / 1000 + "s" + time % 1000 + "ms");
+
+        for (int i = 0; i < 2; i++) {
+            State s = new State(orig);
+            s.setInitial();
+            s.generateInitialSolution(i);
+
+            long start = System.currentTimeMillis();
+
+            Problem p = new Problem(s, s, s, s);
+            Search search = new HillClimbingSearch();
+
+            SearchAgent ag = new SearchAgent(p, search);
+            //printActions(ag.getActions());
+            System.out.println("Last action: " + ag.getActions().get(ag.getActions().size()-1));
+            //printInstrumentation(ag.getInstrumentation());
+
+
+            long time = System.currentTimeMillis() - start;
+            System.out.println("State " + i + ": Execution took " + time / 1000 + "s" + time % 1000 + "ms");
+        }
     }
 
 

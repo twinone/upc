@@ -5,7 +5,10 @@ import IA.Red.CentrosDatos;
 import IA.Red.Sensor;
 import IA.Red.Sensores;
 import aima.search.framework.Successor;
+import com.sun.net.httpserver.Authenticator;
+import sun.plugin.dom.exception.InvalidStateException;
 
+import javax.naming.directory.InvalidSearchControlsException;
 import java.security.InvalidParameterException;
 import java.util.*;
 
@@ -51,7 +54,7 @@ public class State implements aima.search.framework.SuccessorFunction, aima.sear
     /**
      * The number of remaining connections
      */
-    private final Map<Object, Integer> remainingConnections;
+    public final Map<Object, Integer> remainingConnections;
 
 
     /**
@@ -60,12 +63,17 @@ public class State implements aima.search.framework.SuccessorFunction, aima.sear
      * If we connect it to a data center it will have 10 incoming flow
      * remaining.
      */
-    private final Map<Object, Integer> flowLeft;
+    public final Map<Object, Integer> flowLeft;
 
     /**
      * The connections between centers and sensors
      */
-    private final Map<Sensor, Object> graph;
+    public final Map<Sensor, Object> graph;
+
+    /**
+     * The initial state to compare to
+     */
+    public static State initialState;
 
 
     /**
@@ -112,7 +120,7 @@ public class State implements aima.search.framework.SuccessorFunction, aima.sear
      * Generates a copy (by value) of src<br>
      * <b>Warning: {@link #sensors} and {@link #centers} will be shared!</b>
      */
-    private State(State src) {
+    public State(State src) {
         // Pointers
         this.sensors = src.sensors;
         this.centers = src.centers;
@@ -147,11 +155,15 @@ public class State implements aima.search.framework.SuccessorFunction, aima.sear
 
     /**
      * Generates an initial valid solution for the problem using generateInitialSolutionSimple()
-     *
-     * @see State#generateInitialSolution()
      */
-    public void generateInitialSolution() {
-        generateInitialSolutionSimple();
+    public void generateInitialSolution(int n) {
+        if (n == 0) {
+            generateInitialSolutionSimple();
+            System.out.println("Cost:"  + getCost());
+        } else if (n == 1) {
+            generateInitialSolution2();
+            System.out.println("Cost:"  + getCost());
+        }
         if (!isSolution()) {
             throw new IllegalStateException("generateInitialSolution did not generate a valid solution");
         }
@@ -189,8 +201,11 @@ public class State implements aima.search.framework.SuccessorFunction, aima.sear
         for (Sensor s : sensors) {
             Object best = connectable.get(0);
 
+
             for (Object o : connectable) {
-                if (Util.distance(o, s) < Util.distance(best, s)) {
+                if (Util.distance(s, o) < Util.distance(s, best)
+                        && checkEdge(s, o)) {
+
                     best = o;
                 }
             }
@@ -209,9 +224,16 @@ public class State implements aima.search.framework.SuccessorFunction, aima.sear
      * @param connect true if we add the edge, false otherwise
      */
     private boolean updateFlows(Sensor s, boolean connect) {
-        if (connect) return updateFlowsRecursive(s, (int) s.getCapacidad());
-        // TODO test
-        return updateFlowsRecursive(s, (int) -s.getCapacidad());
+        boolean res;
+        //System.out.println("\n\nSTART ----------------------------------");
+        if (connect) {
+            res = updateFlowsRecursive(s, s, (int) s.getCapacidad());
+        } else {
+            res = updateFlowsRecursive(s, s, (int) -s.getCapacidad());
+        }
+        //System.out.println("END ----------------------------------");
+
+        return res;
     }
 
     /**
@@ -224,7 +246,8 @@ public class State implements aima.search.framework.SuccessorFunction, aima.sear
         return true;
     }
 
-    private boolean updateFlowsRecursive(Object o, int flow) {
+    private boolean updateFlowsRecursive(Sensor src, Object o, int flow) {
+        //System.out.println("at: " + Util.objectToString(o, this) + " adding: " + flow);
         Util.check(o);
 
         boolean ok = addFlow(o, -flow);
@@ -233,28 +256,32 @@ public class State implements aima.search.framework.SuccessorFunction, aima.sear
 
         if (o instanceof Centro) return true;
 
+        Sensor s = (Sensor) o;
         // If we get to this point, the flow of this node
         // is already decreased
-        boolean next = updateFlowsRecursive(graph.get(o), flow);
+        boolean next = updateFlowsRecursive(src, graph.get(s), flow);
         // if any of the next nodes fail, we have to reset out count
-        if (!next) addFlow(o, flow);
+        if (!next) addFlow(s, flow);
 
         return next;
     }
 
-    private void printState() {
+    public void printState() {
+        /*
         for (Sensor s : sensors) {
             Object o = graph.get(s);
             System.out.println(
-                    Util.sensorToString(s, flowLeft.get(s)) +
+                    Util.sensorToString(s, this) +
                             " -> " +
-                            Util.objectToString(o, flowLeft.get(o))
+                            Util.objectToString(o, this)
             );
         }
 
+
         for (Centro c : centers) {
-            System.out.println(Util.centerToString(c, flowLeft.get(c)));
+            System.out.println(Util.centerToString(c, this));
         }
+        */
         System.out.println("Cost     : " + getCost());
         System.out.println("Flow     : " + getTotalFlow());
         System.out.println("Max Flow : " + getMaxFlow());
@@ -262,22 +289,58 @@ public class State implements aima.search.framework.SuccessorFunction, aima.sear
         System.out.println("Centers: " + centers.size() + ", Sensors: " + sensors.size());
     }
 
-    private void addEdge(Sensor s, Object o) {
-        if (graph.get(s) != null) throw new InvalidParameterException("Source node is already in graph");
+    /**
+     * Returns true if you can add an edge without
+     * flow problems but DOES NOT ADD IT
+     *
+     * @return true if you can add this edge
+     */
+    private boolean checkEdge(Sensor s, Object o) {
+        if (!addEdge(s, o)) return false;
 
-        graph.put(s, o);
-        remainingConnections.put(o, remainingConnections.get(o) - 1);
-        if (COUNT_OUTGOING) remainingConnections.put(s, remainingConnections.get(s) - 1);
-        updateFlows(s, true);
+        removeEdge(s);
+        return true;
     }
 
-    private void removeEdge(Object parent, Sensor s) {
-        if (graph.get(s) != parent) throw new InvalidParameterException("Edge is not in graph");
+    /**
+     * @return true if the edge was successfully added
+     */
+    private boolean addEdge(Sensor s, Object o) {
+        /*
+        System.out.println("Adding edge from " +
+                Util.sensorToString(s, this) + " to " +
+                Util.objectToString(o, this) + " size=" +
+                graph.size());
+        */
 
-        graph.remove(s);
-        remainingConnections.put(parent, remainingConnections.get(parent) + 1);
-        if (COUNT_OUTGOING) remainingConnections.put(s, remainingConnections.get(s) + 1);
+        if (s == o) throw new IllegalStateException("Connecting sensor to itself");
+        if (graph.get(s) != null) throw new InvalidParameterException("Source sensor is already connected");
+
+
+        graph.put(s, o);
+        boolean flows = updateFlows(s, true);
+        //System.out.println("Remaining: "+ remainingConnections.get(o));
+        //System.out.println("Update: "+flows);
+        boolean canAdd = remainingConnections.get(o) > 0 && flows;
+        if (canAdd) {
+            remainingConnections.put(o, remainingConnections.get(o) - 1);
+            if (COUNT_OUTGOING) remainingConnections.put(s, remainingConnections.get(s) - 1);
+            return true;
+        } else {
+            graph.remove(s);
+            return false;
+        }
+    }
+
+    private void removeEdge(Sensor s) {
+        //System.out.println("Removing edge from " + Util.sensorToString(s, this) + " size=" + graph.size());
+        Object target = graph.get(s);
+        if (target == null) throw new InvalidParameterException("Sensor is not connected");
+
         updateFlows(s, false);
+        graph.remove(s);
+        remainingConnections.put(target, remainingConnections.get(target) + 1);
+        if (COUNT_OUTGOING) remainingConnections.put(s, remainingConnections.get(s) + 1);
     }
 
     /**
@@ -361,12 +424,39 @@ public class State implements aima.search.framework.SuccessorFunction, aima.sear
     @Override
     public List getSuccessors(Object o) {
         if (!(o instanceof State)) throw new InvalidParameterException("Should be state");
-        State s = (State) o;
+        State state = (State) o;
+
+        if (!state.isSolution()) throw new IllegalStateException("State is not a solution");
 
         List<Successor> res = new ArrayList<>();
 
-        // TODO
+        double initialCost = initialState.getCost();
+        double myCost = state.getCost();
+        for (final Sensor sensor : state.sensors) {
+            for (final Object target : state.nodes) {
+                if (sensor == target) continue;
 
+                // TODO optimize
+                String action = "Action: " +
+                        Util.sensorToString(sensor, this) +
+                        " -> " +
+                        Util.objectToString(target, this)
+                        + " cost:" + myCost + " " + initialCost +"(-" + (100 - (myCost / initialCost) * 100) + "%)"
+                        + " flow: " + getTotalFlow() + "/" + getMaxFlow() + " (" + getFlowRatio() * 100 + "%)";
+                //System.out.println("--- START ----" + sensor.hashCode());
+                State newState = new State(state);
+                newState.removeEdge(sensor);
+                boolean added = newState.addEdge(sensor, target);
+                if (!added) continue;
+
+                //System.out.println("--- END   ----");
+
+                Successor succ = new Successor(action, newState);
+                res.add(succ);
+            }
+        }
+
+        //System.out.println("Generated " + res.size() + " successors");
         return res;
     }
 
@@ -375,10 +465,16 @@ public class State implements aima.search.framework.SuccessorFunction, aima.sear
         if (!(o instanceof State)) throw new InvalidParameterException("Should be state");
         State s = (State) o;
 
+        // We never know the minimum cost
         return false;
     }
 
     private boolean isConnected(Sensor s) {
         return graph.get(s) != null;
+    }
+
+    public void setInitial() {
+        //if (initialState != null) throw new IllegalStateException("Not null");
+        initialState = this;
     }
 }

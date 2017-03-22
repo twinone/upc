@@ -22,18 +22,18 @@ public class Util {
         return Math.sqrt(dx * dx + dy * dy);
     }
 
-    public static String objectToString(Object o, int flow) {
-        if (o instanceof Sensor) return sensorToString((Sensor) o, flow);
-        if (o instanceof Centro) return centerToString((Centro) o, flow);
+    public static String objectToString(Object o, State st) {
+        if (o instanceof Sensor) return sensorToString((Sensor) o, st);
+        if (o instanceof Centro) return centerToString((Centro) o, st);
         throw new InvalidParameterException("Must be Centro or Sensor");
     }
 
-    public static String sensorToString(Sensor s, int flow) {
-        return "Sensor (" + s.getCoordX() + "," + s.getCoordY() + ":" + flow + ")";
+    public static String sensorToString(Sensor s, State st) {
+        return "Sensor (" + s.getCoordX() + "," + s.getCoordY() + ":cap=" +(int)s.getCapacidad()+"flow=" + st.flowLeft.get(s) + ",conn="+st.remainingConnections.get(s) +")";
     }
 
-    public static String centerToString(Centro s, int flow) {
-        return "Centro (" + s.getCoordX() + "," + s.getCoordY() + ":" + flow + ")";
+    public static String centerToString(Centro s, State st) {
+        return "Centro (" + s.getCoordX() + "," + s.getCoordY() + ":flow=" + st.flowLeft.get(s) + ",conn="+st.remainingConnections.get(s) +")";
     }
 
 
@@ -61,7 +61,8 @@ public class Util {
      * @param o the object to check
      */
     public static void check(Object o) throws InvalidParameterException {
-        if (!(o instanceof Sensor) && !(o instanceof Centro)) throw new InvalidParameterException("Should be Sensor or Centro");
+        if (!(o instanceof Sensor) && !(o instanceof Centro))
+            throw new InvalidParameterException("Should be Sensor or Centro" + ", was " + o);
     }
 
 
