@@ -1,37 +1,31 @@
 package xyz.twinone;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
-/**
- * Created by twinone on 22/03/2017.
- */
 public class Test {
 
 
     public static class Static {
-        public Map<Coords, Integer> sensors = new HashMap<>();
-        public List<Coords> centers = new ArrayList<>();
+        Map<Coords, Integer> sensors = new LinkedHashMap<>();
+        List<Coords> centers = new ArrayList<>();
 
-        public void addCenter(int x, int y) {
+        void addCenter(int x, int y) {
             centers.add(new Coords(x, y));
         }
 
-        public void addSensor(int x, int y, int cap) {
+        void addSensor(int x, int y, int cap) {
             sensors.put(new Coords(x, y), cap);
         }
     }
 
-    public static Static t1 = new Static();
-    public static Static t2 = new Static();
-    public static Static t3 = new Static();
-    public static Static t4 = new Static();
-    public static Static t5 = new Static();
+    static Static t1 = new Static();
+    static Static t2 = new Static();
+    static Static t3 = new Static();
+    static Static t4 = new Static();
+    static Static t5 = new Static();
 
 
-    public static Static CURRENT = t2;
+    static Static CURRENT = t3;
 
     static {
 
@@ -52,9 +46,16 @@ public class Test {
         t2.addSensor(0, 0, 1);
         t2.addSensor(1, 0, 5);
 
+
+        t3.addCenter(-1, 0);
+        t3.addSensor(0, 0, 5);
+        t3.addSensor(1, 0, 5);
+        t3.addSensor(2, 0, 5);
+        t3.addSensor(3, 0, 5);
+
     }
 
-    public static State getCurrent() {
+    static State getCurrent() {
         return new State(Util.genSensores(Test.CURRENT.sensors), Util.genCentrosDatos(Test.CURRENT.centers));
     }
 

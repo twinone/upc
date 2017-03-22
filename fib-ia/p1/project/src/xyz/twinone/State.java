@@ -223,7 +223,7 @@ public class State implements aima.search.framework.SuccessorFunction, aima.sear
     }
 
     private void printState() {
-        for (Sensor s : graph.keySet()) {
+        for (Sensor s : sensors) {
             Object o = graph.get(s);
             System.out.println(
                     Util.sensorToString(s, incomingFlow.get(s)) +
