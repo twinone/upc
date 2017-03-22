@@ -19,6 +19,10 @@ public class State implements aima.search.framework.SuccessorFunction, aima.sear
      * Maximum allowed connections per sensor
      */
     private static final int CONNS_SENSOR = 3;
+
+    /**
+     * Maximum flow a data center can handle
+     */
     public static final int CENTER_CAPACITY = 150;
 
     /*
@@ -45,6 +49,13 @@ public class State implements aima.search.framework.SuccessorFunction, aima.sear
      */
     private final Map<Object, Integer> remainingConnections;
 
+
+    /**
+     * The remaining incoming flow for each object
+     * For example a Sensor of capacity 5 can handle a flow of 15
+     * If we connect it to a data center it will have 10 incoming flow
+     * remaining.
+     */
     private final Map<Object, Integer> incomingFlow;
 
     /**
@@ -71,7 +82,7 @@ public class State implements aima.search.framework.SuccessorFunction, aima.sear
         return new State(sensors, centers);
     }
 
-    public State(Sensores ss, CentrosDatos cd) {
+    public State(Sensores ss, CentrosDatos cd )  {
         sensors = ss;
         centers = cd;
 
@@ -87,7 +98,6 @@ public class State implements aima.search.framework.SuccessorFunction, aima.sear
         // Initialize the graph
         graph = new HashMap<>();
 
-        // Initialize incomingFlow assuming all sensors are connected
         incomingFlow = new HashMap<>();
         for (Centro c : centers) incomingFlow.put(c, CENTER_CAPACITY);
         for (Sensor s : sensors) incomingFlow.put(s, (int) s.getCapacidad() * 3);
@@ -121,6 +131,7 @@ public class State implements aima.search.framework.SuccessorFunction, aima.sear
         return new State(src);
     }
 
+
     public Sensores getSensors() {
         return sensors;
     }
@@ -145,7 +156,7 @@ public class State implements aima.search.framework.SuccessorFunction, aima.sear
     /**
      * Generates a naive valid solution for the problem
      * <p>
-     * TODO add explanation
+     *     TODO add explanation
      */
     private void generateInitialSolutionSimple() {
         List<Object> connectable = new ArrayList<>(centers);

@@ -4,29 +4,21 @@ import aima.search.framework.Problem;
 import aima.search.framework.Search;
 import aima.search.framework.SearchAgent;
 import aima.search.informed.HillClimbingSearch;
+import sun.management.Sensor;
 
 import java.util.*;
 
 public class Main {
 
-    public static final Map<Coords, Integer> TEST_SS = new HashMap<>();
-    public static final List<Coords> TEST_CD = new ArrayList<>();
-
-    static {
-        TEST_SS.put(new Coords(0,1), 2);
-        TEST_SS.put(new Coords(1,0), 5);
-
-
-        TEST_CD.add(new Coords(1, 2));
-    }
 
 
     public static void main(String[] args) throws Exception {
         long start = System.currentTimeMillis();
 
 
+
         //State s = State.genRandom(100, 100, (int) System.currentTimeMillis());
-        State s = new State(Util.genSensores(TEST_SS), Util.genCentrosDatos(TEST_CD));
+        State s = Test.getCurrent();
         s.generateInitialSolution();
 
         Problem p = new Problem(s, s, s, s);
