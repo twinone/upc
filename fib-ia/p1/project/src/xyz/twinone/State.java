@@ -19,6 +19,7 @@ public class State implements aima.search.framework.SuccessorFunction, aima.sear
      * Maximum allowed connections per sensor
      */
     private static final int CONNS_SENSOR = 3;
+    public static final int CENTER_CAPACITY = 150;
 
     /*
      * DO NOT TOUCH SENSORS, CENTERS or NODES!!!
@@ -44,6 +45,7 @@ public class State implements aima.search.framework.SuccessorFunction, aima.sear
      */
     private final Map<Object, Integer> remainingConnections;
 
+    private final Map<Object, Integer> incomingFlow;
 
     /**
      * The connections between centers and sensors
@@ -69,7 +71,7 @@ public class State implements aima.search.framework.SuccessorFunction, aima.sear
         return new State(sensors, centers);
     }
 
-    public State(Sensores ss, CentrosDatos cd )  {
+    public State(Sensores ss, CentrosDatos cd) {
         sensors = ss;
         centers = cd;
 
@@ -84,6 +86,12 @@ public class State implements aima.search.framework.SuccessorFunction, aima.sear
 
         // Initialize the graph
         graph = new HashMap<>();
+
+        // Initialize incomingFlow assuming all sensors are connected
+        incomingFlow = new HashMap<>();
+        for (Centro c : centers) incomingFlow.put(c, CENTER_CAPACITY);
+        for (Sensor s : sensors) incomingFlow.put(s, (int) s.getCapacidad() * 3);
+
     }
 
     /**
@@ -100,6 +108,7 @@ public class State implements aima.search.framework.SuccessorFunction, aima.sear
         // Copies
         this.graph = new HashMap<>(src.graph);
         this.remainingConnections = new HashMap<>(src.remainingConnections);
+        this.incomingFlow = new HashMap<>(src.incomingFlow);
     }
 
     /**
@@ -111,7 +120,6 @@ public class State implements aima.search.framework.SuccessorFunction, aima.sear
     public static State clone(State src) {
         return new State(src);
     }
-
 
     public Sensores getSensors() {
         return sensors;
@@ -137,7 +145,7 @@ public class State implements aima.search.framework.SuccessorFunction, aima.sear
     /**
      * Generates a naive valid solution for the problem
      * <p>
-     *     TODO add explanation
+     * TODO add explanation
      */
     private void generateInitialSolutionSimple() {
         List<Object> connectable = new ArrayList<>(centers);
@@ -165,10 +173,52 @@ public class State implements aima.search.framework.SuccessorFunction, aima.sear
 
     }
 
+    /**
+     * Updates the flow of a sensor and all the sensors (or datacenter)
+     * it's connected to, recursively
+     *
+     * @param s
+     */
+    private boolean updateFlows(Sensor s) {
+        return updateFlowsRecursive(s, (int) s.getCapacidad());
+    }
+
+    /**
+     * Adds flow to the flow of o
+     */
+    private boolean addFlow(Object o, int flow) {
+        int res = incomingFlow.get(o) + flow;
+        if (res < 0) return false;
+        incomingFlow.put(o, res);
+        return true;
+    }
+
+    private boolean updateFlowsRecursive(Object o, int flow) {
+        Util.check(o);
+
+        boolean ok = addFlow(o, -flow);
+        if (!ok) return false;
+
+
+        if (o instanceof Centro) return true;
+
+        // If we get to this point, the flow of this node
+        // is already decreased
+        boolean next = updateFlowsRecursive(graph.get(o), flow);
+        // if any of the next nodes fail, we have to reset out count
+        if (!next) addFlow(o, flow);
+
+        return next;
+    }
+
     private void printState() {
         for (Sensor s : graph.keySet()) {
             Object o = graph.get(s);
-            System.out.println(Util.sensorToString(s) + " -> " + Util.objectToString(o));
+            System.out.println(
+                    Util.sensorToString(s, incomingFlow.get(s)) +
+                            " -> " +
+                            Util.objectToString(o, incomingFlow.get(o))
+            );
         }
     }
 
@@ -178,6 +228,7 @@ public class State implements aima.search.framework.SuccessorFunction, aima.sear
         graph.put(s, o);
         remainingConnections.put(o, remainingConnections.get(o) - 1);
         remainingConnections.put(s, remainingConnections.get(s) - 1);
+        updateFlows(s);
     }
 
     private void removeEdge(Object parent, Sensor s) {
