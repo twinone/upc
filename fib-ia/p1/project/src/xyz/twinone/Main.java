@@ -35,6 +35,13 @@ public class Main {
             State s = new State(orig);
             s.setInitial();
             s.generateInitialSolution(i);
+            if (true) {
+                s.debugState();
+                return;
+            } else {
+            }
+
+            if (true) return;
 
             long start = System.currentTimeMillis();
 

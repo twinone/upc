@@ -26,8 +26,9 @@ import java.util.concurrent.Semaphore;
 import javax.swing.*;
 
 public class StateDraw extends JPanel implements Scrollable {
-    private static final int AUM_DIST = 30;
-    private static final int MARGIN = 30;
+    private static final int AUM_DIST = 7;
+    private static final int MARGIN = 7;
+    private final int ARR_SIZE = 1;
 
 
     int centerSize;
@@ -42,8 +43,8 @@ public class StateDraw extends JPanel implements Scrollable {
 
     public StateDraw(Sensores s, CentrosDatos cd, Map<Sensor, Object> gg, Map<Object, Integer> fl) {
 
-        centerSize = 30;
-        sensorSize = 20;
+        centerSize = 15;
+        sensorSize = 10;
         this.s = s;
         this.cd = cd;
         this.gg = gg;
@@ -99,7 +100,6 @@ public class StateDraw extends JPanel implements Scrollable {
                 <= getParent().getSize().height;
     }
 
-    private final int ARR_SIZE = 4;
 
     void drawArrow(Graphics g1, int x1, int y1, int x2, int y2) {
         Graphics2D g = (Graphics2D) g1.create();
@@ -136,8 +136,6 @@ public class StateDraw extends JPanel implements Scrollable {
                     (((Centro) o).getCoordX()*AUM_DIST+MARGIN);
             int oCoordY = o instanceof Sensor ? (((Sensor) o).getCoordY()*AUM_DIST+MARGIN)+dist :
                     (((Centro) o).getCoordY()*AUM_DIST+MARGIN);
-            drawArrow(g, coordX+dist, coordY+dist,
-                    oCoordX, oCoordY);
             g.setColor(Color.white);
             g.fillOval(coordX, coordY,
                     sensorSize, sensorSize);
@@ -155,6 +153,22 @@ public class StateDraw extends JPanel implements Scrollable {
             g.setColor(Color.black);
             g.drawOval((ccd.getCoordX()*AUM_DIST)-(centerSize/2)+MARGIN, (ccd.getCoordY()*AUM_DIST)-(centerSize/2)+MARGIN,
                     centerSize, centerSize);
+        }
+
+        for (Sensor ss : s) {
+
+            g.setColor(Color.black);
+            int coordX = (ss.getCoordX()*AUM_DIST)+MARGIN;
+            int coordY = (ss.getCoordY()*AUM_DIST)+MARGIN;
+
+            Object o = gg.get(ss);
+            int oCoordX = o instanceof Sensor ? (((Sensor) o).getCoordX()*AUM_DIST+MARGIN)+dist :
+                    (((Centro) o).getCoordX()*AUM_DIST+MARGIN);
+            int oCoordY = o instanceof Sensor ? (((Sensor) o).getCoordY()*AUM_DIST+MARGIN)+dist :
+                    (((Centro) o).getCoordY()*AUM_DIST+MARGIN);
+            drawArrow(g, coordX+dist, coordY+dist,
+                    oCoordX, oCoordY);
+
         }
 
         /*for (Edge e : edges) {
