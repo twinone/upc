@@ -168,7 +168,7 @@ public class State implements aima.search.framework.SuccessorFunction, aima.sear
             throw new IllegalStateException("generateInitialSolution did not generate a valid solution");
         }
         // Print state
-        printState();
+        //printState();
     }
 
     /**
@@ -242,6 +242,13 @@ public class State implements aima.search.framework.SuccessorFunction, aima.sear
     private boolean addFlow(Object o, int flow) {
         int res = flowLeft.get(o) + flow;
         if (res < 0) return false;
+        if (o instanceof Sensor) {
+            if (((Sensor)o).getCapacidad()*3 < res) {
+                debugState();
+                System.out.println("While adding to object: "+ Util.objectToString(o,this));
+                throw new IllegalStateException("Flow too much:"+ res +">"+((Sensor)o).getCapacidad()*3 );
+            }
+        }
         flowLeft.put(o, res);
         return true;
     }
@@ -266,8 +273,8 @@ public class State implements aima.search.framework.SuccessorFunction, aima.sear
         return next;
     }
 
-    public void printState() {
-        /*
+    public void debugState() {
+
         for (Sensor s : sensors) {
             Object o = graph.get(s);
             System.out.println(
@@ -281,7 +288,11 @@ public class State implements aima.search.framework.SuccessorFunction, aima.sear
         for (Centro c : centers) {
             System.out.println(Util.centerToString(c, this));
         }
-        */
+
+        printState();
+    }
+    public void printState() {
+
         System.out.println("Cost     : " + getCost());
         System.out.println("Flow     : " + getTotalFlow());
         System.out.println("Max Flow : " + getMaxFlow());
@@ -305,7 +316,7 @@ public class State implements aima.search.framework.SuccessorFunction, aima.sear
     /**
      * @return true if the edge was successfully added
      */
-    private boolean addEdge(Sensor s, Object o) {
+    public boolean addEdge(Sensor s, Object o) {
         /*
         System.out.println("Adding edge from " +
                 Util.sensorToString(s, this) + " to " +
@@ -332,7 +343,7 @@ public class State implements aima.search.framework.SuccessorFunction, aima.sear
         }
     }
 
-    private void removeEdge(Sensor s) {
+    public void removeEdge(Sensor s) {
         //System.out.println("Removing edge from " + Util.sensorToString(s, this) + " size=" + graph.size());
         Object target = graph.get(s);
         if (target == null) throw new InvalidParameterException("Sensor is not connected");
@@ -398,8 +409,11 @@ public class State implements aima.search.framework.SuccessorFunction, aima.sear
             Sensor s = e.getKey();
             Object v = e.getValue();
             double dst = Util.distance(s, v);
-            double cap = s.getCapacidad();
-            cost += dst * dst * cap;
+            double flow = s.getCapacidad() * 3 - flowLeft.get(s);
+            if (flow < 0) {
+                throw new IllegalStateException("flow < 0:" + (s.getCapacidad()*3) + " " + flowLeft.get(s));
+            }
+            cost += dst * dst * flow;
         }
         return cost;
     }

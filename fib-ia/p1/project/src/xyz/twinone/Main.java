@@ -4,6 +4,7 @@ import aima.search.framework.Problem;
 import aima.search.framework.Search;
 import aima.search.framework.SearchAgent;
 import aima.search.informed.HillClimbingSearch;
+import aima.search.informed.SimulatedAnnealingSearch;
 import sun.management.Sensor;
 
 import java.util.*;
@@ -15,12 +16,22 @@ public class Main {
 
 
 
-        State orig = State.genRandom(100, 8, (int) System.currentTimeMillis());
-        //State s = Test.getCurrent();
+        //State orig = State.genRandom(100, 4, (int) System.currentTimeMillis());
+        State orig = State.genRandom(100, 4, (int) 30002947);
+       /*
+        State o = Test.getCurrent();
+        o.generateInitialSolution(1);
 
+        o.debugState();
 
+        o.removeEdge(o.getSensors().get(2));
+        System.out.println("---------------");
 
-        for (int i = 0; i < 2; i++) {
+        o.debugState();
+*/
+
+        //if (true) return;
+        for (int i = 0; i < 1; i++) {
             State s = new State(orig);
             s.setInitial();
             s.generateInitialSolution(i);
@@ -37,6 +48,7 @@ public class Main {
 
 
             long time = System.currentTimeMillis() - start;
+            System.out.println("State " + i + ": Execution took " + time / 1000 + "s" + time % 1000 + "ms");
             System.out.println("State " + i + ": Execution took " + time / 1000 + "s" + time % 1000 + "ms");
         }
     }

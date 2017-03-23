@@ -23,9 +23,13 @@ public class Util {
     }
 
     public static String objectToString(Object o, State st) {
+
         if (o instanceof Sensor) return sensorToString((Sensor) o, st);
         if (o instanceof Centro) return centerToString((Centro) o, st);
-        throw new InvalidParameterException("Must be Centro or Sensor");
+
+        if (o == null) return "null";
+        check(o);
+        return "other";
     }
 
     public static String sensorToString(Sensor s, State st) {
