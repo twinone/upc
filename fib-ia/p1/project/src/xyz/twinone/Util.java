@@ -33,11 +33,11 @@ public class Util {
     }
 
     public static String sensorToString(Sensor s, State st) {
-        return "Sensor (" + s.getCoordX() + "," + s.getCoordY() + ":cap=" +(int)s.getCapacidad()+"flow=" + st.flowLeft.get(s) + ",conn="+st.remainingConnections.get(s) +")";
+        return "Sensor (" + s.getCoordX() + "," + s.getCoordY() + ":cap=" +(int)s.getCapacidad()*3+"f=" + st.currentFlow.get(s) + ",conn="+st.remainingConnections.get(s) +")";
     }
 
     public static String centerToString(Centro s, State st) {
-        return "Centro (" + s.getCoordX() + "," + s.getCoordY() + ":flow=" + st.flowLeft.get(s) + ",conn="+st.remainingConnections.get(s) +")";
+        return "Centro (" + s.getCoordX() + "," + s.getCoordY() + ":f=" + st.currentFlow.get(s) + ",conn="+st.remainingConnections.get(s) +")";
     }
 
 

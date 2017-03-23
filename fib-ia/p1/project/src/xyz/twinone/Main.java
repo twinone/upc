@@ -17,7 +17,12 @@ public class Main {
 
 
         //State orig = State.genRandom(100, 4, (int) System.currentTimeMillis());
+
+        // DONT REMOVE, we are working on this seed:
         State orig = State.genRandom(100, 4, (int) 30002947);
+
+        //State orig = Test.getCurrent();
+
        /*
         State o = Test.getCurrent();
         o.generateInitialSolution(1);
@@ -34,14 +39,11 @@ public class Main {
         for (int i = 0; i < 1; i++) {
             State s = new State(orig);
             s.setInitial();
-            s.generateInitialSolution(i);
-            if (true) {
-                s.debugState();
-                return;
-            } else {
-            }
+            s.generateInitialSolution(0);
 
-            if (true) return;
+
+           // s.removeEdge(s.getSensors().get(1));
+            s.debugState();
 
             long start = System.currentTimeMillis();
 
