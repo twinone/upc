@@ -9,8 +9,11 @@ import com.sun.net.httpserver.Authenticator;
 import sun.plugin.dom.exception.InvalidStateException;
 
 import javax.naming.directory.InvalidSearchControlsException;
+import javax.swing.*;
+import java.awt.*;
 import java.security.InvalidParameterException;
 import java.util.*;
+import java.util.List;
 
 public class State implements aima.search.framework.SuccessorFunction, aima.search.framework.HeuristicFunction, aima.search.framework.GoalTest {
 
@@ -298,6 +301,17 @@ public class State implements aima.search.framework.SuccessorFunction, aima.sear
         System.out.println("Max Flow : " + getMaxFlow());
         System.out.println("Flow %   : " + getFlowRatio() * 100);
         System.out.println("Centers: " + centers.size() + ", Sensors: " + sensors.size());
+        this.DrawState();
+    }
+
+    public void DrawState() {
+        JFrame frame = new JFrame("Test");
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setLayout(new BorderLayout());
+        frame.add(new JScrollPane(new StateDraw(sensors, centers, graph, flowLeft)));
+        frame.pack();
+        frame.setLocationRelativeTo(null);
+        frame.setVisible(true);
     }
 
     /**
