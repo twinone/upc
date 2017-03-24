@@ -306,10 +306,6 @@ public class State implements aima.search.framework.SuccessorFunction, aima.sear
             if (next == s) return false;
             next = graph.get(next);
         }
-        if (!(next instanceof Centro)) {
-//            throw new IllegalStateException("Should be a center");
-        }
-
 
         graph.put(s, o);
         if (o instanceof Sensor) leaves.remove((Sensor) o);
@@ -424,7 +420,9 @@ public class State implements aima.search.framework.SuccessorFunction, aima.sear
         totalFlow = flow;
         // TODO
         //System.out.println("Cost:" + cost + ", Flow:" + flow);
-        return cost - 800 * flow;
+
+        //return cost - 800 * flow;
+        return cost / Math.pow(flow, 1);
     }
 
     public double totalCost, totalFlow;
@@ -476,17 +474,18 @@ public class State implements aima.search.framework.SuccessorFunction, aima.sear
                     System.out.println();
                 }
 
-
-                getHeuristic();
+                State newState = new State(state);
+                double heu = newState.getHeuristic();
                 String action = "Action: " +
                         Util.sensorToString(sensor, this) +
                         " -> " +
                         Util.objectToString(target, this)
-                        + " cost:" + totalCost + " "
-                        + " currentFlow: " + totalFlow;
+                        + " cost:" + newState.totalCost + " "
+                        + " currentFlow: " + newState.totalFlow
+                        + " heuristic: " + heu;
 
 
-                State newState = new State(state);
+
                 Object oldTarget = newState.graph.get(sensor);
                 newState.removeEdge(sensor);
 
