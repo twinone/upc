@@ -55,10 +55,10 @@ public class Test {
 
         new Static()
                 .addCenter(0, 0)
-                .addSensor(1, 1, 5)
-                .addSensor(1, 2, 5)
-                .addSensor(1, 3, 2)
-                .addSensor(1, 4, 1)
+                .addSensor(10, 10, 5)
+                .addSensor(10, 20, 5)
+                .addSensor(10, 30, 2)
+                .addSensor(10, 40, 1)
                 .addTo(LIST);
     }
 

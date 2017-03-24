@@ -46,16 +46,14 @@ public class StateDraw extends JPanel implements Scrollable {
     Sensores s;
     CentrosDatos cd;
     Map<Sensor, Object> gg;
-    Map<Object, Integer> flow;
 
-    public StateDraw(Sensores s, CentrosDatos cd, Map<Sensor, Object> gg, Map<Object, Integer> fl) {
+    public StateDraw(Sensores s, CentrosDatos cd, Map<Sensor, Object> gg) {
 
         centerSize = 15 * SCALE;
         sensorSize = 10 * SCALE;
         this.s = s;
         this.cd = cd;
         this.gg = gg;
-        this.flow = fl;
 
         minHeight = 0;
         minWidth = 0;
@@ -154,9 +152,8 @@ public class StateDraw extends JPanel implements Scrollable {
             g.setColor(Color.black);
             g.drawOval(coordX, coordY,
                     sensorSize, sensorSize);
-            String cap = flow.get(ss).toString();
             String coord = "(" + ss.getCoordX() + ","  + ss.getCoordY() + ")";
-            g.drawString(cap + " " + coord, coordX+10,
+            g.drawString("X" + " " + coord, coordX+10,
                     coordY + 20);
         }
 
@@ -169,7 +166,7 @@ public class StateDraw extends JPanel implements Scrollable {
             g.setColor(Color.black);
             g.drawOval(x,y,
                     centerSize, centerSize);
-            g.drawString(""+flow.get(ccd), x+10,
+            g.drawString("X", x+10,
                     y + 35);
 
         }
