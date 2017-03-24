@@ -421,8 +421,8 @@ public class State implements aima.search.framework.SuccessorFunction, aima.sear
         // TODO
         //System.out.println("Cost:" + cost + ", Flow:" + flow);
 
-        //return cost - 800 * flow;
-        return cost / Math.pow(flow, 1);
+        return cost / Math.pow(flow, 1.5);
+        //return cost - 80 * Math.pow(flow, 2);
     }
 
     public double totalCost, totalFlow;
@@ -470,27 +470,21 @@ public class State implements aima.search.framework.SuccessorFunction, aima.sear
                 if (sensor == target) continue;
 
 
-                if (sensor.getCoordX() == 10 && sensor.getCoordY() == 20) {
-                    System.out.println();
-                }
-
                 State newState = new State(state);
-                double heu = newState.getHeuristic();
+                //double heu = newState.getHeuristic();
                 String action = "Action: " +
                         Util.sensorToString(sensor, this) +
                         " -> " +
                         Util.objectToString(target, this)
                         + " cost:" + newState.totalCost + " "
                         + " currentFlow: " + newState.totalFlow
-                        + " heuristic: " + heu;
+                // + " heuristic: " + heu
+                ;
 
 
 
-                Object oldTarget = newState.graph.get(sensor);
                 newState.removeEdge(sensor);
-
                 if (!newState.addEdge(sensor, target)) {
-                    newState.addEdge(sensor, oldTarget);
                     continue;
                 }
 

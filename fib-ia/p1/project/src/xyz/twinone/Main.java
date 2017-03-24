@@ -13,14 +13,14 @@ public class Main {
     public static void main(String[] args) throws Exception {
 
 
-        //State orig = State.genRandom(100, 4, (int) System.currentTimeMillis());
+        State orig = State.genRandom(100, 4, (int) System.currentTimeMillis());
 
         // DONT REMOVE, we are working on this seed:
         //State orig = State.genRandom(300, 6, 30002947);
 
 
         // EXTRA POINT EXPERIMENT 8
-        State orig = State.genRandom(100, 4, 1234);
+        //State orig = State.genRandom(100, 4, 1234);
 
         //State orig = Test.getCurrent();
 
@@ -58,7 +58,7 @@ public class Main {
             l.get(l.size() - 1).getHeuristic();
 
             l.get(l.size() - 1).debugState();
-
+            System.out.println("Iterations: " + l.size());
 
 
             long time = System.currentTimeMillis() - start;
