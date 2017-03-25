@@ -541,10 +541,13 @@ public class State implements aima.search.framework.SuccessorFunction, aima.sear
                             res.add(succ);
                             break;
                         }
+                        j++;
+                        if (generated) break;
                     }
                     break;
                 }
                 i++;
+                if (generated) break;
             }
         }
 
