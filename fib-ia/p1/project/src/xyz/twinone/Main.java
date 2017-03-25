@@ -4,6 +4,7 @@ import aima.search.framework.Problem;
 import aima.search.framework.Search;
 import aima.search.framework.SearchAgent;
 import aima.search.informed.HillClimbingSearch;
+import aima.search.informed.SimulatedAnnealingSearch;
 
 import java.util.*;
 
@@ -48,10 +49,11 @@ public class Main {
             long start = System.currentTimeMillis();
 
             Problem p = new Problem(s, s, s, s);
-            Search search = new HillClimbingSearch();
+            //Search search = new HillClimbingSearch();
+            Search search = new SimulatedAnnealingSearch();
 
             SearchAgent ag = new SearchAgent(p, search);
-            printActions(ag.getActions());
+            //printActions(ag.getActions());
 
             List<State> l = search.getPathStates();
             l.get(l.size() - 1).getHeuristic();

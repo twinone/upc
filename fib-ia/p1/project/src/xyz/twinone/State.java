@@ -5,13 +5,14 @@ import IA.Red.CentrosDatos;
 import IA.Red.Sensor;
 import IA.Red.Sensores;
 import aima.search.framework.Successor;
-import com.sun.tools.javac.util.Pair;
 
 import javax.swing.*;
 import java.awt.*;
 import java.security.InvalidParameterException;
 import java.util.*;
 import java.util.List;
+import java.util.Queue;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class State implements aima.search.framework.SuccessorFunction, aima.search.framework.HeuristicFunction, aima.search.framework.GoalTest {
 
@@ -421,7 +422,7 @@ public class State implements aima.search.framework.SuccessorFunction, aima.sear
         // TODO
         //System.out.println("Cost:" + cost + ", Flow:" + flow);
 
-        return cost / Math.pow(flow, 1.5);
+        return cost / Math.pow(flow, 2.5);
         //return cost - 80 * Math.pow(flow, 2);
     }
 
@@ -455,7 +456,7 @@ public class State implements aima.search.framework.SuccessorFunction, aima.sear
         return 0;
     }
 
-
+    /*
     @Override
     public List getSuccessors(Object o) {
         if (!(o instanceof State)) throw new InvalidParameterException("Should be state");
@@ -494,6 +495,59 @@ public class State implements aima.search.framework.SuccessorFunction, aima.sear
         }
 
         //System.out.println("Generated " + res.size() + " successors");
+        return res;
+    }*/
+
+    @Override
+    public List getSuccessors(Object o) {
+        if (!(o instanceof State)) throw new InvalidParameterException("Should be state");
+        State state = (State) o;
+
+        if (!state.isSolution()) throw new IllegalStateException("State is not a solution");
+
+        List<Successor> res = new ArrayList<>();
+
+        boolean generated = false;
+
+        while(!generated) {
+            int ranSensor = ThreadLocalRandom.current().nextInt(0, state.sensors.size());
+            int ranTarget = ThreadLocalRandom.current().nextInt(0, state.nodes.size());
+            int i = 0;
+            int j = 0;
+            for (final Sensor sensor : state.sensors) {
+                if (i == ranSensor) {
+                    for (final Object target : state.nodes) {
+                        if (j == ranTarget) {
+                            if (sensor == target) break;
+
+
+                            State newState = new State(state);
+                            //double heu = newState.getHeuristic();
+                            String action = "Action: " +
+                                    Util.sensorToString(sensor, this) +
+                                    " -> " +
+                                    Util.objectToString(target, this)
+                                    + " cost:" + newState.totalCost + " "
+                                    + " currentFlow: " + newState.totalFlow
+                                    // + " heuristic: " + heu
+                                    ;
+
+                            newState.removeEdge(sensor);
+                            if (!newState.addEdge(sensor, target)) {
+                                break;
+                            }
+                            generated = true;
+                            Successor succ = new Successor(action, newState);
+                            res.add(succ);
+                            break;
+                        }
+                    }
+                    break;
+                }
+                i++;
+            }
+        }
+
         return res;
     }
 
