@@ -15,10 +15,10 @@ public class Main {
     private static final int INITIAL_SOLUTION = 0;
 
 
-    static double totalCost = 0.0;
-    static double totalFlow = 0.0;
-    static double totalIterations = 0;
-    static double totalMillis;
+    static long totalCost = 0;
+    static long totalFlow = 0;
+    static long totalIterations = 0;
+    static long totalMillis;
 
     public static void main(String[] args) throws Exception {
         Random r = new Random();
