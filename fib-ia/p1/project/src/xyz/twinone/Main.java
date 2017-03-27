@@ -68,7 +68,7 @@ public class Main {
 
         long dt = System.currentTimeMillis() - start;
         long time = dt;
-        System.out.print("Simmulation #"+num + ": ");
+        System.out.print("Simulation #"+num + ": ");
         System.out.print(" t=" + time + "ms, ");
         List<State> l = search.getPathStates();
         System.out.print("iter=" + l.size() + ", ");
