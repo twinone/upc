@@ -12,7 +12,6 @@ import java.security.InvalidParameterException;
 import java.util.*;
 import java.util.List;
 import java.util.Queue;
-import java.util.concurrent.ThreadLocalRandom;
 
 public class State implements aima.search.framework.SuccessorFunction, aima.search.framework.HeuristicFunction, aima.search.framework.GoalTest {
 
@@ -508,40 +507,32 @@ public class State implements aima.search.framework.SuccessorFunction, aima.sear
 
         List<Successor> res = new ArrayList<>();
 
-        int max = Integer.MAX_VALUE;
-        int i = 0;
         Random r = new Random(System.currentTimeMillis());
-        //while (true) {
-        for (Sensor sensor: sensors) {
-            for (Object target : nodes) {
-                //Sensor sensor = sensors.get(r.nextInt(state.sensors.size()));
-                //Object target = nodes.get(r.nextInt(state.nodes.size()));
-                if (sensor == target) continue;
+        while (true) {
+            Sensor sensor = sensors.get(r.nextInt(state.sensors.size()));
+            Object target = nodes.get(r.nextInt(state.nodes.size()));
 
+            if (sensor == target) continue;
 
-                State newState = new State(state);
-                //double heu = newState.getHeuristic();
-                String action = "Action: " +
-                        Util.sensorToString(sensor, this) +
-                        " -> " +
-                        Util.objectToString(target, this)
-                        + " cost:" + newState.totalCost + " "
-                        + " currentFlow: " + newState.totalFlow
-                        // + " heuristic: " + heu
-                        ;
+            State newState = new State(state);
+            //double heu = newState.getHeuristic();
+            String action = "Action: " +
+                    Util.sensorToString(sensor, this) +
+                    " -> " +
+                    Util.objectToString(target, this)
+                    + " cost:" + newState.totalCost + " "
+                    + " currentFlow: " + newState.totalFlow
+                    // + " heuristic: " + heu
+                    ;
 
-                newState.removeEdge(sensor);
-                if (!newState.addEdge(sensor, target)) {
-                    continue;
-                }
-                Successor succ = new Successor(action, newState);
-                res.add(succ);
+            newState.removeEdge(sensor);
+            if (!newState.addEdge(sensor, target)) {
+                continue;
             }
+            Successor succ = new Successor(action, newState);
+            res.add(succ);
+            return res;
         }
-
-            //if (i++ >= max) break;
-        //}
-        return res;
     }
 
     private SearchMode searchMode = SearchMode.HILL_CLIMBING;

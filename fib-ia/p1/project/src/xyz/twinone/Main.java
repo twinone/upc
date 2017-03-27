@@ -12,7 +12,7 @@ public class Main {
 
 
     private static final boolean SIMULATED_ANNEALING = false;
-    private static final int INITIAL_SOLUTION = 0;
+    private static final int INITIAL_SOLUTION = 1;
 
 
     static long totalCost = 0;
@@ -23,10 +23,10 @@ public class Main {
     public static void main(String[] args) throws Exception {
         Random r = new Random();
 
-        int numTests = 15;
+        int numTests = 10;
         for (int i = 0; i < numTests; i++) {
             //System.out.println("----------------");
-            runExperiment(i, r.nextInt(), i == numTests-1);
+            runExperiment(0, r.nextInt(), i == numTests-1);
         }
         //System.out.println("----------------");
 
@@ -40,9 +40,10 @@ public class Main {
 
     public static void runExperiment(int num, int seed, boolean draw) throws Exception {
 
-
+        int xx = 100+50*num;
+        int y = 4 + num*2;
         //State orig = State.genRandom(100, 4, (int) System.currentTimeMillis());
-        State orig = State.genRandom(100, 4, seed);
+        State orig = State.genRandom(xx,y, seed);
 
 
         State s = new State(orig);
@@ -54,7 +55,8 @@ public class Main {
         Problem p = new Problem(s, s, s, s);
         Search search;
         if (SIMULATED_ANNEALING) {
-            search = new SimulatedAnnealingSearch();
+            int steps = 10000 * 100; int stiter = 100; int k = 20; double lambda = 0.005D;
+            search = new SimulatedAnnealingSearch(steps, stiter, k, lambda);
             s.setSearchMode(State.SearchMode.SIMULATED_ANNEALING);
         } else {
             search = new HillClimbingSearch();
@@ -68,23 +70,22 @@ public class Main {
 
         long dt = System.currentTimeMillis() - start;
         long time = dt;
-        System.out.print("Simulation #"+num + ": ");
+        System.out.print("Simulation #"+num + " ("+xx + " sensors,"+y+" centers): ");
         System.out.print(" t=" + time + "ms, ");
         List<State> l = search.getPathStates();
         System.out.print("iter=" + l.size() + ", ");
+        State x = s;
         if (l.size() >= 1) {
-            State x = l.get(l.size() - 1);
-            x.getHeuristic();
-            x.debugState();
-            if (draw)  x.drawState();
-
-            totalIterations += l.size();
-            totalMillis += dt;
-            totalFlow += x.totalFlow;
-            totalCost += x.totalCost;
-        } else {
-            throw new IllegalStateException("Execution " +num +  "has no actions");
+            x = l.get(l.size() - 1);
         }
+
+        x.getHeuristic();
+        x.debugState();
+        if (draw)  x.drawState();
+        totalIterations += l.size();
+        totalMillis += dt;
+        totalFlow += x.totalFlow;
+        totalCost += x.totalCost;
     }
 
 }
