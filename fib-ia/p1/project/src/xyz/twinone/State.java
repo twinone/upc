@@ -85,8 +85,8 @@ public class State implements aima.search.framework.SuccessorFunction, aima.sear
 
         // Set up the sensors and centers
         Random r = new Random(seed);
-        Sensores sensors = new Sensores(numSensores, 1234);
-        CentrosDatos centers = new CentrosDatos(numCentrosDatos, 1234);
+        Sensores sensors = new Sensores(numSensores, r.nextInt());
+        CentrosDatos centers = new CentrosDatos(numCentrosDatos, r.nextInt());
         return new State(sensors, centers);
 
     }
@@ -248,23 +248,22 @@ public class State implements aima.search.framework.SuccessorFunction, aima.sear
     public void debugState() {
 
         /**
-        for (Sensor s : sensors) {
-            Object o = graph.get(s);
-            System.out.println(
-                    Util.sensorToString(s, this) +
-                            " -> " +
-                            Util.objectToString(o, this)
-            );
-        }
+         for (Sensor s : sensors) {
+         Object o = graph.get(s);
+         System.out.println(
+         Util.sensorToString(s, this) +
+         " -> " +
+         Util.objectToString(o, this)
+         );
+         }
 
 
-        for (Centro c : centers) {
-            System.out.println(Util.centerToString(c, this));
-        }
-*/
+         for (Centro c : centers) {
+         System.out.println(Util.centerToString(c, this));
+         }
+         */
         getHeuristic();
-        System.out.println("Cost:" + totalCost + ", flow:" + totalFlow);
-        drawState();
+        System.out.println("cost=" + totalCost + ", flow=" + totalFlow);
     }
 
 
@@ -456,9 +455,13 @@ public class State implements aima.search.framework.SuccessorFunction, aima.sear
         return 0;
     }
 
-    /*
+
     @Override
     public List getSuccessors(Object o) {
+        return searchMode == SearchMode.HILL_CLIMBING ? getSuccessorsHC(o) : getSuccessorsSA(o);
+    }
+
+    public List getSuccessorsHC(Object o) {
         if (!(o instanceof State)) throw new InvalidParameterException("Should be state");
         State state = (State) o;
 
@@ -479,9 +482,8 @@ public class State implements aima.search.framework.SuccessorFunction, aima.sear
                         Util.objectToString(target, this)
                         + " cost:" + newState.totalCost + " "
                         + " currentFlow: " + newState.totalFlow
-                // + " heuristic: " + heu
-                ;
-
+                        // + " heuristic: " + heu
+                        ;
 
 
                 newState.removeEdge(sensor);
@@ -496,10 +498,9 @@ public class State implements aima.search.framework.SuccessorFunction, aima.sear
 
         //System.out.println("Generated " + res.size() + " successors");
         return res;
-    }*/
+    }
 
-    @Override
-    public List getSuccessors(Object o) {
+    public List getSuccessorsSA(Object o) {
         if (!(o instanceof State)) throw new InvalidParameterException("Should be state");
         State state = (State) o;
 
@@ -507,50 +508,39 @@ public class State implements aima.search.framework.SuccessorFunction, aima.sear
 
         List<Successor> res = new ArrayList<>();
 
-        boolean generated = false;
-
-        while(!generated) {
-            int ranSensor = ThreadLocalRandom.current().nextInt(0, state.sensors.size());
-            int ranTarget = ThreadLocalRandom.current().nextInt(0, state.nodes.size());
-            int i = 0;
-            int j = 0;
-            for (final Sensor sensor : state.sensors) {
-                if (i == ranSensor) {
-                    for (final Object target : state.nodes) {
-                        if (j == ranTarget) {
-                            if (sensor == target) break;
+        int max = Integer.MAX_VALUE;
+        int i = 0;
+        Random r = new Random(System.currentTimeMillis());
+        //while (true) {
+        for (Sensor sensor: sensors) {
+            for (Object target : nodes) {
+                //Sensor sensor = sensors.get(r.nextInt(state.sensors.size()));
+                //Object target = nodes.get(r.nextInt(state.nodes.size()));
+                if (sensor == target) continue;
 
 
-                            State newState = new State(state);
-                            //double heu = newState.getHeuristic();
-                            String action = "Action: " +
-                                    Util.sensorToString(sensor, this) +
-                                    " -> " +
-                                    Util.objectToString(target, this)
-                                    + " cost:" + newState.totalCost + " "
-                                    + " currentFlow: " + newState.totalFlow
-                                    // + " heuristic: " + heu
-                                    ;
+                State newState = new State(state);
+                //double heu = newState.getHeuristic();
+                String action = "Action: " +
+                        Util.sensorToString(sensor, this) +
+                        " -> " +
+                        Util.objectToString(target, this)
+                        + " cost:" + newState.totalCost + " "
+                        + " currentFlow: " + newState.totalFlow
+                        // + " heuristic: " + heu
+                        ;
 
-                            newState.removeEdge(sensor);
-                            if (!newState.addEdge(sensor, target)) {
-                                break;
-                            }
-                            generated = true;
-                            Successor succ = new Successor(action, newState);
-                            res.add(succ);
-                            break;
-                        }
-                        j++;
-                        if (generated) break;
-                    }
-                    break;
+                newState.removeEdge(sensor);
+                if (!newState.addEdge(sensor, target)) {
+                    continue;
                 }
-                i++;
-                if (generated) break;
+                Successor succ = new Successor(action, newState);
+                res.add(succ);
             }
         }
 
+            //if (i++ >= max) break;
+        //}
         return res;
     }
 

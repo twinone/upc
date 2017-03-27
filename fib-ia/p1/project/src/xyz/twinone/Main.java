@@ -12,16 +12,42 @@ public class Main {
 
 
     private static final boolean SIMULATED_ANNEALING = false;
+    private static final int INITIAL_SOLUTION = 0;
+
+
+    static double totalCost = 0.0;
+    static double totalFlow = 0.0;
+    static double totalIterations = 0;
+    static double totalMillis;
 
     public static void main(String[] args) throws Exception {
+        Random r = new Random();
+
+        int numTests = 15;
+        for (int i = 0; i < numTests; i++) {
+            //System.out.println("----------------");
+            runExperiment(i, r.nextInt(), i == numTests-1);
+        }
+        //System.out.println("----------------");
+
+        totalCost /= numTests;
+        totalFlow /= numTests;
+        totalIterations /= numTests;
+        totalMillis /= numTests;
+
+        System.out.println("Averages: t="+totalMillis + ", iter="+totalIterations + ", cost="+totalCost + ", flow="+totalFlow);
+    }
+
+    public static void runExperiment(int num, int seed, boolean draw) throws Exception {
 
 
-        State orig = State.genRandom(100, 4, (int) System.currentTimeMillis());
+        //State orig = State.genRandom(100, 4, (int) System.currentTimeMillis());
+        State orig = State.genRandom(100, 4, seed);
 
 
         State s = new State(orig);
         s.setInitial();
-        s.generateInitialSolution(1);
+        s.generateInitialSolution(INITIAL_SOLUTION);
 
         long start = System.currentTimeMillis();
 
@@ -37,16 +63,28 @@ public class Main {
         SearchAgent ag = new SearchAgent(p, search);
         //printActions(ag.getActions());
 
+
+
+
+        long dt = System.currentTimeMillis() - start;
+        long time = dt;
+        System.out.print("Simmulation #"+num + ": ");
+        System.out.print(" t=" + time + "ms, ");
         List<State> l = search.getPathStates();
-        System.out.println("Iterations: " + l.size());
+        System.out.print("iter=" + l.size() + ", ");
         if (l.size() >= 1) {
-            l.get(l.size() - 1).getHeuristic();
-            l.get(l.size() - 1).debugState();
+            State x = l.get(l.size() - 1);
+            x.getHeuristic();
+            x.debugState();
+            if (draw)  x.drawState();
+
+            totalIterations += l.size();
+            totalMillis += dt;
+            totalFlow += x.totalFlow;
+            totalCost += x.totalCost;
+        } else {
+            throw new IllegalStateException("Execution " +num +  "has no actions");
         }
-
-
-        long time = System.currentTimeMillis() - start;
-        System.out.println("Execution took " + time / 1000 + "s" + time % 1000 + "ms");
     }
 
 }
