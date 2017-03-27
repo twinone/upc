@@ -554,6 +554,16 @@ public class State implements aima.search.framework.SuccessorFunction, aima.sear
         return res;
     }
 
+    private SearchMode searchMode = SearchMode.HILL_CLIMBING;
+
+    public void setSearchMode(SearchMode mode) {
+        searchMode = mode;
+    }
+
+    public enum SearchMode {
+        SIMULATED_ANNEALING, HILL_CLIMBING
+    }
+
     @Override
     public boolean isGoalState(Object o) {
         if (!(o instanceof State)) throw new InvalidParameterException("Should be state");

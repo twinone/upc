@@ -11,80 +11,42 @@ import java.util.*;
 public class Main {
 
 
+    private static final boolean SIMULATED_ANNEALING = false;
+
     public static void main(String[] args) throws Exception {
 
 
         State orig = State.genRandom(100, 4, (int) System.currentTimeMillis());
 
-        // DONT REMOVE, we are working on this seed:
-        //State orig = State.genRandom(300, 6, 30002947);
 
+        State s = new State(orig);
+        s.setInitial();
+        s.generateInitialSolution(1);
 
-        // EXTRA POINT EXPERIMENT 8
-        //State orig = State.genRandom(100, 4, 1234);
+        long start = System.currentTimeMillis();
 
-        //State orig = Test.getCurrent();
+        Problem p = new Problem(s, s, s, s);
+        Search search;
+        if (SIMULATED_ANNEALING) {
+            search = new SimulatedAnnealingSearch();
+            s.setSearchMode(State.SearchMode.SIMULATED_ANNEALING);
+        } else {
+            search = new HillClimbingSearch();
+            s.setSearchMode(State.SearchMode.HILL_CLIMBING);
+        }
+        SearchAgent ag = new SearchAgent(p, search);
+        //printActions(ag.getActions());
 
-       /*
-        State o = Test.getCurrent();
-        o.generateInitialSolution(1);
-
-        o.debugState();
-
-        o.removeEdge(o.getSensors().get(2));
-        System.out.println("---------------");
-
-        o.debugState();
-*/
-
-        //if (true) return;
-        for (int i = 0; i < 1; i++) {
-            State s = new State(orig);
-            s.setInitial();
-            s.generateInitialSolution(1);
-
-
-            //s.debugState();
-            //if (true)return;
-            long start = System.currentTimeMillis();
-
-            Problem p = new Problem(s, s, s, s);
-            //Search search = new HillClimbingSearch();
-            Search search = new SimulatedAnnealingSearch();
-
-            SearchAgent ag = new SearchAgent(p, search);
-            //printActions(ag.getActions());
-
-            List<State> l = search.getPathStates();
+        List<State> l = search.getPathStates();
+        System.out.println("Iterations: " + l.size());
+        if (l.size() >= 1) {
             l.get(l.size() - 1).getHeuristic();
-            l.get(l.size() - 1).getHeuristic();
-
             l.get(l.size() - 1).debugState();
-            System.out.println("Iterations: " + l.size());
-
-
-            long time = System.currentTimeMillis() - start;
-            System.out.println("State " + i + ": Execution took " + time / 1000 + "s" + time % 1000 + "ms");
-
-        }
-    }
-
-
-    private static void printActions(List actions) {
-        for (int i = 0; i < actions.size(); i++) {
-            String action = (String) actions.get(i);
-            System.out.println(action);
-        }
-    }
-
-    private static void printInstrumentation(Properties properties) {
-        Iterator keys = properties.keySet().iterator();
-        while (keys.hasNext()) {
-            String key = (String) keys.next();
-            String property = properties.getProperty(key);
-            System.out.println(key + " : " + property);
         }
 
+
+        long time = System.currentTimeMillis() - start;
+        System.out.println("Execution took " + time / 1000 + "s" + time % 1000 + "ms");
     }
 
 }
