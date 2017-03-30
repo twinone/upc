@@ -1,0 +1,31 @@
+resize 800 600
+loadObject /assig/grau-g/models/plane.obj
+solid
+noaxes
+clearColor 1 1 1
+resetCamera
+resetLightPosition
+
+unit0 /assig/grau-g/Textures/bill-gates.jpg
+
+dist 1.6
+float time 0.2
+grab 1
+grab 1
+
+float time 0.6
+grab 2
+grab 2
+
+unit0 /assig/grau-g/Textures/starfish.jpg
+ 
+float time 0.4
+dist 1.2
+grab 3
+grab 3
+
+float time 1.7
+grab 4
+grab 4
+
+resetCamera

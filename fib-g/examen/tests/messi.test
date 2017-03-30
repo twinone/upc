@@ -1,0 +1,28 @@
+resize 800 600
+loadObject /assig/grau-g/models/plane.obj
+solid
+noaxes
+clearColor 1 1 1
+resetCamera
+resetLightPosition
+
+unit0 /assig/grau-g/Textures/Messi.jpg
+
+dist 1.6
+float time 0.0
+grab 1
+grab 1
+
+float time 0.3
+grab 2
+grab 2
+
+float time 0.6
+grab 3
+grab 3
+
+float time 1.2
+grab 4
+grab 4
+
+resetCamera
