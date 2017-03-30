@@ -1,0 +1,62 @@
+Setmanes 1-2
+1. Basic lighting (1)
+2. Basic lighting (2)
+3. Lighting (1)
+4. Lighting (2)
+6. Lighting (4)
+  5. Lighting(3)
+  7. Lighting (5)
+  16. 4 lights
+
+Setmana 3
+8. BasicTexture
+9. Animate Texture
+10. Tiling
+14. Animate Verts (1)
+15. Animate Verts (2)
+12. Explosion
+   11. Magnet  
+   13. Fire
+   
+
+Setmana 4
+17. Gradient Color (1)
+18. Gradient Color (2)
+19. Foldme
+21. Auto-rotate
+23. Spherize
+25. UV unfold
+    20. Oscillate
+    22. Bouncing
+    24. Twist
+
+
+Setmana 5
+26. CRT display
+28. Calculant normal al FS
+29. Checkerboard (1)
+30. Checkerboard (2)
+31. Checkerboard (3)
+32. Senyera
+    27. Profile
+    33. Checkerboard (4)
+    34. CircularStripes
+
+Setmana 6
+35. Hinomaru
+38. Uncover
+40. Reverse Z (1)
+41. Reverse Z (2)
+44. Texture splatting
+    36. Hinomaru 2
+    39. Gioconda
+    43. Parallax hallucination
+    45. Marble
+    47. Inking
+    53. Glossy
+
+Després del primer control
+
+42. Proj Texture mapping
+48. Sphere Mapping 
+49. Skymap
