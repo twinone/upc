@@ -312,13 +312,14 @@ public class State implements aima.search.framework.SuccessorFunction, aima.sear
         return true;
     }
 
-    public void removeEdge(Sensor s) {
+    public Object removeEdge(Sensor s) {
         if (graph.get(s) == null) throw new IllegalStateException("Edge does not exists");
 
         Object o = graph.get(s);
         if (o instanceof Sensor) leaves.add((Sensor) o);
-        graph.remove(s);
+        Object r = graph.remove(s);
         remainingConnections.put(o, remainingConnections.get(o) + 1);
+        return r;
     }
 
     /**
@@ -457,7 +458,7 @@ public class State implements aima.search.framework.SuccessorFunction, aima.sear
 
     @Override
     public List getSuccessors(Object o) {
-        return searchMode == SearchMode.HILL_CLIMBING ? getSuccessorsHC(o) : getSuccessorsSA(o);
+        return searchMode == SearchMode.HILL_CLIMBING ? getSuccessorsHC2(o) : getSuccessorsSA(o);
     }
 
     public List getSuccessorsHC(Object o) {
@@ -502,10 +503,86 @@ public class State implements aima.search.framework.SuccessorFunction, aima.sear
         return res;
     }
 
+    public List getSuccessorsHC2(Object o) {
+        if (!(o instanceof State)) throw new InvalidParameterException("Should be state");
+        State state = (State) o;
+
+        if (!state.isSolution()) throw new IllegalStateException("State is not a solution");
+
+        List<Successor> res = new ArrayList<>();
+
+        for (final Sensor sensor : state.sensors) {
+            for (final Object target : state.nodes) {
+                if (sensor == target) continue;
+
+
+                State newState = new State(state);
+                //double heu = newState.getHeuristic();
+                String action = "Action: " +
+                        Util.sensorToString(sensor, this) +
+                        " -> " +
+                        Util.objectToString(target, this)
+                        + " cost:" + newState.totalCost + " "
+                        + " currentFlow: " + newState.totalFlow
+                        // + " heuristic: " + heu
+                        ;
+
+
+                if (!newState.moveEdge(sensor, target)) {
+                    continue;
+                }
+                /*newState.removeEdge(sensor);
+                if (!newState.addEdge(sensor, target)) {
+                    continue;
+                }*/
+
+                Successor succ = new Successor(action, newState);
+                res.add(succ);
+            }
+        }
+
+        int counter = 1;
+        for (final Sensor sensor : state.sensors) {
+            for (final Sensor target : state.sensors.subList(counter, state.sensors.size())) {
+
+                State newState = new State(state);
+                //double heu = newState.getHeuristic();
+                String action = "Action: " +
+                        Util.sensorToString(sensor, this) +
+                        " -> " +
+                        Util.objectToString(target, this)
+                        + " cost:" + newState.totalCost + " "
+                        + " currentFlow: " + newState.totalFlow
+                        // + " heuristic: " + heu
+                        ;
+
+
+                if (!newState.changeEdge(sensor, target)) {
+                    ++counter;
+                    continue;
+                }
+
+                Successor succ = new Successor(action, newState);
+                res.add(succ);
+                ++counter;
+            }
+        }
+
+        //System.out.println("Generated " + res.size() + " successors");
+        return res;
+    }
+
     private boolean moveEdge(Sensor sensor, Object target) {
         this.removeEdge(sensor);
         return this.addEdge(sensor, target);
     }
+
+    private boolean changeEdge(Sensor sensor, Sensor target) {
+        Object o = this.removeEdge(sensor);
+        Object o2 = this.removeEdge(target);
+        return this.addEdge(sensor, o2) && this.addEdge(target, o);
+    }
+
 
     public List getSuccessorsSA(Object o) {
         if (!(o instanceof State)) throw new InvalidParameterException("Should be state");
@@ -533,8 +610,7 @@ public class State implements aima.search.framework.SuccessorFunction, aima.sear
                     // + " heuristic: " + heu
                     ;
 
-            newState.removeEdge(sensor);
-            if (!newState.addEdge(sensor, target)) {
+            if (!newState.moveEdge(sensor, target)) {
                 continue;
             }
             Successor succ = new Successor(action, newState);
