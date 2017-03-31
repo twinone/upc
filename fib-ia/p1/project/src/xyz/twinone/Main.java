@@ -13,6 +13,8 @@ public class Main {
 
     private static final boolean SIMULATED_ANNEALING = false;
     private static final int INITIAL_SOLUTION = 1;
+    private static final int NUM_TESTS = 10;
+    private static final boolean INCREMENT_VALUES = false;
 
 
     static long totalCost = 0;
@@ -23,25 +25,31 @@ public class Main {
     public static void main(String[] args) throws Exception {
         Random r = new Random();
 
-        int numTests = 10;
-        for (int i = 0; i < numTests; i++) {
+        for (int i = 0; i < NUM_TESTS; i++) {
             //System.out.println("----------------");
-            runExperiment(0, r.nextInt(), i == numTests-1);
+            runExperiment(i, r.nextInt(), i == NUM_TESTS-1);
         }
         //System.out.println("----------------");
 
-        totalCost /= numTests;
-        totalFlow /= numTests;
-        totalIterations /= numTests;
-        totalMillis /= numTests;
+        totalCost /= NUM_TESTS;
+        totalFlow /= NUM_TESTS;
+        totalIterations /= NUM_TESTS;
+        totalMillis /= NUM_TESTS;
 
         System.out.println("Averages: t="+totalMillis + ", iter="+totalIterations + ", cost="+totalCost + ", flow="+totalFlow);
     }
 
     public static void runExperiment(int num, int seed, boolean draw) throws Exception {
-
-        int xx = 100+50*num;
-        int y = 4 + num*2;
+        int xx;
+        int y;
+        if (INCREMENT_VALUES) {
+            xx = 100+50*num;
+            y = 4 + num*2;
+        }
+        else {
+            xx = 100;
+            y = 4;
+        }
         //State orig = State.genRandom(100, 4, (int) System.currentTimeMillis());
         State orig = State.genRandom(xx,y, seed);
 

@@ -485,10 +485,13 @@ public class State implements aima.search.framework.SuccessorFunction, aima.sear
                         ;
 
 
-                newState.removeEdge(sensor);
-                if (!newState.addEdge(sensor, target)) {
+                if (!newState.moveEdge(sensor, target)) {
                     continue;
                 }
+                /*newState.removeEdge(sensor);
+                if (!newState.addEdge(sensor, target)) {
+                    continue;
+                }*/
 
                 Successor succ = new Successor(action, newState);
                 res.add(succ);
@@ -497,6 +500,11 @@ public class State implements aima.search.framework.SuccessorFunction, aima.sear
 
         //System.out.println("Generated " + res.size() + " successors");
         return res;
+    }
+
+    private boolean moveEdge(Sensor sensor, Object target) {
+        this.removeEdge(sensor);
+        return this.addEdge(sensor, target);
     }
 
     public List getSuccessorsSA(Object o) {
