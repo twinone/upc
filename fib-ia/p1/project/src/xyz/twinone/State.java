@@ -196,10 +196,16 @@ public class State implements aima.search.framework.SuccessorFunction, aima.sear
             connectable.sort((o1, o2) -> {
                 // if one is a sensor and the other not, the center has priority
                 if (o1 instanceof Sensor || o2 instanceof Sensor) {
-                    if (o2 instanceof Centro) return 1;
-                    if (o1 instanceof Centro) return -1;
+                    if (o2 instanceof Centro) {
+                        return 1;
+                    }
+                    if (o1 instanceof Centro) {
+                        return -1;
+                    }
                 }
-                return (int) (Util.distance(s, o1) - Util.distance(s, o2));
+                if (Util.distance(s, o1) > Util.distance(s, o2)) return 1;
+                else if (Util.distance(s, o1) < Util.distance(s, o2)) return -1;
+                else return 0;
             });
             Object o = connectable.get(0);
 
@@ -458,7 +464,7 @@ public class State implements aima.search.framework.SuccessorFunction, aima.sear
 
     @Override
     public List getSuccessors(Object o) {
-        return searchMode == SearchMode.HILL_CLIMBING ? getSuccessorsHC2(o) : getSuccessorsSA(o);
+        return searchMode == SearchMode.HILL_CLIMBING ? getSuccessorsHC(o) : getSuccessorsSA(o);
     }
 
     public List getSuccessorsHC(Object o) {

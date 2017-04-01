@@ -11,10 +11,10 @@ import java.util.*;
 public class Main {
 
 
-    private static final boolean SIMULATED_ANNEALING = false;
+    private static final boolean SIMULATED_ANNEALING = true;
     private static final int INITIAL_SOLUTION = 1;
     private static final int NUM_TESTS = 10;
-    private static final boolean INCREMENT_VALUES = false;
+    private static final boolean INCREMENT_VALUES = true;
 
 
     static long totalCost = 0;
