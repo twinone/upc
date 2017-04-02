@@ -11,10 +11,13 @@ import java.util.*;
 public class Main {
 
 
-    private static final boolean SIMULATED_ANNEALING = true;
+    private static final boolean SIMULATED_ANNEALING = false;
     private static final int INITIAL_SOLUTION = 1;
     private static final int NUM_TESTS = 10;
-    private static final boolean INCREMENT_VALUES = true;
+    private static final int INITIAL_SENSORS = 100;
+    private static final int INITIAL_CENTERS = 4;
+    private static final int INCREMENT_SENSORS = 0;
+    private static final int INCREMENT_CENTERS = 0;
 
 
     static long totalCost = 0;
@@ -27,7 +30,7 @@ public class Main {
 
         for (int i = 0; i < NUM_TESTS; i++) {
             //System.out.println("----------------");
-            runExperiment(i, r.nextInt(), i == NUM_TESTS-1);
+            runExperiment(i, r.nextInt(), false/*i == NUM_TESTS-1*/);
         }
         //System.out.println("----------------");
 
@@ -40,16 +43,8 @@ public class Main {
     }
 
     public static void runExperiment(int num, int seed, boolean draw) throws Exception {
-        int xx;
-        int y;
-        if (INCREMENT_VALUES) {
-            xx = 100+50*num;
-            y = 4 + num*2;
-        }
-        else {
-            xx = 100;
-            y = 4;
-        }
+        int xx = INITIAL_SENSORS + INCREMENT_SENSORS*num;
+        int y = INITIAL_CENTERS + INCREMENT_CENTERS*num;
         //State orig = State.genRandom(100, 4, (int) System.currentTimeMillis());
         State orig = State.genRandom(xx,y, seed);
 
@@ -63,7 +58,7 @@ public class Main {
         Problem p = new Problem(s, s, s, s);
         Search search;
         if (SIMULATED_ANNEALING) {
-            int steps = 10000 * 100; int stiter = 100; int k = 20; double lambda = 0.005D;
+            int steps = 10000 * 100; int stiter = 100; int k = 20; double lambda = 0.01D;
             search = new SimulatedAnnealingSearch(steps, stiter, k, lambda);
             s.setSearchMode(State.SearchMode.SIMULATED_ANNEALING);
         } else {
@@ -89,7 +84,7 @@ public class Main {
 
         x.getHeuristic();
         x.debugState();
-        if (draw)  x.drawState();
+        if (draw)  x.drawState(num);
         totalIterations += l.size();
         totalMillis += dt;
         totalFlow += x.totalFlow;
