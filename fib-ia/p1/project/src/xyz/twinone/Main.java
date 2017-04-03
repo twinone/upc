@@ -50,7 +50,6 @@ public class Main {
 
 
         State s = new State(orig);
-        s.setInitial();
         s.generateInitialSolution(INITIAL_SOLUTION);
 
         long start = System.currentTimeMillis();

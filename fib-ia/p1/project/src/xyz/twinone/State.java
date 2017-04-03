@@ -28,15 +28,6 @@ public class State implements aima.search.framework.SuccessorFunction, aima.sear
      * Maximum currentFlow a data center can handle
      */
     public static final int CENTER_CAPACITY = 150;
-    /**
-     * Set to true if we count the outgoing edge as a "connection"
-     */
-    private static final boolean COUNT_OUTGOING = false;
-
-    /*
-     * DO NOT TOUCH SENSORS, CENTERS or NODES!!!
-     * IF YOU WANT TO MODIFY IT, MAKE A COPY
-     */
 
     /**
      * The sensors of this problem
@@ -63,10 +54,6 @@ public class State implements aima.search.framework.SuccessorFunction, aima.sear
      */
     public final Map<Sensor, Object> graph;
 
-    /**
-     * The initial state to compare to
-     */
-    public static State initialState;
 
     public final Set<Sensor> leaves;
 
@@ -126,25 +113,6 @@ public class State implements aima.search.framework.SuccessorFunction, aima.sear
         leaves = new HashSet<>(src.leaves);
     }
 
-    /**
-     * Creates a clone of the previous state
-     *
-     * @param src The source of the clone
-     * @see #clone(State)
-     */
-    public static State clone(State src) {
-        return new State(src);
-    }
-
-
-    public Sensores getSensors() {
-        return sensors;
-    }
-
-    public CentrosDatos getCenters() {
-        return centers;
-    }
-
 
     /**
      * Generates an initial valid solution for the problem using generateInitialSolution1()
@@ -153,10 +121,6 @@ public class State implements aima.search.framework.SuccessorFunction, aima.sear
         if (n == 0) generateInitialSolution1();
         else if (n == 1) generateInitialSolution2();
         else if (n == 2) generateInitialSolution3();
-
-        if (!isSolution()) {
-            throw new IllegalStateException("generateInitialSolution did not generate a valid solution");
-        }
     }
 
     /**
@@ -313,7 +277,7 @@ public class State implements aima.search.framework.SuccessorFunction, aima.sear
         }
 
         graph.put(s, o);
-        if (o instanceof Sensor) leaves.remove((Sensor) o);
+        if (o instanceof Sensor) leaves.remove(o);
         remainingConnections.put(o, remainingConnections.get(o) - 1);
         return true;
     }
@@ -327,44 +291,6 @@ public class State implements aima.search.framework.SuccessorFunction, aima.sear
         remainingConnections.put(o, remainingConnections.get(o) + 1);
         return r;
     }
-
-    /**
-     * This function checks whether this {@link State} fulfills all
-     * restrictions<br>
-     * <ul>
-     * <li>It's a DAG (no cycles, connected)</li>
-     * <li>Every root is a {@link Centro}</li>
-     * <li>Every sensor is connected to at most 3 nodes</li>
-     * <li>Every center is connected to at most 25 nodes</li>
-     * </ul>
-     *
-     * @return true if this {@link State} is a solution to the problem
-     */
-    public boolean isSolution() {
-        if (true) return true;
-        // Check if it's connected
-
-        Set<Object> x = new HashSet<>(nodes);
-        for (Object o : nodes) {
-            if (remainingConnections.get(o) < 0) {
-                throw new IllegalStateException("A node has negative remaining connections");
-            }
-        }
-
-
-        for (Map.Entry<Sensor, Object> e : graph.entrySet()) {
-            x.remove(e.getKey());
-            x.remove(e.getValue());
-        }
-
-        x.removeAll(centers);
-
-        //if (!x.isEmpty()) throw new IllegalStateException("The graph is not connected");
-
-
-        return true;
-    }
-
 
     /*
      * AIMA stuff
@@ -471,8 +397,6 @@ public class State implements aima.search.framework.SuccessorFunction, aima.sear
         if (!(o instanceof State)) throw new InvalidParameterException("Should be state");
         State state = (State) o;
 
-        if (!state.isSolution()) throw new IllegalStateException("State is not a solution");
-
         List<Successor> res = new ArrayList<>();
 
         for (final Sensor sensor : state.sensors) {
@@ -513,7 +437,6 @@ public class State implements aima.search.framework.SuccessorFunction, aima.sear
         if (!(o instanceof State)) throw new InvalidParameterException("Should be state");
         State state = (State) o;
 
-        if (!state.isSolution()) throw new IllegalStateException("State is not a solution");
 
         List<Successor> res = new ArrayList<>();
 
@@ -570,8 +493,6 @@ public class State implements aima.search.framework.SuccessorFunction, aima.sear
         if (!(o instanceof State)) throw new InvalidParameterException("Should be state");
         State state = (State) o;
 
-        if (!state.isSolution()) throw new IllegalStateException("State is not a solution");
-
         List<Successor> res = new ArrayList<>();
 
         Random r = new Random(System.currentTimeMillis());
@@ -624,8 +545,4 @@ public class State implements aima.search.framework.SuccessorFunction, aima.sear
         return graph.get(s) != null;
     }
 
-    public void setInitial() {
-        //if (initialState != null) throw new IllegalStateException("Not null");
-        initialState = this;
-    }
 }
