@@ -115,14 +115,14 @@ public class State implements aima.search.framework.SuccessorFunction, aima.sear
      */
     public State(State src) {
         // Pointers
-        this.sensors = src.sensors;
-        this.centers = src.centers;
-        this.nodes = src.nodes;
+        sensors = src.sensors;
+        centers = src.centers;
+        nodes = src.nodes;
 
 
         // Copies
-        this.graph = new HashMap<>(src.graph);
-        this.remainingConnections = new HashMap<>(src.remainingConnections);
+        graph = new HashMap<>(src.graph);
+        remainingConnections = new HashMap<>(src.remainingConnections);
         leaves = new HashSet<>(src.leaves);
     }
 
@@ -533,7 +533,7 @@ public class State implements aima.search.framework.SuccessorFunction, aima.sear
                         ;
 
 
-                if (!newState.changeEdges(sensor, target)) {
+                if (!newState.swapEdges(sensor, target)) {
                     ++counter;
                     continue;
                 }
@@ -549,14 +549,20 @@ public class State implements aima.search.framework.SuccessorFunction, aima.sear
     }
 
     private boolean moveEdge(Sensor sensor, Object target) {
-        this.removeEdge(sensor);
-        return this.addEdge(sensor, target);
+        removeEdge(sensor);
+        return addEdge(sensor, target);
     }
 
-    private boolean changeEdges(Sensor sensor, Sensor target) {
-        Object o = this.removeEdge(sensor);
-        Object o2 = this.removeEdge(target);
-        return this.addEdge(sensor, o2) && this.addEdge(target, o);
+    private boolean swapEdges(Sensor s1, Sensor s2) {
+        Object o1 = removeEdge(s1);
+        Object o2 = removeEdge(s2);
+        boolean ok1 = addEdge(s1, o2);
+        boolean pl2 = addEdge(s2, o1);
+        if (!ok1 || !pl2) {
+            if (ok1) removeEdge(s1);
+            if (pl2) removeEdge(s2);
+        }
+        return addEdge(s1, o2) && addEdge(s2, o1);
     }
 
 
