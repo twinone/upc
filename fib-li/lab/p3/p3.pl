@@ -59,34 +59,28 @@ casas :- Sol = [[1,_,_,_,_,_],
 	write(Sol), nl, !.
 
 % 3
+mappend([], []).
+mappend([X|Xs], R) :-
+	mappend(Xs, R1),
+	append(X, R1, R).
+
+
 programa(R) :-
-	append(R1, ['end'], R),
-	append(['begin'], Is, R1),
+	append([[begin], Is, [end]], R),
 	instrucciones(Is), !.
 
 instrucciones(R) :- instruccion(R), !.
 instrucciones(R) :-
-	append(R1, Is, R),
-	append(I, [';'], R1),
+	append([I, [;], Is], R),
 	instruccion(I),	instrucciones(Is), !.
 
 instruccion(R) :- 
-	append(R3, X3, R),
-	append(R2, ['+'], R3),
-	append(R1, X2, R2),
-	append(X1, ['='], R1),
+	append([X1, ['='], X2, ['+'], X3], R),
 	variable(X3), variable(X2), variable(X1).
 
 instruccion(R) :-
-	append(R7, ['endif'], R),
-	append(R6, Is2, R7),
-	append(R5, ['else'], R6),
-	append(R4, Is, R5),
-	append(R3, ['then'], R4),
-	append(R2, X2, R3),
-	append(R1, ['='], R2),
-	append(['if'], X1, R1),
+	append([['if'],X1,[=],X2,[then],Is,['else'],Is2,[endif]], R),!,
 	instrucciones(Is2), instrucciones(Is),
 	variable(X2), variable(X1).
 
-variable([X]) :- member(X, ['x', 'y', 'z']), !.
+variable([X]) :- member(X, ['x', 'y', 'z']).
