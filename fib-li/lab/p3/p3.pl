@@ -23,19 +23,17 @@ fnr([X|Xs], [X|R]) :- filter(X, Xs, R1), fnr(R1, R), !.
 al_lado(X, Y) :- X is Y - 1.
 al_lado(X, Y) :- Y is X - 1.
 
-casas :- Sol = [ [1,A1,B1,C1,D1,E1],
-		 [2,A2,B2,C2,D2,E2],
-		 [3,A3,B3,C3,D3,E3],
-		 [4,A4,B4,C4,D4,E4],
-		 [5,A5,B5,C5,D5,E5]],
-
+casas :- Sol = [[1,_,_,_,_,_],
+		[2,_,_,_,_,_],
+		[3,_,_,_,_,_],
+		[4,_,_,_,_,_],
+		[5,_,_,_,_,_]],
 	% casa, color, prof, animal, bebida, pais
 	member([_,rojo,_,_,_,peru], Sol),
 	member([_,_,_,perro,_,francia], Sol),
 	member([_,_,pintor,_,_,japon], Sol),
 	member([_,_,_,_,ron,china], Sol),
 	member([1,_,_,_,_,hungria], Sol),
-	% casa, color, prof, animal, bebida, pais
 	member([_,verde,_,_,cognac,_], Sol),
 	member([NumCasaBlanca,blanco,_,_,_,_], Sol),
 	member([NumCasaVerde,verde,_,_,_,_], Sol),
@@ -44,7 +42,6 @@ casas :- Sol = [ [1,A1,B1,C1,D1,E1],
 	member([3,_,_,_,cava,_], Sol),
 	member([NumCasaActor,_,actor,_,_,_], Sol),
 	member([NumCasaCaballo,_,_,caballo,_,_], Sol),
-	% casa, color, prof, animal, bebida, pais
 	member([NumCasaHungaro,_,_,_,_,hungria], Sol),
 	member([NumCasaAzul,azul,_,_,_,_], Sol),
 	member([_,_,notario,_,whisky,_], Sol),
@@ -60,3 +57,41 @@ casas :- Sol = [ [1,A1,B1,C1,D1,E1],
 %	member(X, Sol), write(X), nl, fail.
 %casas.
 	write(Sol), nl, !.
+
+% 3
+programa(R) :-
+	append(R1, ['end'], R),
+	append(['begin'], Is, R1),
+	instrucciones(Is), !.
+
+instrucciones([]) :- fail.
+instrucciones(R) :- instruccion(R), !.
+instrucciones(R) :-
+	append(R1, Is, R),
+	append(I, [';'], R1),
+	instruccion(I),
+	instrucciones(Is), !.
+
+instruccion(R) :- 
+	append(R3, X3, R),
+	variable(X3),
+	append(R2, ['+'], R3),
+	append(R1, X2, R2),
+	variable(X2),
+	append(X1, ['='], R1),
+	variable(X1).
+instruccion(R) :-
+	append(R7, ['endif'], R),
+	append(R6, Is2, R7),
+	instrucciones(Is2),
+	append(R5, ['else'], R6),
+	append(R4, Is, R5),
+	instrucciones(Is),
+	append(R3, ['then'], R4),
+	append(R2, X2, R3),
+	variable(X2),
+	append(R1, ['='], R2),
+	append(['if'], X1, R1),
+	variable(X1).
+
+variable([X]) :- member(X, ['x', 'y', 'z']), !.
