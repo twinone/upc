@@ -64,34 +64,29 @@ programa(R) :-
 	append(['begin'], Is, R1),
 	instrucciones(Is), !.
 
-instrucciones([]) :- fail.
 instrucciones(R) :- instruccion(R), !.
 instrucciones(R) :-
 	append(R1, Is, R),
 	append(I, [';'], R1),
-	instruccion(I),
-	instrucciones(Is), !.
+	instruccion(I),	instrucciones(Is), !.
 
 instruccion(R) :- 
 	append(R3, X3, R),
-	variable(X3),
 	append(R2, ['+'], R3),
 	append(R1, X2, R2),
-	variable(X2),
 	append(X1, ['='], R1),
-	variable(X1).
+	variable(X3), variable(X2), variable(X1).
+
 instruccion(R) :-
 	append(R7, ['endif'], R),
 	append(R6, Is2, R7),
-	instrucciones(Is2),
 	append(R5, ['else'], R6),
 	append(R4, Is, R5),
-	instrucciones(Is),
 	append(R3, ['then'], R4),
 	append(R2, X2, R3),
-	variable(X2),
 	append(R1, ['='], R2),
 	append(['if'], X1, R1),
-	variable(X1).
+	instrucciones(Is2), instrucciones(Is),
+	variable(X2), variable(X1).
 
 variable([X]) :- member(X, ['x', 'y', 'z']), !.
