@@ -59,11 +59,6 @@ casas :- Sol = [[1,_,_,_,_,_],
 	write(Sol), nl, !.
 
 % 3
-mappend([], []).
-mappend([X|Xs], R) :-
-	mappend(Xs, R1),
-	append(X, R1, R).
-
 
 programa(R) :-
 	append([[begin], Is, [end]], R),
