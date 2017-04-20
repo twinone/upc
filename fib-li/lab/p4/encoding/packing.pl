@@ -1,4 +1,4 @@
-:-include(entradaPacking3).
+:-include(entradaPacking5).
 :-dynamic(varNumber/3).
 symbolicOutput(0). % set to 1 to see symbolic output only; 0 otherwise.
 
@@ -8,15 +8,14 @@ symbolicOutput(0). % set to 1 to see symbolic output only; 0 otherwise.
 %% We are given a large rectangular piece of cloth from which we want
 %% to cut a set of smaller rectangular pieces. The goal of this problem
 %% is to decide how to cut those small pieces from the large cloth, i.e.
-%% how to place them. 
+%% how to place them.
 %%
 %% Note 1: The smaller pieces cannot be rotated.
-%% 
+%%
 %% Note 2: All dimensions are integer numbers and are given in
 %% meters. Additionally, the larger piece of cloth is divided into
-%% square cells of dimension 1m x 1m, and every small piece must
-%% obtained exactly by choosing some of these cells
-%% 
+%% square cells of dimension 1m x 1m, and every small piece must %% obtained exactly by choosing some of these cells
+%%
 %% Extend this file to do this using a SAT solver, following the
 %% example of sudoku.pl:
 %% - implement writeClauses so that it computes the solution, and
@@ -25,24 +24,66 @@ symbolicOutput(0). % set to 1 to see symbolic output only; 0 otherwise.
 
 %%%%%% Some helpful definitions to make the code cleaner:
 rect(B):-rect(B,_,_).
-xCoord(X) :- width(W),  between(1,W,X).
-yCoord(Y) :- height(H), between(1,H,Y).
-width(B,W):- rect(B,W,_).
+xCoord(X) :- width(W),  between(1,W,X). % generates all x coords
+yCoord(Y) :- height(H), between(1,H,Y). % generates all y coords
+width(B,W):- rect(B,W,_).               %
 height(B,H):- rect(B,_,H).
-insideTable(X,Y):- width(W), height(H), between(1,W,X), between(1,H,Y).
+% changed to go left-to-right first.
+insideTable(X,Y):- width(W), height(H), between(1,H,Y), between(1,W,X).
+
 
 %%%%%%  Variables: They might be useful
-% starts-B-X-Y:   box B has its left-bottom cell with upper-right coordinates (X,Y)
-%  fills-B-X-Y:   box B fills cell with upper-right coordinates (X,Y)
+% starts-B-X-Y:   box B has its left-upper coordinate at (X,Y)
+%  ends-B-X-Y:   box B fills cell with coordinates (X,Y)
 
 writeClauses:-
-    true.
+  eachBoxExactlyOnce,
+  noIntersect,
+  fillsPositions,
+  true.
+
+eachBoxExactlyOnce :-
+  rect(R), findall(starts-R-X-Y, canPlace(R,X,Y), L), exactly(1, L), fail.
+eachBoxExactlyOnce.
+
+noIntersect :-
+  insideTable(X,Y), findall(fills-R-X-Y, rect(R), L), exactly(1, L), fail.
+noIntersect.
+
+fillsPositions :-
+  rect(R), fills(R, X,Y, I,J), writeClause([\+starts-R-X-Y,fills-R-I-J]), fail.
+fillsPositions.
+
+
+% the rectangle R at X,Y covers I, J
+fills(R,X,Y,I,J) :- canPlace(R,X,Y), rect(R, W,H), X2 is X + W - 1,
+  Y2 is Y + H - 1, between(X, X2, I), between(Y, Y2, J).
+
+canPlace(R, X, Y) :- insideTable(X, Y), width(R,W), height(R,H),
+  Tx is X + W - 1, Ty is Y + H - 1, insideTable(Tx,Ty).
 
 %%%%%%%%%%%%%%%%%%%%%%%
 %%%%%% show the solution. Here M contains the literals that are true in the model:
 
-displaySol(M):-write(M),nl,fail.
+%displaySol(M):-write(M),nl,fail.
+%displaySol(_).
+
+
+displaySol(M) :-
+  insideTable(X, Y), boxAt(M, X, Y, R), pretty(R), writeL(X), fail.
 displaySol(_).
+
+pretty(X) :- X < 10, write(' '), fail.
+pretty(X) :- write('  '), write(X).
+
+writeL(X) :- width(W), X is W, nl.
+writeL(_).
+
+boxAt(M,X,Y,Res) :- rect(R,W,H), member(starts-R-I-J, M),
+  I2 is I + W - 1, J2 is J + H - 1, between(I,I2, X), between(J,J2, Y),
+  Res is R, !.
+boxAt(_,_,_,-1).
+
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -87,7 +128,7 @@ numVars(N), numClauses(C),
 write('Generated '), write(C), write(' clauses over '), write(N), write(' variables. '),nl,
 shell('cat header clauses > infile.cnf',_),
 write('Calling solver....'), nl,
-shell('./picosat -v -o model infile.cnf', Result),  % if sat: Result=10; if unsat: Result=20.
+shell('picosat -v -o model infile.cnf', Result),  % if sat: Result=10; if unsat: Result=20.
 	treatResult(Result),!.
 
 treatResult(20):- write('Unsatisfiable'), nl, halt.
