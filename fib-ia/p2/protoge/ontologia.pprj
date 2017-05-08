@@ -1,4 +1,4 @@
-; Sun May 07 11:54:23 CEST 2017
+; Sun May 07 13:23:50 CEST 2017
 ; 
 ;+ (version "3.5")
 ;+ (build "Build 660")
@@ -20,9 +20,9 @@
 ([BROWSER_SLOT_NAMES] of  Property_List
 
 	(properties
-		[ontologia_ProjectKB_Class75]
-		[ontologia_ProjectKB_Class76]
-		[ontologia_ProjectKB_Class77]))
+		[ontologia_ProjectKB_Class10158]
+		[ontologia_ProjectKB_Class10159]
+		[ontologia_ProjectKB_Class10160]))
 
 ([CLSES_TAB] of  Widget
 
@@ -183,6 +183,21 @@
 ([ontologia_ProjectKB_Class101] of  String
 
 	(name "SearchTab_Query"))
+
+([ontologia_ProjectKB_Class10158] of  String
+
+	(name ":INSTANCE-ANNOTATION")
+	(string_value "%3AANNOTATION-TEXT"))
+
+([ontologia_ProjectKB_Class10159] of  String
+
+	(name ":PAL-CONSTRAINT")
+	(string_value "%3APAL-NAME"))
+
+([ontologia_ProjectKB_Class10160] of  String
+
+	(name ":META-CLASS")
+	(string_value "%3ANAME"))
 
 ([ontologia_ProjectKB_Class11] of  Widget
 
@@ -498,21 +513,6 @@
 
 ([ontologia_ProjectKB_Class74] of  Property_List
 )
-
-([ontologia_ProjectKB_Class75] of  String
-
-	(name ":INSTANCE-ANNOTATION")
-	(string_value "%3AANNOTATION-TEXT"))
-
-([ontologia_ProjectKB_Class76] of  String
-
-	(name ":PAL-CONSTRAINT")
-	(string_value "%3APAL-NAME"))
-
-([ontologia_ProjectKB_Class77] of  String
-
-	(name ":META-CLASS")
-	(string_value "%3ANAME"))
 
 ([ontologia_ProjectKB_Class8] of  Property_List
 )
