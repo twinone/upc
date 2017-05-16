@@ -672,12 +672,13 @@
     (nuevo_usuario)
     (ins_tipo_vino)
     ?restrt <- (object (is-a RestriccionTipo) (vino ?v))
-    (test (eq ?v TRUE)) 
-    => 
-    (bind ?q (pregunta-indice "¿Como quieres el vino?" (create$ Unico CadaPlato)))
-    (switch ?q
-        (case 1 then (send ?restrt put-tipoVino Unico))
-        (case 2 then (send ?restrt put-tipoVino CadaPlato))
+    =>
+    (if (eq ?v TRUE) then
+        (bind ?q (pregunta-indice "¿Como quieres el vino?" (create$ Unico CadaPlato)))
+        (switch ?q
+            (case 1 then (send ?restrt put-tipoVino Unico))
+            (case 2 then (send ?restrt put-tipoVino CadaPlato))
+        )
     )
     (assert (ins_tipo_tvino))
 )
@@ -687,8 +688,17 @@
     (ins_tipo_alimentacion)
     (ins_tipo_estilo)
     (ins_tipo_vino)
+    (ins_tipo_tvino)
     ?restrt <- (object (is-a RestriccionTipo))
     ?usuario <- (object (is-a Usuario))
     =>
     (slot-insert$ ?usuario restricciones 1 ?restrt)
 )
+
+
+;;;------------------------------------------------------------------------------------------------------------------------------------------------------
+;;;----------               MODULO DE INFERENCIA DE EXPEDIENTE              ----------                      MODULO DE INFERENCIA DE EXPEDIENTE  
+;;;------------------------------------------------------------------------------------------------------------------------------------------------------
+
+;; En este modulo se hace la inferencia de la informacion almacenada en el expediente 
+
