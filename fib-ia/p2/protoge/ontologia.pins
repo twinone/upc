@@ -1,4 +1,4 @@
-; Tue May 16 19:36:48 CEST 2017
+; Tue May 16 19:49:53 CEST 2017
 ; 
 ;+ (version "3.5")
 ;+ (build "Build 660")
@@ -73,7 +73,13 @@
 		[ontologia_Class20018]
 		[ontologia_Class20021]
 		[ontologia_Class20024]
-		[ontologia_Class20028])
+		[ontologia_Class20028]
+		[ontologia_Class20031]
+		[ontologia_Class20037]
+		[ontologia_Class20038]
+		[ontologia_Class20039]
+		[ontologia_Class20040]
+		[ontologia_Class20041])
 	(esVino TRUE)
 	(nombreBebida "Vino Rosado")
 	(precioBebida 7))
@@ -115,7 +121,12 @@
 		[ontologia_Class20018]
 		[ontologia_Class20021]
 		[ontologia_Class20024]
-		[ontologia_Class20028])
+		[ontologia_Class20028]
+		[ontologia_Class20031]
+		[ontologia_Class20037]
+		[ontologia_Class20039]
+		[ontologia_Class20040]
+		[ontologia_Class20041])
 	(nombreBebida "Refresco")
 	(precioBebida 3))
 
@@ -156,7 +167,12 @@
 		[ontologia_Class20018]
 		[ontologia_Class20021]
 		[ontologia_Class20024]
-		[ontologia_Class20028])
+		[ontologia_Class20028]
+		[ontologia_Class20031]
+		[ontologia_Class20037]
+		[ontologia_Class20039]
+		[ontologia_Class20040]
+		[ontologia_Class20041])
 	(nombreBebida "Agua")
 	(precioBebida 2))
 
@@ -197,7 +213,12 @@
 		[ontologia_Class20018]
 		[ontologia_Class20021]
 		[ontologia_Class20024]
-		[ontologia_Class20028])
+		[ontologia_Class20028]
+		[ontologia_Class20031]
+		[ontologia_Class20037]
+		[ontologia_Class20039]
+		[ontologia_Class20040]
+		[ontologia_Class20041])
 	(nombreBebida "Cerveza")
 	(precioBebida 3))
 
@@ -238,7 +259,12 @@
 		[ontologia_Class20018]
 		[ontologia_Class20021]
 		[ontologia_Class20024]
-		[ontologia_Class20028])
+		[ontologia_Class20028]
+		[ontologia_Class20031]
+		[ontologia_Class20037]
+		[ontologia_Class20039]
+		[ontologia_Class20040]
+		[ontologia_Class20041])
 	(nombreBebida "Zumo Natural")
 	(precioBebida 4))
 
@@ -279,7 +305,13 @@
 		[ontologia_Class20018]
 		[ontologia_Class20021]
 		[ontologia_Class20024]
-		[ontologia_Class20028])
+		[ontologia_Class20028]
+		[ontologia_Class20031]
+		[ontologia_Class20037]
+		[ontologia_Class20038]
+		[ontologia_Class20039]
+		[ontologia_Class20040]
+		[ontologia_Class20041])
 	(nombreBebida "Cava")
 	(precioBebida 6))
 
@@ -320,7 +352,13 @@
 		[ontologia_Class20018]
 		[ontologia_Class20021]
 		[ontologia_Class20024]
-		[ontologia_Class20028])
+		[ontologia_Class20028]
+		[ontologia_Class20031]
+		[ontologia_Class20037]
+		[ontologia_Class20038]
+		[ontologia_Class20039]
+		[ontologia_Class20040]
+		[ontologia_Class20041])
 	(nombreBebida "Champagn")
 	(precioBebida 8))
 
@@ -356,7 +394,9 @@
 ([ontologia_Class10011] of  Ingrediente
 
 	(nombreIngrediente "Brocoli")
-	(platos [ontologia_Class10010])
+	(platos
+		[ontologia_Class10010]
+		[ontologia_Class20039])
 	(tipoIngrediente Vegetal))
 
 ([ontologia_Class10012] of  Ingrediente
@@ -370,7 +410,8 @@
 		[ontologia_Class10081]
 		[ontologia_Class10117]
 		[ontologia_Class20009]
-		[ontologia_Class20010])
+		[ontologia_Class20010]
+		[ontologia_Class20038])
 	(tipoIngrediente OrigenAnimal))
 
 ([ontologia_Class10013] of  Ingrediente
@@ -392,7 +433,9 @@
 ([ontologia_Class10015] of  Ingrediente
 
 	(nombreIngrediente "Calabaza")
-	(platos [ontologia_Class10010])
+	(platos
+		[ontologia_Class10010]
+		[ontologia_Class20039])
 	(tipoIngrediente Vegetal))
 
 ([ontologia_Class10016] of  Ingrediente
@@ -455,7 +498,8 @@
 	(nombreIngrediente "Patata")
 	(platos
 		[ontologia_Class10018]
-		[ontologia_Class10061])
+		[ontologia_Class10061]
+		[ontologia_Class20031])
 	(tipoIngrediente Vegetal))
 
 ([ontologia_Class10021] of  Ingrediente
@@ -471,7 +515,8 @@
 	(nombreIngrediente "Crema")
 	(platos
 		[ontologia_Class10018]
-		[ontologia_Class10081])
+		[ontologia_Class10081]
+		[ontologia_Class20041])
 	(tipoIngrediente OrigenAnimal))
 
 ([ontologia_Class10023] of  Ingrediente
@@ -490,7 +535,8 @@
 		[ontologia_Class20007]
 		[ontologia_Class20014]
 		[ontologia_Class20015]
-		[ontologia_Class20028])
+		[ontologia_Class20028]
+		[ontologia_Class20033])
 	(tipoIngrediente Vegetal))
 
 ([ontologia_Class10024] of  Ingrediente
@@ -544,7 +590,10 @@
 		[ontologia_Class10071]
 		[ontologia_Class10074]
 		[ontologia_Class10092]
-		[ontologia_Class20014])
+		[ontologia_Class20014]
+		[ontologia_Class20031]
+		[ontologia_Class20033]
+		[ontologia_Class20040])
 	(tipoIngrediente Vegetal))
 
 ([ontologia_Class10028] of  Ingrediente
@@ -552,7 +601,8 @@
 	(nombreIngrediente "Esparrago")
 	(platos
 		[ontologia_Class10046]
-		[ontologia_Class10025])
+		[ontologia_Class10025]
+		[ontologia_Class20039])
 	(tipoIngrediente Vegetal))
 
 ([ontologia_Class10029] of  Ingrediente
@@ -588,7 +638,9 @@
 		[ontologia_Class20015]
 		[ontologia_Class20018]
 		[ontologia_Class20021]
-		[ontologia_Class20028])
+		[ontologia_Class20028]
+		[ontologia_Class20031]
+		[ontologia_Class20033])
 	(tipoIngrediente Vegetal))
 
 ([ontologia_Class10033] of  Plato
@@ -622,7 +674,9 @@
 ([ontologia_Class10034] of  Ingrediente
 
 	(nombreIngrediente "Lechuga")
-	(platos [ontologia_Class10033])
+	(platos
+		[ontologia_Class10033]
+		[ontologia_Class20033])
 	(tipoIngrediente Vegetal))
 
 ([ontologia_Class10035] of  Ingrediente
@@ -819,7 +873,13 @@
 		[ontologia_Class20018]
 		[ontologia_Class20021]
 		[ontologia_Class20024]
-		[ontologia_Class20028])
+		[ontologia_Class20028]
+		[ontologia_Class20031]
+		[ontologia_Class20037]
+		[ontologia_Class20038]
+		[ontologia_Class20039]
+		[ontologia_Class20040]
+		[ontologia_Class20041])
 	(esVino TRUE)
 	(nombreBebida "Vino Casero")
 	(precioBebida 2))
@@ -882,7 +942,8 @@
 		[ontologia_Class10052]
 		[ontologia_Class10057]
 		[ontologia_Class10117]
-		[ontologia_Class20018])
+		[ontologia_Class20018]
+		[ontologia_Class20041])
 	(tipoIngrediente OrigenAnimal))
 
 ([ontologia_Class10056] of  Ingrediente
@@ -1282,7 +1343,9 @@
 ([ontologia_Class10086] of  Ingrediente
 
 	(nombreIngrediente "Judia")
-	(platos [ontologia_Class10084])
+	(platos
+		[ontologia_Class10084]
+		[ontologia_Class20039])
 	(tipoIngrediente Vegetal))
 
 ([ontologia_Class10087] of  Ingrediente
@@ -1770,7 +1833,13 @@
 		[ontologia_Class20018]
 		[ontologia_Class20021]
 		[ontologia_Class20024]
-		[ontologia_Class20028])
+		[ontologia_Class20028]
+		[ontologia_Class20031]
+		[ontologia_Class20037]
+		[ontologia_Class20038]
+		[ontologia_Class20039]
+		[ontologia_Class20040]
+		[ontologia_Class20041])
 	(esVino TRUE)
 	(nombreBebida "Vino Blanco")
 	(precioBebida 7))
@@ -1786,7 +1855,8 @@
 	(nombreIngrediente "Guistantes")
 	(platos
 		[ontologia_Class0]
-		[ontologia_Class20021])
+		[ontologia_Class20021]
+		[ontologia_Class20039])
 	(tipoIngrediente Vegetal))
 
 ([ontologia_Class20006] of  Plato
@@ -1976,7 +2046,10 @@
 ([ontologia_Class20017] of  Ingrediente
 
 	(nombreIngrediente "Bacon")
-	(platos [ontologia_Class20015])
+	(platos
+		[ontologia_Class20015]
+		[ontologia_Class20033]
+		[ontologia_Class20041])
 	(tipoIngrediente Carne))
 
 ([ontologia_Class20018] of  Plato
@@ -2113,7 +2186,7 @@
 		[ontologia_Class10023]
 		[ontologia_Class10083])
 	(nombrePlato "Albondigas con Champinones")
-	(precioPlato 8)
+	(precioPlato 4)
 	(temperatura Caliente)
 	(tipoPlato Segundo)
 	(t%C3%ADpico Espana))
@@ -2127,7 +2200,186 @@
 ([ontologia_Class20030] of  Ingrediente
 
 	(nombreIngrediente "Champinon")
-	(platos [ontologia_Class20028])
+	(platos
+		[ontologia_Class20028]
+		[ontologia_Class20037]
+		[ontologia_Class20039])
+	(tipoIngrediente Vegetal))
+
+([ontologia_Class20031] of  Plato
+
+	(bebidaCompatible
+		[ontologia_Class10005]
+		[ontologia_Class10008]
+		[ontologia_Class10006]
+		[ontologia_Class10009]
+		[ontologia_Class10004]
+		[ontologia_Class2]
+		[ontologia_Class10051]
+		[ontologia_Class10003]
+		[ontologia_Class4]
+		[ontologia_Class10007])
+	(dificultad 1)
+	(disponible TodoElAno)
+	(ingredientes
+		[ontologia_Class10020]
+		[ontologia_Class10027]
+		[ontologia_Class10031]
+		[ontologia_Class20032])
+	(nombrePlato "Bravas")
+	(precioPlato 4)
+	(temperatura Caliente)
+	(tipoPlato Primero)
+	(t%C3%ADpico Espana))
+
+([ontologia_Class20032] of  Ingrediente
+
+	(nombreIngrediente "Mayonesa")
+	(platos [ontologia_Class20031])
+	(tipoIngrediente Vegetal))
+
+([ontologia_Class20033] of  Plato
+
+	(dificultad 3)
+	(disponible TodoElAno)
+	(ingredientes
+		[ontologia_Class10031]
+		[ontologia_Class20017]
+		[ontologia_Class10023]
+		[ontologia_Class10034]
+		[ontologia_Class10027]
+		[ontologia_Class20036])
+	(nombrePlato "Hamburguesa Ternera")
+	(precioPlato 4)
+	(temperatura Caliente)
+	(tipoPlato Segundo)
+	(t%C3%ADpico Espana))
+
+([ontologia_Class20036] of  Ingrediente
+
+	(nombreIngrediente "Hamburguesa")
+	(platos [ontologia_Class20033])
+	(tipoIngrediente Carne))
+
+([ontologia_Class20037] of  Plato
+
+	(bebidaCompatible
+		[ontologia_Class10005]
+		[ontologia_Class10008]
+		[ontologia_Class10006]
+		[ontologia_Class10009]
+		[ontologia_Class10004]
+		[ontologia_Class2]
+		[ontologia_Class10051]
+		[ontologia_Class10003]
+		[ontologia_Class4]
+		[ontologia_Class10007])
+	(dificultad 3)
+	(disponible TodoElAno)
+	(ingredientes [ontologia_Class20030])
+	(nombrePlato "Croquetas de Champinones")
+	(precioPlato 3)
+	(temperatura Caliente)
+	(tipoPlato Primero)
+	(t%C3%ADpico Espana))
+
+([ontologia_Class20038] of  Plato
+
+	(bebidaCompatible
+		[ontologia_Class10008]
+		[ontologia_Class10009]
+		[ontologia_Class2]
+		[ontologia_Class10051]
+		[ontologia_Class10003]
+		[ontologia_Class4])
+	(dificultad 1)
+	(disponible TodoElAno)
+	(ingredientes [ontologia_Class10012])
+	(nombrePlato "Tabla de Quesos")
+	(precioPlato 17)
+	(temperatura Frio)
+	(tipoPlato Primero)
+	(t%C3%ADpico Espana))
+
+([ontologia_Class20039] of  Plato
+
+	(bebidaCompatible
+		[ontologia_Class10005]
+		[ontologia_Class10008]
+		[ontologia_Class10006]
+		[ontologia_Class10009]
+		[ontologia_Class10004]
+		[ontologia_Class2]
+		[ontologia_Class10051]
+		[ontologia_Class10003]
+		[ontologia_Class4]
+		[ontologia_Class10007])
+	(dificultad 3)
+	(disponible TodoElAno)
+	(ingredientes
+		[ontologia_Class10011]
+		[ontologia_Class10015]
+		[ontologia_Class20030]
+		[ontologia_Class10028]
+		[ontologia_Class20004]
+		[ontologia_Class10086])
+	(nombrePlato "Pure de verduras")
+	(precioPlato 4)
+	(temperatura Caliente)
+	(tipoPlato Primero)
+	(t%C3%ADpico Espana))
+
+([ontologia_Class20040] of  Plato
+
+	(bebidaCompatible
+		[ontologia_Class10005]
+		[ontologia_Class10008]
+		[ontologia_Class10006]
+		[ontologia_Class10009]
+		[ontologia_Class10004]
+		[ontologia_Class2]
+		[ontologia_Class10051]
+		[ontologia_Class10003]
+		[ontologia_Class4]
+		[ontologia_Class10007])
+	(dificultad 2)
+	(disponible TodoElAno)
+	(ingredientes [ontologia_Class10027])
+	(nombrePlato "Sopa de Tomate")
+	(precioPlato 3)
+	(temperatura Caliente)
+	(tipoPlato Primero)
+	(t%C3%ADpico Espana))
+
+([ontologia_Class20041] of  Plato
+
+	(bebidaCompatible
+		[ontologia_Class10005]
+		[ontologia_Class10008]
+		[ontologia_Class10006]
+		[ontologia_Class10009]
+		[ontologia_Class10004]
+		[ontologia_Class2]
+		[ontologia_Class10051]
+		[ontologia_Class10003]
+		[ontologia_Class4]
+		[ontologia_Class10007])
+	(dificultad 3)
+	(disponible TodoElAno)
+	(ingredientes
+		[ontologia_Class10022]
+		[ontologia_Class10055]
+		[ontologia_Class20017]
+		[ontologia_Class20017])
+	(nombrePlato "Espaguetis Carbonara")
+	(precioPlato 7)
+	(temperatura Caliente)
+	(tipoPlato Primero)
+	(t%C3%ADpico Espana))
+
+([ontologia_Class20042] of  Ingrediente
+
+	(nombreIngrediente "Espagueti")
 	(tipoIngrediente Vegetal))
 
 ([ontologia_Class4] of  Bebida
@@ -2167,7 +2419,13 @@
 		[ontologia_Class20018]
 		[ontologia_Class20021]
 		[ontologia_Class20024]
-		[ontologia_Class20028])
+		[ontologia_Class20028]
+		[ontologia_Class20031]
+		[ontologia_Class20037]
+		[ontologia_Class20038]
+		[ontologia_Class20039]
+		[ontologia_Class20040]
+		[ontologia_Class20041])
 	(esVino TRUE)
 	(nombreBebida "Vino Tinto")
 	(precioBebida 7))

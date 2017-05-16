@@ -1,4 +1,4 @@
-; Tue May 16 19:36:48 CEST 2017
+; Tue May 16 19:49:53 CEST 2017
 ; 
 ;+ (version "3.5")
 ;+ (build "Build 660")
@@ -20,12 +20,12 @@
 ([BROWSER_SLOT_NAMES] of  Property_List
 
 	(properties
-		[ontologia_ProjectKB_Class49]
-		[ontologia_ProjectKB_Class50]
-		[ontologia_ProjectKB_Class51]
-		[ontologia_ProjectKB_Class52]
-		[ontologia_ProjectKB_Class53]
-		[ontologia_ProjectKB_Class54]))
+		[ontologia_ProjectKB_Class67]
+		[ontologia_ProjectKB_Class68]
+		[ontologia_ProjectKB_Class69]
+		[ontologia_ProjectKB_Class70]
+		[ontologia_ProjectKB_Class71]
+		[ontologia_ProjectKB_Class72]))
 
 ([CLSES_TAB] of  Widget
 
@@ -394,44 +394,44 @@
 ([ontologia_ProjectKB_Class4] of  Property_List
 )
 
-([ontologia_ProjectKB_Class49] of  String
-
-	(name ":INSTANCE-ANNOTATION")
-	(string_value "%3AANNOTATION-TEXT"))
-
 ([ontologia_ProjectKB_Class5] of  Widget
 
 	(is_hidden TRUE)
 	(property_list [ontologia_ProjectKB_Class6])
 	(widget_class_name "edu.stanford.smi.protege.widget.ProtegePropertiesTab"))
 
-([ontologia_ProjectKB_Class50] of  String
+([ontologia_ProjectKB_Class6] of  Property_List
+)
+
+([ontologia_ProjectKB_Class67] of  String
+
+	(name ":INSTANCE-ANNOTATION")
+	(string_value "%3AANNOTATION-TEXT"))
+
+([ontologia_ProjectKB_Class68] of  String
 
 	(name "Plato")
 	(string_value "nombrePlato{%28}precioPlato{%29}"))
 
-([ontologia_ProjectKB_Class51] of  String
+([ontologia_ProjectKB_Class69] of  String
 
 	(name ":PAL-CONSTRAINT")
 	(string_value "%3APAL-NAME"))
 
-([ontologia_ProjectKB_Class52] of  String
+([ontologia_ProjectKB_Class70] of  String
 
 	(name ":META-CLASS")
 	(string_value "%3ANAME"))
 
-([ontologia_ProjectKB_Class53] of  String
+([ontologia_ProjectKB_Class71] of  String
 
 	(name "Ingrediente")
 	(string_value "nombreIngrediente{%28}tipoIngrediente{%29}"))
 
-([ontologia_ProjectKB_Class54] of  String
+([ontologia_ProjectKB_Class72] of  String
 
 	(name "Bebida")
 	(string_value "nombreBebida{%28}precioBebida{%29}"))
-
-([ontologia_ProjectKB_Class6] of  Property_List
-)
 
 ([ontologia_ProjectKB_Class99] of  Widget
 
