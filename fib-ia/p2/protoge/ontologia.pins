@@ -1,4 +1,4 @@
-; Sun May 21 16:20:52 CEST 2017
+; Sun May 21 16:34:33 CEST 2017
 ; 
 ;+ (version "3.5")
 ;+ (build "Build 660")
@@ -11,6 +11,19 @@
 		[ontologia_Class10009]
 		[ontologia_Class10004]
 		[ontologia_Class10007])
+	(compatibilesPlato
+		[ontologia_Class20012]
+		[ontologia_Class20006]
+		[ontologia_Class10118]
+		[ontologia_Class10119]
+		[ontologia_Class10106]
+		[ontologia_Class20010]
+		[ontologia_Class10052]
+		[ontologia_Class10057]
+		[ontologia_Class10112]
+		[ontologia_Class10109]
+		[ontologia_Class10117]
+		[ontologia_Class20024])
 	(dificultad 3)
 	(disponible Invierno)
 	(ingredientes
@@ -374,6 +387,19 @@
 		[ontologia_Class10009]
 		[ontologia_Class10004]
 		[ontologia_Class10007])
+	(compatibilesPlato
+		[ontologia_Class20012]
+		[ontologia_Class20006]
+		[ontologia_Class10118]
+		[ontologia_Class10119]
+		[ontologia_Class10106]
+		[ontologia_Class20010]
+		[ontologia_Class10052]
+		[ontologia_Class10057]
+		[ontologia_Class10112]
+		[ontologia_Class10109]
+		[ontologia_Class10117]
+		[ontologia_Class20024])
 	(dificultad 2)
 	(disponible TodoElAno)
 	(ingredientes
@@ -462,6 +488,19 @@
 		[ontologia_Class10003]
 		[ontologia_Class4]
 		[ontologia_Class10007])
+	(compatibilesPlato
+		[ontologia_Class20012]
+		[ontologia_Class20006]
+		[ontologia_Class10118]
+		[ontologia_Class10119]
+		[ontologia_Class10106]
+		[ontologia_Class20010]
+		[ontologia_Class10052]
+		[ontologia_Class10057]
+		[ontologia_Class10112]
+		[ontologia_Class10109]
+		[ontologia_Class10117]
+		[ontologia_Class20024])
 	(dificultad 1)
 	(disponible Primavera)
 	(ingredientes
@@ -554,6 +593,19 @@
 		[ontologia_Class2]
 		[ontologia_Class4]
 		[ontologia_Class10007])
+	(compatibilesPlato
+		[ontologia_Class20012]
+		[ontologia_Class20006]
+		[ontologia_Class10118]
+		[ontologia_Class10119]
+		[ontologia_Class10106]
+		[ontologia_Class20010]
+		[ontologia_Class10052]
+		[ontologia_Class10057]
+		[ontologia_Class10112]
+		[ontologia_Class10109]
+		[ontologia_Class10117]
+		[ontologia_Class20024])
 	(dificultad 5)
 	(disponible Primavera)
 	(ingredientes
@@ -648,6 +700,19 @@
 		[ontologia_Class10004]
 		[ontologia_Class10051]
 		[ontologia_Class10007])
+	(compatibilesPlato
+		[ontologia_Class20012]
+		[ontologia_Class20006]
+		[ontologia_Class10118]
+		[ontologia_Class10119]
+		[ontologia_Class10106]
+		[ontologia_Class20010]
+		[ontologia_Class10052]
+		[ontologia_Class10057]
+		[ontologia_Class10112]
+		[ontologia_Class10109]
+		[ontologia_Class10117]
+		[ontologia_Class20024])
 	(dificultad 4)
 	(disponible Primavera)
 	(ingredientes
@@ -714,6 +779,19 @@
 		[ontologia_Class10009]
 		[ontologia_Class10004]
 		[ontologia_Class10007])
+	(compatibilesPlato
+		[ontologia_Class20012]
+		[ontologia_Class20006]
+		[ontologia_Class10118]
+		[ontologia_Class10119]
+		[ontologia_Class10106]
+		[ontologia_Class20010]
+		[ontologia_Class10052]
+		[ontologia_Class10057]
+		[ontologia_Class10112]
+		[ontologia_Class10109]
+		[ontologia_Class10117]
+		[ontologia_Class20024])
 	(dificultad 5)
 	(disponible Primavera)
 	(ingredientes
@@ -771,6 +849,19 @@
 		[ontologia_Class10004]
 		[ontologia_Class2]
 		[ontologia_Class10007])
+	(compatibilesPlato
+		[ontologia_Class20012]
+		[ontologia_Class20006]
+		[ontologia_Class10118]
+		[ontologia_Class10119]
+		[ontologia_Class10106]
+		[ontologia_Class20010]
+		[ontologia_Class10052]
+		[ontologia_Class10057]
+		[ontologia_Class10112]
+		[ontologia_Class10109]
+		[ontologia_Class10117]
+		[ontologia_Class20024])
 	(dificultad 10)
 	(disponible Primavera)
 	(ingredientes
@@ -863,6 +954,42 @@
 		[ontologia_Class10003]
 		[ontologia_Class4]
 		[ontologia_Class10007])
+	(compatibilesPlato
+		[ontologia_Class0]
+		[ontologia_Class20014]
+		[ontologia_Class20031]
+		[ontologia_Class10040]
+		[ontologia_Class20037]
+		[ontologia_Class10010]
+		[ontologia_Class10061]
+		[ontologia_Class10065]
+		[ontologia_Class20041]
+		[ontologia_Class10069]
+		[ontologia_Class10018]
+		[ontologia_Class20015]
+		[ontologia_Class10025]
+		[ontologia_Class10081]
+		[ontologia_Class20039]
+		[ontologia_Class20007]
+		[ontologia_Class10103]
+		[ontologia_Class10033]
+		[ontologia_Class10071]
+		[ontologia_Class10084]
+		[ontologia_Class20040]
+		[ontologia_Class20038]
+		[ontologia_Class20028]
+		[ontologia_Class20018]
+		[ontologia_Class10100]
+		[ontologia_Class10074]
+		[ontologia_Class10096]
+		[ontologia_Class20021]
+		[ontologia_Class20033]
+		[ontologia_Class10078]
+		[ontologia_Class10046]
+		[ontologia_Class10090]
+		[ontologia_Class10092]
+		[ontologia_Class20009]
+		[ontologia_Class10077])
 	(dificultad 1)
 	(disponible Primavera)
 	(ingredientes
@@ -931,6 +1058,42 @@
 		[ontologia_Class10003]
 		[ontologia_Class4]
 		[ontologia_Class10007])
+	(compatibilesPlato
+		[ontologia_Class0]
+		[ontologia_Class20014]
+		[ontologia_Class20031]
+		[ontologia_Class10040]
+		[ontologia_Class20037]
+		[ontologia_Class10010]
+		[ontologia_Class10061]
+		[ontologia_Class10065]
+		[ontologia_Class20041]
+		[ontologia_Class10069]
+		[ontologia_Class10018]
+		[ontologia_Class20015]
+		[ontologia_Class10025]
+		[ontologia_Class10081]
+		[ontologia_Class20039]
+		[ontologia_Class20007]
+		[ontologia_Class10103]
+		[ontologia_Class10033]
+		[ontologia_Class10071]
+		[ontologia_Class10084]
+		[ontologia_Class20040]
+		[ontologia_Class20038]
+		[ontologia_Class20028]
+		[ontologia_Class20018]
+		[ontologia_Class10100]
+		[ontologia_Class10074]
+		[ontologia_Class10096]
+		[ontologia_Class20021]
+		[ontologia_Class20033]
+		[ontologia_Class10078]
+		[ontologia_Class10046]
+		[ontologia_Class10090]
+		[ontologia_Class10092]
+		[ontologia_Class20009]
+		[ontologia_Class10077])
 	(dificultad 2)
 	(disponible Primavera)
 	(ingredientes
@@ -980,6 +1143,19 @@
 		[ontologia_Class2]
 		[ontologia_Class10051]
 		[ontologia_Class10007])
+	(compatibilesPlato
+		[ontologia_Class20012]
+		[ontologia_Class20006]
+		[ontologia_Class10118]
+		[ontologia_Class10119]
+		[ontologia_Class10106]
+		[ontologia_Class20010]
+		[ontologia_Class10052]
+		[ontologia_Class10057]
+		[ontologia_Class10112]
+		[ontologia_Class10109]
+		[ontologia_Class10117]
+		[ontologia_Class20024])
 	(dificultad 5)
 	(disponible Verano)
 	(ingredientes
@@ -1026,6 +1202,19 @@
 		[ontologia_Class10004]
 		[ontologia_Class10051]
 		[ontologia_Class10007])
+	(compatibilesPlato
+		[ontologia_Class20012]
+		[ontologia_Class20006]
+		[ontologia_Class10118]
+		[ontologia_Class10119]
+		[ontologia_Class10106]
+		[ontologia_Class20010]
+		[ontologia_Class10052]
+		[ontologia_Class10057]
+		[ontologia_Class10112]
+		[ontologia_Class10109]
+		[ontologia_Class10117]
+		[ontologia_Class20024])
 	(dificultad 2)
 	(disponible Verano)
 	(ingredientes
@@ -1076,6 +1265,19 @@
 		[ontologia_Class10003]
 		[ontologia_Class4]
 		[ontologia_Class10007])
+	(compatibilesPlato
+		[ontologia_Class20012]
+		[ontologia_Class20006]
+		[ontologia_Class10118]
+		[ontologia_Class10119]
+		[ontologia_Class10106]
+		[ontologia_Class20010]
+		[ontologia_Class10052]
+		[ontologia_Class10057]
+		[ontologia_Class10112]
+		[ontologia_Class10109]
+		[ontologia_Class10117]
+		[ontologia_Class20024])
 	(dificultad 2)
 	(disponible Verano)
 	(ingredientes
@@ -1110,6 +1312,19 @@
 		[ontologia_Class10003]
 		[ontologia_Class4]
 		[ontologia_Class10007])
+	(compatibilesPlato
+		[ontologia_Class20012]
+		[ontologia_Class20006]
+		[ontologia_Class10118]
+		[ontologia_Class10119]
+		[ontologia_Class10106]
+		[ontologia_Class20010]
+		[ontologia_Class10052]
+		[ontologia_Class10057]
+		[ontologia_Class10112]
+		[ontologia_Class10109]
+		[ontologia_Class10117]
+		[ontologia_Class20024])
 	(dificultad 4)
 	(disponible Verano)
 	(ingredientes
@@ -1147,6 +1362,19 @@
 		[ontologia_Class10004]
 		[ontologia_Class4]
 		[ontologia_Class10007])
+	(compatibilesPlato
+		[ontologia_Class20012]
+		[ontologia_Class20006]
+		[ontologia_Class10118]
+		[ontologia_Class10119]
+		[ontologia_Class10106]
+		[ontologia_Class20010]
+		[ontologia_Class10052]
+		[ontologia_Class10057]
+		[ontologia_Class10112]
+		[ontologia_Class10109]
+		[ontologia_Class10117]
+		[ontologia_Class20024])
 	(dificultad 10)
 	(disponible TodoElAno)
 	(ingredientes
@@ -1186,6 +1414,19 @@
 		[ontologia_Class10004]
 		[ontologia_Class10051]
 		[ontologia_Class10007])
+	(compatibilesPlato
+		[ontologia_Class20012]
+		[ontologia_Class20006]
+		[ontologia_Class10118]
+		[ontologia_Class10119]
+		[ontologia_Class10106]
+		[ontologia_Class20010]
+		[ontologia_Class10052]
+		[ontologia_Class10057]
+		[ontologia_Class10112]
+		[ontologia_Class10109]
+		[ontologia_Class10117]
+		[ontologia_Class20024])
 	(dificultad 4)
 	(nombrePlato "Fritura Sardinas")
 	(precioPlato 8)
@@ -1202,6 +1443,19 @@
 		[ontologia_Class10004]
 		[ontologia_Class2]
 		[ontologia_Class10007])
+	(compatibilesPlato
+		[ontologia_Class20012]
+		[ontologia_Class20006]
+		[ontologia_Class10118]
+		[ontologia_Class10119]
+		[ontologia_Class10106]
+		[ontologia_Class20010]
+		[ontologia_Class10052]
+		[ontologia_Class10057]
+		[ontologia_Class10112]
+		[ontologia_Class10109]
+		[ontologia_Class10117]
+		[ontologia_Class20024])
 	(dificultad 10)
 	(disponible TodoElAno)
 	(ingredientes
@@ -1237,6 +1491,19 @@
 		[ontologia_Class10009]
 		[ontologia_Class10004]
 		[ontologia_Class10007])
+	(compatibilesPlato
+		[ontologia_Class20012]
+		[ontologia_Class20006]
+		[ontologia_Class10118]
+		[ontologia_Class10119]
+		[ontologia_Class10106]
+		[ontologia_Class20010]
+		[ontologia_Class10052]
+		[ontologia_Class10057]
+		[ontologia_Class10112]
+		[ontologia_Class10109]
+		[ontologia_Class10117]
+		[ontologia_Class20024])
 	(dificultad 4)
 	(disponible TodoElAno)
 	(ingredientes
@@ -1282,6 +1549,19 @@
 		[ontologia_Class10004]
 		[ontologia_Class10003]
 		[ontologia_Class10007])
+	(compatibilesPlato
+		[ontologia_Class20012]
+		[ontologia_Class20006]
+		[ontologia_Class10118]
+		[ontologia_Class10119]
+		[ontologia_Class10106]
+		[ontologia_Class20010]
+		[ontologia_Class10052]
+		[ontologia_Class10057]
+		[ontologia_Class10112]
+		[ontologia_Class10109]
+		[ontologia_Class10117]
+		[ontologia_Class20024])
 	(dificultad 8)
 	(disponible TodoElAno)
 	(ingredientes
@@ -1346,6 +1626,19 @@
 		[ontologia_Class10004]
 		[ontologia_Class10051]
 		[ontologia_Class10007])
+	(compatibilesPlato
+		[ontologia_Class20012]
+		[ontologia_Class20006]
+		[ontologia_Class10118]
+		[ontologia_Class10119]
+		[ontologia_Class10106]
+		[ontologia_Class20010]
+		[ontologia_Class10052]
+		[ontologia_Class10057]
+		[ontologia_Class10112]
+		[ontologia_Class10109]
+		[ontologia_Class10117]
+		[ontologia_Class20024])
 	(dificultad 3)
 	(disponible TodoElAno)
 	(ingredientes
@@ -1374,6 +1667,19 @@
 		[ontologia_Class10004]
 		[ontologia_Class2]
 		[ontologia_Class10007])
+	(compatibilesPlato
+		[ontologia_Class20012]
+		[ontologia_Class20006]
+		[ontologia_Class10118]
+		[ontologia_Class10119]
+		[ontologia_Class10106]
+		[ontologia_Class20010]
+		[ontologia_Class10052]
+		[ontologia_Class10057]
+		[ontologia_Class10112]
+		[ontologia_Class10109]
+		[ontologia_Class10117]
+		[ontologia_Class20024])
 	(dificultad 8)
 	(disponible TodoElAno)
 	(ingredientes
@@ -1425,6 +1731,19 @@
 		[ontologia_Class10004]
 		[ontologia_Class4]
 		[ontologia_Class10007])
+	(compatibilesPlato
+		[ontologia_Class20012]
+		[ontologia_Class20006]
+		[ontologia_Class10118]
+		[ontologia_Class10119]
+		[ontologia_Class10106]
+		[ontologia_Class20010]
+		[ontologia_Class10052]
+		[ontologia_Class10057]
+		[ontologia_Class10112]
+		[ontologia_Class10109]
+		[ontologia_Class10117]
+		[ontologia_Class20024])
 	(dificultad 8)
 	(disponible Verano)
 	(ingredientes
@@ -1468,6 +1787,19 @@
 		[ontologia_Class10003]
 		[ontologia_Class4]
 		[ontologia_Class10007])
+	(compatibilesPlato
+		[ontologia_Class20012]
+		[ontologia_Class20006]
+		[ontologia_Class10118]
+		[ontologia_Class10119]
+		[ontologia_Class10106]
+		[ontologia_Class20010]
+		[ontologia_Class10052]
+		[ontologia_Class10057]
+		[ontologia_Class10112]
+		[ontologia_Class10109]
+		[ontologia_Class10117]
+		[ontologia_Class20024])
 	(dificultad 10)
 	(disponible Otono)
 	(ingredientes
@@ -1504,6 +1836,19 @@
 		[ontologia_Class10003]
 		[ontologia_Class4]
 		[ontologia_Class10007])
+	(compatibilesPlato
+		[ontologia_Class20012]
+		[ontologia_Class20006]
+		[ontologia_Class10118]
+		[ontologia_Class10119]
+		[ontologia_Class10106]
+		[ontologia_Class20010]
+		[ontologia_Class10052]
+		[ontologia_Class10057]
+		[ontologia_Class10112]
+		[ontologia_Class10109]
+		[ontologia_Class10117]
+		[ontologia_Class20024])
 	(dificultad 10)
 	(disponible Otono)
 	(ingredientes
@@ -1548,6 +1893,42 @@
 		[ontologia_Class10003]
 		[ontologia_Class4]
 		[ontologia_Class10007])
+	(compatibilesPlato
+		[ontologia_Class0]
+		[ontologia_Class20014]
+		[ontologia_Class20031]
+		[ontologia_Class10040]
+		[ontologia_Class20037]
+		[ontologia_Class10010]
+		[ontologia_Class10061]
+		[ontologia_Class10065]
+		[ontologia_Class20041]
+		[ontologia_Class10069]
+		[ontologia_Class10018]
+		[ontologia_Class20015]
+		[ontologia_Class10025]
+		[ontologia_Class10081]
+		[ontologia_Class20039]
+		[ontologia_Class20007]
+		[ontologia_Class10103]
+		[ontologia_Class10033]
+		[ontologia_Class10071]
+		[ontologia_Class10084]
+		[ontologia_Class20040]
+		[ontologia_Class20038]
+		[ontologia_Class20028]
+		[ontologia_Class20018]
+		[ontologia_Class10100]
+		[ontologia_Class10074]
+		[ontologia_Class10096]
+		[ontologia_Class20021]
+		[ontologia_Class20033]
+		[ontologia_Class10078]
+		[ontologia_Class10046]
+		[ontologia_Class10090]
+		[ontologia_Class10092]
+		[ontologia_Class20009]
+		[ontologia_Class10077])
 	(dificultad 10)
 	(disponible TodoElAno)
 	(ingredientes
@@ -1587,6 +1968,42 @@
 		[ontologia_Class10003]
 		[ontologia_Class4]
 		[ontologia_Class10007])
+	(compatibilesPlato
+		[ontologia_Class0]
+		[ontologia_Class20014]
+		[ontologia_Class20031]
+		[ontologia_Class10040]
+		[ontologia_Class20037]
+		[ontologia_Class10010]
+		[ontologia_Class10061]
+		[ontologia_Class10065]
+		[ontologia_Class20041]
+		[ontologia_Class10069]
+		[ontologia_Class10018]
+		[ontologia_Class20015]
+		[ontologia_Class10025]
+		[ontologia_Class10081]
+		[ontologia_Class20039]
+		[ontologia_Class20007]
+		[ontologia_Class10103]
+		[ontologia_Class10033]
+		[ontologia_Class10071]
+		[ontologia_Class10084]
+		[ontologia_Class20040]
+		[ontologia_Class20038]
+		[ontologia_Class20028]
+		[ontologia_Class20018]
+		[ontologia_Class10100]
+		[ontologia_Class10074]
+		[ontologia_Class10096]
+		[ontologia_Class20021]
+		[ontologia_Class20033]
+		[ontologia_Class10078]
+		[ontologia_Class10046]
+		[ontologia_Class10090]
+		[ontologia_Class10092]
+		[ontologia_Class20009]
+		[ontologia_Class10077])
 	(dificultad 10)
 	(disponible Otono)
 	(ingredientes
@@ -1629,6 +2046,42 @@
 		[ontologia_Class10003]
 		[ontologia_Class4]
 		[ontologia_Class10007])
+	(compatibilesPlato
+		[ontologia_Class0]
+		[ontologia_Class20014]
+		[ontologia_Class20031]
+		[ontologia_Class10040]
+		[ontologia_Class20037]
+		[ontologia_Class10010]
+		[ontologia_Class10061]
+		[ontologia_Class10065]
+		[ontologia_Class20041]
+		[ontologia_Class10069]
+		[ontologia_Class10018]
+		[ontologia_Class20015]
+		[ontologia_Class10025]
+		[ontologia_Class10081]
+		[ontologia_Class20039]
+		[ontologia_Class20007]
+		[ontologia_Class10103]
+		[ontologia_Class10033]
+		[ontologia_Class10071]
+		[ontologia_Class10084]
+		[ontologia_Class20040]
+		[ontologia_Class20038]
+		[ontologia_Class20028]
+		[ontologia_Class20018]
+		[ontologia_Class10100]
+		[ontologia_Class10074]
+		[ontologia_Class10096]
+		[ontologia_Class20021]
+		[ontologia_Class20033]
+		[ontologia_Class10078]
+		[ontologia_Class10046]
+		[ontologia_Class10090]
+		[ontologia_Class10092]
+		[ontologia_Class20009]
+		[ontologia_Class10077])
 	(dificultad 8)
 	(disponible Otono)
 	(ingredientes
@@ -1692,6 +2145,42 @@
 		[ontologia_Class10003]
 		[ontologia_Class4]
 		[ontologia_Class10007])
+	(compatibilesPlato
+		[ontologia_Class0]
+		[ontologia_Class20014]
+		[ontologia_Class20031]
+		[ontologia_Class10040]
+		[ontologia_Class20037]
+		[ontologia_Class10010]
+		[ontologia_Class10061]
+		[ontologia_Class10065]
+		[ontologia_Class20041]
+		[ontologia_Class10069]
+		[ontologia_Class10018]
+		[ontologia_Class20015]
+		[ontologia_Class10025]
+		[ontologia_Class10081]
+		[ontologia_Class20039]
+		[ontologia_Class20007]
+		[ontologia_Class10103]
+		[ontologia_Class10033]
+		[ontologia_Class10071]
+		[ontologia_Class10084]
+		[ontologia_Class20040]
+		[ontologia_Class20038]
+		[ontologia_Class20028]
+		[ontologia_Class20018]
+		[ontologia_Class10100]
+		[ontologia_Class10074]
+		[ontologia_Class10096]
+		[ontologia_Class20021]
+		[ontologia_Class20033]
+		[ontologia_Class10078]
+		[ontologia_Class10046]
+		[ontologia_Class10090]
+		[ontologia_Class10092]
+		[ontologia_Class20009]
+		[ontologia_Class10077])
 	(dificultad 6)
 	(disponible TodoElAno)
 	(ingredientes
@@ -1721,6 +2210,42 @@
 		[ontologia_Class10003]
 		[ontologia_Class4]
 		[ontologia_Class10007])
+	(compatibilesPlato
+		[ontologia_Class0]
+		[ontologia_Class20014]
+		[ontologia_Class20031]
+		[ontologia_Class10040]
+		[ontologia_Class20037]
+		[ontologia_Class10010]
+		[ontologia_Class10061]
+		[ontologia_Class10065]
+		[ontologia_Class20041]
+		[ontologia_Class10069]
+		[ontologia_Class10018]
+		[ontologia_Class20015]
+		[ontologia_Class10025]
+		[ontologia_Class10081]
+		[ontologia_Class20039]
+		[ontologia_Class20007]
+		[ontologia_Class10103]
+		[ontologia_Class10033]
+		[ontologia_Class10071]
+		[ontologia_Class10084]
+		[ontologia_Class20040]
+		[ontologia_Class20038]
+		[ontologia_Class20028]
+		[ontologia_Class20018]
+		[ontologia_Class10100]
+		[ontologia_Class10074]
+		[ontologia_Class10096]
+		[ontologia_Class20021]
+		[ontologia_Class20033]
+		[ontologia_Class10078]
+		[ontologia_Class10046]
+		[ontologia_Class10090]
+		[ontologia_Class10092]
+		[ontologia_Class20009]
+		[ontologia_Class10077])
 	(dificultad 5)
 	(disponible TodoElAno)
 	(ingredientes
@@ -1747,6 +2272,42 @@
 		[ontologia_Class10003]
 		[ontologia_Class4]
 		[ontologia_Class10007])
+	(compatibilesPlato
+		[ontologia_Class0]
+		[ontologia_Class20014]
+		[ontologia_Class20031]
+		[ontologia_Class10040]
+		[ontologia_Class20037]
+		[ontologia_Class10010]
+		[ontologia_Class10061]
+		[ontologia_Class10065]
+		[ontologia_Class20041]
+		[ontologia_Class10069]
+		[ontologia_Class10018]
+		[ontologia_Class20015]
+		[ontologia_Class10025]
+		[ontologia_Class10081]
+		[ontologia_Class20039]
+		[ontologia_Class20007]
+		[ontologia_Class10103]
+		[ontologia_Class10033]
+		[ontologia_Class10071]
+		[ontologia_Class10084]
+		[ontologia_Class20040]
+		[ontologia_Class20038]
+		[ontologia_Class20028]
+		[ontologia_Class20018]
+		[ontologia_Class10100]
+		[ontologia_Class10074]
+		[ontologia_Class10096]
+		[ontologia_Class20021]
+		[ontologia_Class20033]
+		[ontologia_Class10078]
+		[ontologia_Class10046]
+		[ontologia_Class10090]
+		[ontologia_Class10092]
+		[ontologia_Class20009]
+		[ontologia_Class10077])
 	(dificultad 10)
 	(disponible TodoElAno)
 	(ingredientes
@@ -1814,6 +2375,42 @@
 		[ontologia_Class10009]
 		[ontologia_Class10004]
 		[ontologia_Class10007])
+	(compatibilesPlato
+		[ontologia_Class0]
+		[ontologia_Class20014]
+		[ontologia_Class20031]
+		[ontologia_Class10040]
+		[ontologia_Class20037]
+		[ontologia_Class10010]
+		[ontologia_Class10061]
+		[ontologia_Class10065]
+		[ontologia_Class20041]
+		[ontologia_Class10069]
+		[ontologia_Class10018]
+		[ontologia_Class20015]
+		[ontologia_Class10025]
+		[ontologia_Class10081]
+		[ontologia_Class20039]
+		[ontologia_Class20007]
+		[ontologia_Class10103]
+		[ontologia_Class10033]
+		[ontologia_Class10071]
+		[ontologia_Class10084]
+		[ontologia_Class20040]
+		[ontologia_Class20038]
+		[ontologia_Class20028]
+		[ontologia_Class20018]
+		[ontologia_Class10100]
+		[ontologia_Class10074]
+		[ontologia_Class10096]
+		[ontologia_Class20021]
+		[ontologia_Class20033]
+		[ontologia_Class10078]
+		[ontologia_Class10046]
+		[ontologia_Class10090]
+		[ontologia_Class10092]
+		[ontologia_Class20009]
+		[ontologia_Class10077])
 	(dificultad 7)
 	(disponible Invierno)
 	(ingredientes
@@ -1837,6 +2434,19 @@
 		[ontologia_Class10004]
 		[ontologia_Class2]
 		[ontologia_Class10007])
+	(compatibilesPlato
+		[ontologia_Class20012]
+		[ontologia_Class20006]
+		[ontologia_Class10118]
+		[ontologia_Class10119]
+		[ontologia_Class10106]
+		[ontologia_Class20010]
+		[ontologia_Class10052]
+		[ontologia_Class10057]
+		[ontologia_Class10112]
+		[ontologia_Class10109]
+		[ontologia_Class10117]
+		[ontologia_Class20024])
 	(dificultad 6)
 	(disponible Invierno)
 	(ingredientes
@@ -1859,6 +2469,19 @@
 		[ontologia_Class10009]
 		[ontologia_Class10004]
 		[ontologia_Class10007])
+	(compatibilesPlato
+		[ontologia_Class20012]
+		[ontologia_Class20006]
+		[ontologia_Class10118]
+		[ontologia_Class10119]
+		[ontologia_Class10106]
+		[ontologia_Class20010]
+		[ontologia_Class10052]
+		[ontologia_Class10057]
+		[ontologia_Class10112]
+		[ontologia_Class10109]
+		[ontologia_Class10117]
+		[ontologia_Class20024])
 	(dificultad 6)
 	(disponible Otono Invierno)
 	(ingredientes
@@ -1884,6 +2507,42 @@
 		[ontologia_Class10003]
 		[ontologia_Class4]
 		[ontologia_Class10007])
+	(compatibilesPlato
+		[ontologia_Class0]
+		[ontologia_Class20014]
+		[ontologia_Class20031]
+		[ontologia_Class10040]
+		[ontologia_Class20037]
+		[ontologia_Class10010]
+		[ontologia_Class10061]
+		[ontologia_Class10065]
+		[ontologia_Class20041]
+		[ontologia_Class10069]
+		[ontologia_Class10018]
+		[ontologia_Class20015]
+		[ontologia_Class10025]
+		[ontologia_Class10081]
+		[ontologia_Class20039]
+		[ontologia_Class20007]
+		[ontologia_Class10103]
+		[ontologia_Class10033]
+		[ontologia_Class10071]
+		[ontologia_Class10084]
+		[ontologia_Class20040]
+		[ontologia_Class20038]
+		[ontologia_Class20028]
+		[ontologia_Class20018]
+		[ontologia_Class10100]
+		[ontologia_Class10074]
+		[ontologia_Class10096]
+		[ontologia_Class20021]
+		[ontologia_Class20033]
+		[ontologia_Class10078]
+		[ontologia_Class10046]
+		[ontologia_Class10090]
+		[ontologia_Class10092]
+		[ontologia_Class20009]
+		[ontologia_Class10077])
 	(dificultad 4)
 	(disponible TodoElAno)
 	(ingredientes
@@ -1918,6 +2577,42 @@
 		[ontologia_Class10003]
 		[ontologia_Class4]
 		[ontologia_Class10007])
+	(compatibilesPlato
+		[ontologia_Class0]
+		[ontologia_Class20014]
+		[ontologia_Class20031]
+		[ontologia_Class10040]
+		[ontologia_Class20037]
+		[ontologia_Class10010]
+		[ontologia_Class10061]
+		[ontologia_Class10065]
+		[ontologia_Class20041]
+		[ontologia_Class10069]
+		[ontologia_Class10018]
+		[ontologia_Class20015]
+		[ontologia_Class10025]
+		[ontologia_Class10081]
+		[ontologia_Class20039]
+		[ontologia_Class20007]
+		[ontologia_Class10103]
+		[ontologia_Class10033]
+		[ontologia_Class10071]
+		[ontologia_Class10084]
+		[ontologia_Class20040]
+		[ontologia_Class20038]
+		[ontologia_Class20028]
+		[ontologia_Class20018]
+		[ontologia_Class10100]
+		[ontologia_Class10074]
+		[ontologia_Class10096]
+		[ontologia_Class20021]
+		[ontologia_Class20033]
+		[ontologia_Class10078]
+		[ontologia_Class10046]
+		[ontologia_Class10090]
+		[ontologia_Class10092]
+		[ontologia_Class20009]
+		[ontologia_Class10077])
 	(dificultad 1)
 	(disponible TodoElAno)
 	(ingredientes
@@ -1947,6 +2642,19 @@
 		[ontologia_Class10004]
 		[ontologia_Class10051]
 		[ontologia_Class10007])
+	(compatibilesPlato
+		[ontologia_Class20012]
+		[ontologia_Class20006]
+		[ontologia_Class10118]
+		[ontologia_Class10119]
+		[ontologia_Class10106]
+		[ontologia_Class20010]
+		[ontologia_Class10052]
+		[ontologia_Class10057]
+		[ontologia_Class10112]
+		[ontologia_Class10109]
+		[ontologia_Class10117]
+		[ontologia_Class20024])
 	(dificultad 4)
 	(disponible Invierno)
 	(ingredientes
@@ -1971,6 +2679,19 @@
 		[ontologia_Class10004]
 		[ontologia_Class10003]
 		[ontologia_Class10007])
+	(compatibilesPlato
+		[ontologia_Class20012]
+		[ontologia_Class20006]
+		[ontologia_Class10118]
+		[ontologia_Class10119]
+		[ontologia_Class10106]
+		[ontologia_Class20010]
+		[ontologia_Class10052]
+		[ontologia_Class10057]
+		[ontologia_Class10112]
+		[ontologia_Class10109]
+		[ontologia_Class10117]
+		[ontologia_Class20024])
 	(dificultad 8)
 	(disponible Invierno)
 	(ingredientes
@@ -2011,6 +2732,19 @@
 		[ontologia_Class10004]
 		[ontologia_Class2]
 		[ontologia_Class10007])
+	(compatibilesPlato
+		[ontologia_Class20012]
+		[ontologia_Class20006]
+		[ontologia_Class10118]
+		[ontologia_Class10119]
+		[ontologia_Class10106]
+		[ontologia_Class20010]
+		[ontologia_Class10052]
+		[ontologia_Class10057]
+		[ontologia_Class10112]
+		[ontologia_Class10109]
+		[ontologia_Class10117]
+		[ontologia_Class20024])
 	(dificultad 7)
 	(disponible Otono Invierno)
 	(ingredientes
@@ -2040,6 +2774,19 @@
 		[ontologia_Class10004]
 		[ontologia_Class2]
 		[ontologia_Class10007])
+	(compatibilesPlato
+		[ontologia_Class20012]
+		[ontologia_Class20006]
+		[ontologia_Class10118]
+		[ontologia_Class10119]
+		[ontologia_Class10106]
+		[ontologia_Class20010]
+		[ontologia_Class10052]
+		[ontologia_Class10057]
+		[ontologia_Class10112]
+		[ontologia_Class10109]
+		[ontologia_Class10117]
+		[ontologia_Class20024])
 	(dificultad 5)
 	(disponible TodoElAno)
 	(ingredientes
@@ -2073,6 +2820,42 @@
 		[ontologia_Class10003]
 		[ontologia_Class4]
 		[ontologia_Class10007])
+	(compatibilesPlato
+		[ontologia_Class0]
+		[ontologia_Class20014]
+		[ontologia_Class20031]
+		[ontologia_Class10040]
+		[ontologia_Class20037]
+		[ontologia_Class10010]
+		[ontologia_Class10061]
+		[ontologia_Class10065]
+		[ontologia_Class20041]
+		[ontologia_Class10069]
+		[ontologia_Class10018]
+		[ontologia_Class20015]
+		[ontologia_Class10025]
+		[ontologia_Class10081]
+		[ontologia_Class20039]
+		[ontologia_Class20007]
+		[ontologia_Class10103]
+		[ontologia_Class10033]
+		[ontologia_Class10071]
+		[ontologia_Class10084]
+		[ontologia_Class20040]
+		[ontologia_Class20038]
+		[ontologia_Class20028]
+		[ontologia_Class20018]
+		[ontologia_Class10100]
+		[ontologia_Class10074]
+		[ontologia_Class10096]
+		[ontologia_Class20021]
+		[ontologia_Class20033]
+		[ontologia_Class10078]
+		[ontologia_Class10046]
+		[ontologia_Class10090]
+		[ontologia_Class10092]
+		[ontologia_Class20009]
+		[ontologia_Class10077])
 	(dificultad 6)
 	(disponible TodoElAno)
 	(ingredientes
@@ -2115,6 +2898,19 @@
 		[ontologia_Class10004]
 		[ontologia_Class10051]
 		[ontologia_Class10007])
+	(compatibilesPlato
+		[ontologia_Class20012]
+		[ontologia_Class20006]
+		[ontologia_Class10118]
+		[ontologia_Class10119]
+		[ontologia_Class10106]
+		[ontologia_Class20010]
+		[ontologia_Class10052]
+		[ontologia_Class10057]
+		[ontologia_Class10112]
+		[ontologia_Class10109]
+		[ontologia_Class10117]
+		[ontologia_Class20024])
 	(dificultad 4)
 	(disponible TodoElAno)
 	(ingredientes
@@ -2154,6 +2950,19 @@
 		[ontologia_Class10004]
 		[ontologia_Class10051]
 		[ontologia_Class10007])
+	(compatibilesPlato
+		[ontologia_Class20012]
+		[ontologia_Class20006]
+		[ontologia_Class10118]
+		[ontologia_Class10119]
+		[ontologia_Class10106]
+		[ontologia_Class20010]
+		[ontologia_Class10052]
+		[ontologia_Class10057]
+		[ontologia_Class10112]
+		[ontologia_Class10109]
+		[ontologia_Class10117]
+		[ontologia_Class20024])
 	(dificultad 1)
 	(disponible TodoElAno)
 	(ingredientes
@@ -2181,6 +2990,19 @@
 		[ontologia_Class10009]
 		[ontologia_Class10004]
 		[ontologia_Class10007])
+	(compatibilesPlato
+		[ontologia_Class20012]
+		[ontologia_Class20006]
+		[ontologia_Class10118]
+		[ontologia_Class10119]
+		[ontologia_Class10106]
+		[ontologia_Class20010]
+		[ontologia_Class10052]
+		[ontologia_Class10057]
+		[ontologia_Class10112]
+		[ontologia_Class10109]
+		[ontologia_Class10117]
+		[ontologia_Class20024])
 	(dificultad 3)
 	(disponible TodoElAno)
 	(ingredientes
@@ -2210,6 +3032,19 @@
 		[ontologia_Class10009]
 		[ontologia_Class10004]
 		[ontologia_Class10007])
+	(compatibilesPlato
+		[ontologia_Class20012]
+		[ontologia_Class20006]
+		[ontologia_Class10118]
+		[ontologia_Class10119]
+		[ontologia_Class10106]
+		[ontologia_Class20010]
+		[ontologia_Class10052]
+		[ontologia_Class10057]
+		[ontologia_Class10112]
+		[ontologia_Class10109]
+		[ontologia_Class10117]
+		[ontologia_Class20024])
 	(dificultad 3)
 	(disponible TodoElAno)
 	(ingredientes [ontologia_Class20030])
@@ -2229,6 +3064,19 @@
 		[ontologia_Class10004]
 		[ontologia_Class4]
 		[ontologia_Class10007])
+	(compatibilesPlato
+		[ontologia_Class20012]
+		[ontologia_Class20006]
+		[ontologia_Class10118]
+		[ontologia_Class10119]
+		[ontologia_Class10106]
+		[ontologia_Class20010]
+		[ontologia_Class10052]
+		[ontologia_Class10057]
+		[ontologia_Class10112]
+		[ontologia_Class10109]
+		[ontologia_Class10117]
+		[ontologia_Class20024])
 	(dificultad 1)
 	(disponible TodoElAno)
 	(ingredientes [ontologia_Class10012])
@@ -2247,6 +3095,19 @@
 		[ontologia_Class10009]
 		[ontologia_Class10004]
 		[ontologia_Class10007])
+	(compatibilesPlato
+		[ontologia_Class20012]
+		[ontologia_Class20006]
+		[ontologia_Class10118]
+		[ontologia_Class10119]
+		[ontologia_Class10106]
+		[ontologia_Class20010]
+		[ontologia_Class10052]
+		[ontologia_Class10057]
+		[ontologia_Class10112]
+		[ontologia_Class10109]
+		[ontologia_Class10117]
+		[ontologia_Class20024])
 	(dificultad 3)
 	(disponible TodoElAno)
 	(ingredientes
@@ -2277,6 +3138,19 @@
 		[ontologia_Class10003]
 		[ontologia_Class4]
 		[ontologia_Class10007])
+	(compatibilesPlato
+		[ontologia_Class20012]
+		[ontologia_Class20006]
+		[ontologia_Class10118]
+		[ontologia_Class10119]
+		[ontologia_Class10106]
+		[ontologia_Class20010]
+		[ontologia_Class10052]
+		[ontologia_Class10057]
+		[ontologia_Class10112]
+		[ontologia_Class10109]
+		[ontologia_Class10117]
+		[ontologia_Class20024])
 	(dificultad 2)
 	(disponible TodoElAno)
 	(ingredientes [ontologia_Class10027])
@@ -2295,6 +3169,19 @@
 		[ontologia_Class10004]
 		[ontologia_Class10003]
 		[ontologia_Class10007])
+	(compatibilesPlato
+		[ontologia_Class20012]
+		[ontologia_Class20006]
+		[ontologia_Class10118]
+		[ontologia_Class10119]
+		[ontologia_Class10106]
+		[ontologia_Class20010]
+		[ontologia_Class10052]
+		[ontologia_Class10057]
+		[ontologia_Class10112]
+		[ontologia_Class10109]
+		[ontologia_Class10117]
+		[ontologia_Class20024])
 	(dificultad 3)
 	(disponible TodoElAno)
 	(ingredientes

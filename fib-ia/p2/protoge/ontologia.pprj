@@ -1,4 +1,4 @@
-; Sun May 21 16:20:52 CEST 2017
+; Sun May 21 16:34:33 CEST 2017
 ; 
 ;+ (version "3.5")
 ;+ (build "Build 660")
@@ -20,12 +20,12 @@
 ([BROWSER_SLOT_NAMES] of  Property_List
 
 	(properties
-		[ontologia_ProjectKB_Class15]
-		[ontologia_ProjectKB_Class16]
-		[ontologia_ProjectKB_Class17]
-		[ontologia_ProjectKB_Class18]
-		[ontologia_ProjectKB_Class19]
-		[ontologia_ProjectKB_Class20]))
+		[ontologia_ProjectKB_Class7]
+		[ontologia_ProjectKB_Class8]
+		[ontologia_ProjectKB_Class9]
+		[ontologia_ProjectKB_Class10]
+		[ontologia_ProjectKB_Class11]
+		[ontologia_ProjectKB_Class12]))
 
 ([CLSES_TAB] of  Widget
 
@@ -65,6 +65,9 @@
 ([INSTANCES_TAB] of  Widget
 
 	(widget_class_name "edu.stanford.smi.protege.widget.InstancesTab"))
+
+([KB_096452_Class0] of  Map
+)
 
 ([KB_269231_Class0] of  String
 
@@ -166,9 +169,6 @@
 	(name "classes_file_name")
 	(string_value "ontologia.pont"))
 
-([KB_670261_Class0] of  Map
-)
-
 ([LAYOUT_PROPERTIES] of  Property_List
 
 	(name "layout properties")
@@ -180,10 +180,10 @@
 	(property_list [ontologia_ProjectKB_Class2])
 	(widget_class_name "edu.stanford.smi.protege.widget.ClsesAndInstancesTab"))
 
-([ontologia_ProjectKB_Class10] of  Boolean
+([ontologia_ProjectKB_Class10] of  String
 
-	(boolean_value FALSE)
-	(name "ButtonDisplayed-Delete Instance"))
+	(name ":META-CLASS")
+	(string_value "%3ANAME"))
 
 ([ontologia_ProjectKB_Class100] of  Property_List
 
@@ -387,65 +387,18 @@
 	(boolean_value FALSE)
 	(name "ButtonDisplayed-Delete Instance"))
 
-([ontologia_ProjectKB_Class11] of  Widget
-
-	(height 120)
-	(is_hidden FALSE)
-	(name "inverse_of_compatibilesPlato")
-	(property_list [ontologia_ProjectKB_Class12])
-	(widget_class_name "edu.stanford.smi.protege.widget.InstanceListWidget")
-	(width 200)
-	(x 0)
-	(y 460))
-
-([ontologia_ProjectKB_Class12] of  Property_List
-
-	(properties
-		[ontologia_ProjectKB_Class13]
-		[ontologia_ProjectKB_Class14]))
-
-([ontologia_ProjectKB_Class13] of  Boolean
-
-	(boolean_value FALSE)
-	(name "ButtonDisplayed-View References to Value"))
-
-([ontologia_ProjectKB_Class14] of  Boolean
-
-	(boolean_value FALSE)
-	(name "ButtonDisplayed-Delete Instance"))
-
-([ontologia_ProjectKB_Class15] of  String
-
-	(name ":INSTANCE-ANNOTATION")
-	(string_value "%3AANNOTATION-TEXT"))
-
-([ontologia_ProjectKB_Class16] of  String
-
-	(name "Plato")
-	(string_value "nombrePlato{%28}precioPlato{%29}"))
-
-([ontologia_ProjectKB_Class17] of  String
-
-	(name ":PAL-CONSTRAINT")
-	(string_value "%3APAL-NAME"))
-
-([ontologia_ProjectKB_Class18] of  String
-
-	(name ":META-CLASS")
-	(string_value "%3ANAME"))
-
-([ontologia_ProjectKB_Class19] of  String
+([ontologia_ProjectKB_Class11] of  String
 
 	(name "Ingrediente")
 	(string_value "nombreIngrediente{%28}tipoIngrediente{%29}"))
 
-([ontologia_ProjectKB_Class2] of  Property_List
-)
-
-([ontologia_ProjectKB_Class20] of  String
+([ontologia_ProjectKB_Class12] of  String
 
 	(name "Bebida")
 	(string_value "nombreBebida{%28}precioBebida{%29}"))
+
+([ontologia_ProjectKB_Class2] of  Property_List
+)
 
 ([ontologia_ProjectKB_Class3] of  Widget
 
@@ -465,27 +418,20 @@
 ([ontologia_ProjectKB_Class6] of  Property_List
 )
 
-([ontologia_ProjectKB_Class7] of  Widget
+([ontologia_ProjectKB_Class7] of  String
 
-	(height 60)
-	(is_hidden FALSE)
-	(name "inverse_of_compatibilesPlato")
-	(property_list [ontologia_ProjectKB_Class8])
-	(widget_class_name "edu.stanford.smi.protege.widget.InstanceFieldWidget")
-	(width 200)
-	(x 0)
-	(y 460))
+	(name ":INSTANCE-ANNOTATION")
+	(string_value "%3AANNOTATION-TEXT"))
 
-([ontologia_ProjectKB_Class8] of  Property_List
+([ontologia_ProjectKB_Class8] of  String
 
-	(properties
-		[ontologia_ProjectKB_Class9]
-		[ontologia_ProjectKB_Class10]))
+	(name "Plato")
+	(string_value "tipoPlato{-%3E}nombrePlato"))
 
-([ontologia_ProjectKB_Class9] of  Boolean
+([ontologia_ProjectKB_Class9] of  String
 
-	(boolean_value FALSE)
-	(name "ButtonDisplayed-View References to Value"))
+	(name ":PAL-CONSTRAINT")
+	(string_value "%3APAL-NAME"))
 
 ([ontologia_ProjectKB_Class99] of  Widget
 
