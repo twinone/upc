@@ -1,4 +1,4 @@
-; Sun May 21 16:53:13 CEST 2017
+; Sun May 21 22:13:07 CEST 2017
 ; 
 ;+ (version "3.5")
 ;+ (build "Build 660")
@@ -51,16 +51,6 @@
 	(tipoPlato Primero)
 	(t%C3%ADpico Espana))
 
-([ontologia_Class10000] of  Bebida
-
-	(compatiblesBebidas
-		[ontologia_Class20040]
-		[ontologia_Class20038]
-		[ontologia_Class10112]
-		[ontologia_Class10109]
-		[ontologia_Class10117]
-		[ontologia_Class20024]))
-
 ([ontologia_Class10002] of  Ingrediente
 
 	(nombreIngrediente "Alubias")
@@ -85,11 +75,11 @@
 		[ontologia_Class10103]
 		[ontologia_Class10071]
 		[ontologia_Class10084]
+		[ontologia_Class20024]
 		[ontologia_Class20040]
 		[ontologia_Class10112]
-		[ontologia_Class10109]
 		[ontologia_Class10117]
-		[ontologia_Class20024])
+		[ontologia_Class10109])
 	(esVino TRUE)
 	(nombreBebida "Vino Rosado")
 	(precioBebida 7))
@@ -137,13 +127,13 @@
 		[ontologia_Class10033]
 		[ontologia_Class10071]
 		[ontologia_Class10084]
-		[ontologia_Class20040]
-		[ontologia_Class20038]
 		[ontologia_Class20009]
+		[ontologia_Class20038]
+		[ontologia_Class20024]
+		[ontologia_Class20040]
 		[ontologia_Class10112]
-		[ontologia_Class10109]
 		[ontologia_Class10117]
-		[ontologia_Class20024])
+		[ontologia_Class10109])
 	(nombreBebida "Refresco")
 	(precioBebida 3))
 
@@ -190,13 +180,13 @@
 		[ontologia_Class10033]
 		[ontologia_Class10071]
 		[ontologia_Class10084]
-		[ontologia_Class20040]
-		[ontologia_Class20038]
 		[ontologia_Class20009]
+		[ontologia_Class20038]
+		[ontologia_Class20024]
+		[ontologia_Class20040]
 		[ontologia_Class10112]
-		[ontologia_Class10109]
 		[ontologia_Class10117]
-		[ontologia_Class20024])
+		[ontologia_Class10109])
 	(nombreBebida "Agua")
 	(precioBebida 2))
 
@@ -243,13 +233,13 @@
 		[ontologia_Class10033]
 		[ontologia_Class10071]
 		[ontologia_Class10084]
-		[ontologia_Class20040]
-		[ontologia_Class20038]
 		[ontologia_Class20009]
+		[ontologia_Class20038]
+		[ontologia_Class20024]
+		[ontologia_Class20040]
 		[ontologia_Class10112]
-		[ontologia_Class10109]
 		[ontologia_Class10117]
-		[ontologia_Class20024])
+		[ontologia_Class10109])
 	(nombreBebida "Cerveza")
 	(precioBebida 3))
 
@@ -296,13 +286,13 @@
 		[ontologia_Class10033]
 		[ontologia_Class10071]
 		[ontologia_Class10084]
-		[ontologia_Class20040]
-		[ontologia_Class20038]
 		[ontologia_Class20009]
+		[ontologia_Class20038]
+		[ontologia_Class20024]
+		[ontologia_Class20040]
 		[ontologia_Class10112]
-		[ontologia_Class10109]
 		[ontologia_Class10117]
-		[ontologia_Class20024])
+		[ontologia_Class10109])
 	(nombreBebida "Zumo Natural")
 	(precioBebida 4))
 
@@ -330,12 +320,12 @@
 		[ontologia_Class20039]
 		[ontologia_Class10103]
 		[ontologia_Class10071]
-		[ontologia_Class20040]
 		[ontologia_Class20009]
+		[ontologia_Class20024]
+		[ontologia_Class20040]
 		[ontologia_Class10112]
-		[ontologia_Class10109]
 		[ontologia_Class10117]
-		[ontologia_Class20024])
+		[ontologia_Class10109])
 	(nombreBebida "Cava")
 	(precioBebida 6))
 
@@ -382,13 +372,13 @@
 		[ontologia_Class10033]
 		[ontologia_Class10071]
 		[ontologia_Class10084]
-		[ontologia_Class20040]
-		[ontologia_Class20038]
 		[ontologia_Class20009]
+		[ontologia_Class20038]
+		[ontologia_Class20024]
+		[ontologia_Class20040]
 		[ontologia_Class10112]
-		[ontologia_Class10109]
 		[ontologia_Class10117]
-		[ontologia_Class20024])
+		[ontologia_Class10109])
 	(nombreBebida "Champagn")
 	(precioBebida 8))
 
@@ -1033,11 +1023,11 @@
 		[ontologia_Class10057]
 		[ontologia_Class10033]
 		[ontologia_Class10071]
+		[ontologia_Class20024]
 		[ontologia_Class20040]
 		[ontologia_Class10112]
-		[ontologia_Class10109]
 		[ontologia_Class10117]
-		[ontologia_Class20024])
+		[ontologia_Class10109])
 	(esVino TRUE)
 	(nombreBebida "Vino Casero")
 	(precioBebida 2))
@@ -2321,7 +2311,6 @@
 ([ontologia_Class10109] of  Plato
 
 	(bebidaCompatible
-		[ontologia_Class10000]
 		[ontologia_Class10005]
 		[ontologia_Class10008]
 		[ontologia_Class10006]
@@ -2399,7 +2388,6 @@
 ([ontologia_Class10112] of  Plato
 
 	(bebidaCompatible
-		[ontologia_Class10000]
 		[ontologia_Class10005]
 		[ontologia_Class10008]
 		[ontologia_Class10006]
@@ -2498,7 +2486,6 @@
 ([ontologia_Class10117] of  Plato
 
 	(bebidaCompatible
-		[ontologia_Class10000]
 		[ontologia_Class10005]
 		[ontologia_Class10008]
 		[ontologia_Class10006]
@@ -2707,11 +2694,11 @@
 		[ontologia_Class20007]
 		[ontologia_Class10103]
 		[ontologia_Class10071]
+		[ontologia_Class20024]
 		[ontologia_Class20040]
 		[ontologia_Class10112]
-		[ontologia_Class10109]
 		[ontologia_Class10117]
-		[ontologia_Class20024])
+		[ontologia_Class10109])
 	(esVino TRUE)
 	(nombreBebida "Vino Blanco")
 	(precioBebida 7))
@@ -3281,7 +3268,6 @@
 ([ontologia_Class20024] of  Plato
 
 	(bebidaCompatible
-		[ontologia_Class10000]
 		[ontologia_Class10005]
 		[ontologia_Class10008]
 		[ontologia_Class10006]
@@ -3599,7 +3585,6 @@
 ([ontologia_Class20038] of  Plato
 
 	(bebidaCompatible
-		[ontologia_Class10000]
 		[ontologia_Class10005]
 		[ontologia_Class10006]
 		[ontologia_Class10009]
@@ -3694,8 +3679,6 @@
 ([ontologia_Class20040] of  Plato
 
 	(bebidaCompatible
-		[ontologia_Class10000]
-		[ontologia_Class10000]
 		[ontologia_Class10005]
 		[ontologia_Class10008]
 		[ontologia_Class10006]
@@ -3812,12 +3795,12 @@
 		[ontologia_Class10025]
 		[ontologia_Class10103]
 		[ontologia_Class10071]
-		[ontologia_Class20040]
 		[ontologia_Class20038]
+		[ontologia_Class20024]
+		[ontologia_Class20040]
 		[ontologia_Class10112]
-		[ontologia_Class10109]
 		[ontologia_Class10117]
-		[ontologia_Class20024])
+		[ontologia_Class10109])
 	(esVino TRUE)
 	(nombreBebida "Vino Tinto")
 	(precioBebida 7))
