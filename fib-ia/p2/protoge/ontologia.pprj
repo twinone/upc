@@ -1,4 +1,4 @@
-; Sun May 21 16:34:33 CEST 2017
+; Sun May 21 16:53:13 CEST 2017
 ; 
 ;+ (version "3.5")
 ;+ (build "Build 660")
@@ -20,12 +20,12 @@
 ([BROWSER_SLOT_NAMES] of  Property_List
 
 	(properties
-		[ontologia_ProjectKB_Class7]
-		[ontologia_ProjectKB_Class8]
-		[ontologia_ProjectKB_Class9]
-		[ontologia_ProjectKB_Class10]
-		[ontologia_ProjectKB_Class11]
-		[ontologia_ProjectKB_Class12]))
+		[ontologia_ProjectKB_Class19]
+		[ontologia_ProjectKB_Class20]
+		[ontologia_ProjectKB_Class21]
+		[ontologia_ProjectKB_Class22]
+		[ontologia_ProjectKB_Class23]
+		[ontologia_ProjectKB_Class24]))
 
 ([CLSES_TAB] of  Widget
 
@@ -179,11 +179,6 @@
 	(is_hidden TRUE)
 	(property_list [ontologia_ProjectKB_Class2])
 	(widget_class_name "edu.stanford.smi.protege.widget.ClsesAndInstancesTab"))
-
-([ontologia_ProjectKB_Class10] of  String
-
-	(name ":META-CLASS")
-	(string_value "%3ANAME"))
 
 ([ontologia_ProjectKB_Class100] of  Property_List
 
@@ -387,18 +382,38 @@
 	(boolean_value FALSE)
 	(name "ButtonDisplayed-Delete Instance"))
 
-([ontologia_ProjectKB_Class11] of  String
+([ontologia_ProjectKB_Class19] of  String
+
+	(name ":INSTANCE-ANNOTATION")
+	(string_value "%3AANNOTATION-TEXT"))
+
+([ontologia_ProjectKB_Class2] of  Property_List
+)
+
+([ontologia_ProjectKB_Class20] of  String
+
+	(name "Plato")
+	(string_value "tipoPlato{-%3E}nombrePlato"))
+
+([ontologia_ProjectKB_Class21] of  String
+
+	(name ":PAL-CONSTRAINT")
+	(string_value "%3APAL-NAME"))
+
+([ontologia_ProjectKB_Class22] of  String
+
+	(name ":META-CLASS")
+	(string_value "%3ANAME"))
+
+([ontologia_ProjectKB_Class23] of  String
 
 	(name "Ingrediente")
 	(string_value "nombreIngrediente{%28}tipoIngrediente{%29}"))
 
-([ontologia_ProjectKB_Class12] of  String
+([ontologia_ProjectKB_Class24] of  String
 
 	(name "Bebida")
 	(string_value "nombreBebida{%28}precioBebida{%29}"))
-
-([ontologia_ProjectKB_Class2] of  Property_List
-)
 
 ([ontologia_ProjectKB_Class3] of  Widget
 
@@ -417,21 +432,6 @@
 
 ([ontologia_ProjectKB_Class6] of  Property_List
 )
-
-([ontologia_ProjectKB_Class7] of  String
-
-	(name ":INSTANCE-ANNOTATION")
-	(string_value "%3AANNOTATION-TEXT"))
-
-([ontologia_ProjectKB_Class8] of  String
-
-	(name "Plato")
-	(string_value "tipoPlato{-%3E}nombrePlato"))
-
-([ontologia_ProjectKB_Class9] of  String
-
-	(name ":PAL-CONSTRAINT")
-	(string_value "%3APAL-NAME"))
 
 ([ontologia_ProjectKB_Class99] of  Widget
 
