@@ -1,4 +1,4 @@
-; Tue May 16 19:49:53 CEST 2017
+; Sun May 21 15:46:54 CEST 2017
 ; 
 ;+ (version "3.5")
 ;+ (build "Build 660")
@@ -7,14 +7,9 @@
 
 	(bebidaCompatible
 		[ontologia_Class10005]
-		[ontologia_Class10008]
 		[ontologia_Class10006]
 		[ontologia_Class10009]
 		[ontologia_Class10004]
-		[ontologia_Class2]
-		[ontologia_Class10051]
-		[ontologia_Class10003]
-		[ontologia_Class4]
 		[ontologia_Class10007])
 	(dificultad 3)
 	(disponible Invierno)
@@ -30,6 +25,16 @@
 	(tipoPlato Primero)
 	(t%C3%ADpico Espana))
 
+([ontologia_Class10000] of  Bebida
+
+	(compatiblesBebidas
+		[ontologia_Class20040]
+		[ontologia_Class20038]
+		[ontologia_Class10112]
+		[ontologia_Class10109]
+		[ontologia_Class10117]
+		[ontologia_Class20024]))
+
 ([ontologia_Class10002] of  Ingrediente
 
 	(nombreIngrediente "Alubias")
@@ -39,47 +44,26 @@
 ([ontologia_Class10003] of  Bebida
 
 	(compatiblesBebidas
-		[ontologia_Class10040]
-		[ontologia_Class10010]
-		[ontologia_Class10018]
-		[ontologia_Class10046]
-		[ontologia_Class10025]
-		[ontologia_Class10033]
-		[ontologia_Class10052]
-		[ontologia_Class10061]
-		[ontologia_Class10065]
-		[ontologia_Class10069]
-		[ontologia_Class10071]
-		[ontologia_Class10074]
-		[ontologia_Class10078]
-		[ontologia_Class10081]
-		[ontologia_Class10084]
-		[ontologia_Class10092]
-		[ontologia_Class10096]
-		[ontologia_Class10100]
-		[ontologia_Class10103]
-		[ontologia_Class10106]
-		[ontologia_Class10109]
-		[ontologia_Class10112]
-		[ontologia_Class10117]
-		[ontologia_Class10118]
 		[ontologia_Class10119]
-		[ontologia_Class0]
-		[ontologia_Class20006]
-		[ontologia_Class20007]
-		[ontologia_Class20009]
-		[ontologia_Class20014]
+		[ontologia_Class20012]
+		[ontologia_Class10118]
+		[ontologia_Class10100]
+		[ontologia_Class10106]
+		[ontologia_Class20041]
+		[ontologia_Class20010]
+		[ontologia_Class10069]
+		[ontologia_Class10018]
 		[ontologia_Class20015]
-		[ontologia_Class20018]
-		[ontologia_Class20021]
-		[ontologia_Class20024]
-		[ontologia_Class20028]
-		[ontologia_Class20031]
-		[ontologia_Class20037]
-		[ontologia_Class20038]
-		[ontologia_Class20039]
+		[ontologia_Class10052]
+		[ontologia_Class10057]
+		[ontologia_Class10103]
+		[ontologia_Class10071]
+		[ontologia_Class10084]
 		[ontologia_Class20040]
-		[ontologia_Class20041])
+		[ontologia_Class10112]
+		[ontologia_Class10109]
+		[ontologia_Class10117]
+		[ontologia_Class20024])
 	(esVino TRUE)
 	(nombreBebida "Vino Rosado")
 	(precioBebida 7))
@@ -87,278 +71,298 @@
 ([ontologia_Class10004] of  Bebida
 
 	(compatiblesBebidas
+		[ontologia_Class10119]
+		[ontologia_Class20028]
+		[ontologia_Class10090]
+		[ontologia_Class0]
+		[ontologia_Class20014]
+		[ontologia_Class20012]
+		[ontologia_Class20018]
+		[ontologia_Class20006]
+		[ontologia_Class20031]
+		[ontologia_Class10118]
+		[ontologia_Class10100]
+		[ontologia_Class10074]
 		[ontologia_Class10040]
+		[ontologia_Class20037]
+		[ontologia_Class10106]
 		[ontologia_Class10010]
-		[ontologia_Class10018]
-		[ontologia_Class10046]
-		[ontologia_Class10025]
-		[ontologia_Class10033]
-		[ontologia_Class10052]
 		[ontologia_Class10061]
 		[ontologia_Class10065]
-		[ontologia_Class10069]
-		[ontologia_Class10071]
-		[ontologia_Class10074]
-		[ontologia_Class10078]
-		[ontologia_Class10081]
-		[ontologia_Class10084]
-		[ontologia_Class10092]
+		[ontologia_Class20041]
 		[ontologia_Class10096]
-		[ontologia_Class10100]
-		[ontologia_Class10103]
-		[ontologia_Class10106]
-		[ontologia_Class10109]
-		[ontologia_Class10112]
-		[ontologia_Class10117]
-		[ontologia_Class10118]
-		[ontologia_Class10119]
-		[ontologia_Class0]
-		[ontologia_Class20006]
-		[ontologia_Class20007]
-		[ontologia_Class20009]
-		[ontologia_Class20014]
-		[ontologia_Class20015]
-		[ontologia_Class20018]
+		[ontologia_Class20010]
+		[ontologia_Class10077]
+		[ontologia_Class10069]
 		[ontologia_Class20021]
-		[ontologia_Class20024]
-		[ontologia_Class20028]
-		[ontologia_Class20031]
-		[ontologia_Class20037]
+		[ontologia_Class20033]
+		[ontologia_Class10018]
+		[ontologia_Class10078]
+		[ontologia_Class20015]
+		[ontologia_Class10046]
+		[ontologia_Class10052]
+		[ontologia_Class10057]
+		[ontologia_Class10092]
+		[ontologia_Class10025]
+		[ontologia_Class10081]
 		[ontologia_Class20039]
+		[ontologia_Class20007]
+		[ontologia_Class10103]
+		[ontologia_Class10033]
+		[ontologia_Class10071]
+		[ontologia_Class10084]
 		[ontologia_Class20040]
-		[ontologia_Class20041])
+		[ontologia_Class20038]
+		[ontologia_Class20009]
+		[ontologia_Class10112]
+		[ontologia_Class10109]
+		[ontologia_Class10117]
+		[ontologia_Class20024])
 	(nombreBebida "Refresco")
 	(precioBebida 3))
 
 ([ontologia_Class10005] of  Bebida
 
 	(compatiblesBebidas
+		[ontologia_Class10119]
+		[ontologia_Class20028]
+		[ontologia_Class10090]
+		[ontologia_Class0]
+		[ontologia_Class20014]
+		[ontologia_Class20012]
+		[ontologia_Class20018]
+		[ontologia_Class20006]
+		[ontologia_Class20031]
+		[ontologia_Class10118]
+		[ontologia_Class10100]
+		[ontologia_Class10074]
 		[ontologia_Class10040]
+		[ontologia_Class20037]
+		[ontologia_Class10106]
 		[ontologia_Class10010]
-		[ontologia_Class10018]
-		[ontologia_Class10046]
-		[ontologia_Class10025]
-		[ontologia_Class10033]
-		[ontologia_Class10052]
 		[ontologia_Class10061]
 		[ontologia_Class10065]
-		[ontologia_Class10069]
-		[ontologia_Class10071]
-		[ontologia_Class10074]
-		[ontologia_Class10078]
-		[ontologia_Class10081]
-		[ontologia_Class10084]
-		[ontologia_Class10092]
+		[ontologia_Class20041]
 		[ontologia_Class10096]
-		[ontologia_Class10100]
-		[ontologia_Class10103]
-		[ontologia_Class10106]
-		[ontologia_Class10109]
-		[ontologia_Class10112]
-		[ontologia_Class10117]
-		[ontologia_Class10118]
-		[ontologia_Class10119]
-		[ontologia_Class0]
-		[ontologia_Class20006]
-		[ontologia_Class20007]
-		[ontologia_Class20009]
-		[ontologia_Class20014]
-		[ontologia_Class20015]
-		[ontologia_Class20018]
+		[ontologia_Class20010]
+		[ontologia_Class10077]
+		[ontologia_Class10069]
 		[ontologia_Class20021]
-		[ontologia_Class20024]
-		[ontologia_Class20028]
-		[ontologia_Class20031]
-		[ontologia_Class20037]
+		[ontologia_Class20033]
+		[ontologia_Class10018]
+		[ontologia_Class10078]
+		[ontologia_Class20015]
+		[ontologia_Class10046]
+		[ontologia_Class10052]
+		[ontologia_Class10057]
+		[ontologia_Class10092]
+		[ontologia_Class10025]
+		[ontologia_Class10081]
 		[ontologia_Class20039]
+		[ontologia_Class20007]
+		[ontologia_Class10103]
+		[ontologia_Class10033]
+		[ontologia_Class10071]
+		[ontologia_Class10084]
 		[ontologia_Class20040]
-		[ontologia_Class20041])
+		[ontologia_Class20038]
+		[ontologia_Class20009]
+		[ontologia_Class10112]
+		[ontologia_Class10109]
+		[ontologia_Class10117]
+		[ontologia_Class20024])
 	(nombreBebida "Agua")
 	(precioBebida 2))
 
 ([ontologia_Class10006] of  Bebida
 
 	(compatiblesBebidas
+		[ontologia_Class10119]
+		[ontologia_Class20028]
+		[ontologia_Class10090]
+		[ontologia_Class0]
+		[ontologia_Class20014]
+		[ontologia_Class20012]
+		[ontologia_Class20018]
+		[ontologia_Class20006]
+		[ontologia_Class20031]
+		[ontologia_Class10118]
+		[ontologia_Class10100]
+		[ontologia_Class10074]
 		[ontologia_Class10040]
+		[ontologia_Class20037]
+		[ontologia_Class10106]
 		[ontologia_Class10010]
-		[ontologia_Class10018]
-		[ontologia_Class10046]
-		[ontologia_Class10025]
-		[ontologia_Class10033]
-		[ontologia_Class10052]
 		[ontologia_Class10061]
 		[ontologia_Class10065]
-		[ontologia_Class10069]
-		[ontologia_Class10071]
-		[ontologia_Class10074]
-		[ontologia_Class10078]
-		[ontologia_Class10081]
-		[ontologia_Class10084]
-		[ontologia_Class10092]
+		[ontologia_Class20041]
 		[ontologia_Class10096]
-		[ontologia_Class10100]
-		[ontologia_Class10103]
-		[ontologia_Class10106]
-		[ontologia_Class10109]
-		[ontologia_Class10112]
-		[ontologia_Class10117]
-		[ontologia_Class10118]
-		[ontologia_Class10119]
-		[ontologia_Class0]
-		[ontologia_Class20006]
-		[ontologia_Class20007]
-		[ontologia_Class20009]
-		[ontologia_Class20014]
-		[ontologia_Class20015]
-		[ontologia_Class20018]
+		[ontologia_Class20010]
+		[ontologia_Class10077]
+		[ontologia_Class10069]
 		[ontologia_Class20021]
-		[ontologia_Class20024]
-		[ontologia_Class20028]
-		[ontologia_Class20031]
-		[ontologia_Class20037]
+		[ontologia_Class20033]
+		[ontologia_Class10018]
+		[ontologia_Class10078]
+		[ontologia_Class20015]
+		[ontologia_Class10046]
+		[ontologia_Class10052]
+		[ontologia_Class10057]
+		[ontologia_Class10092]
+		[ontologia_Class10025]
+		[ontologia_Class10081]
 		[ontologia_Class20039]
+		[ontologia_Class20007]
+		[ontologia_Class10103]
+		[ontologia_Class10033]
+		[ontologia_Class10071]
+		[ontologia_Class10084]
 		[ontologia_Class20040]
-		[ontologia_Class20041])
+		[ontologia_Class20038]
+		[ontologia_Class20009]
+		[ontologia_Class10112]
+		[ontologia_Class10109]
+		[ontologia_Class10117]
+		[ontologia_Class20024])
 	(nombreBebida "Cerveza")
 	(precioBebida 3))
 
 ([ontologia_Class10007] of  Bebida
 
 	(compatiblesBebidas
+		[ontologia_Class10119]
+		[ontologia_Class20028]
+		[ontologia_Class10090]
+		[ontologia_Class0]
+		[ontologia_Class20014]
+		[ontologia_Class20012]
+		[ontologia_Class20018]
+		[ontologia_Class20006]
+		[ontologia_Class20031]
+		[ontologia_Class10118]
+		[ontologia_Class10100]
+		[ontologia_Class10074]
 		[ontologia_Class10040]
+		[ontologia_Class20037]
+		[ontologia_Class10106]
 		[ontologia_Class10010]
-		[ontologia_Class10018]
-		[ontologia_Class10046]
-		[ontologia_Class10025]
-		[ontologia_Class10033]
-		[ontologia_Class10052]
 		[ontologia_Class10061]
 		[ontologia_Class10065]
-		[ontologia_Class10069]
-		[ontologia_Class10071]
-		[ontologia_Class10074]
-		[ontologia_Class10078]
-		[ontologia_Class10081]
-		[ontologia_Class10084]
-		[ontologia_Class10092]
+		[ontologia_Class20041]
 		[ontologia_Class10096]
-		[ontologia_Class10100]
-		[ontologia_Class10103]
-		[ontologia_Class10106]
-		[ontologia_Class10109]
-		[ontologia_Class10112]
-		[ontologia_Class10117]
-		[ontologia_Class10118]
-		[ontologia_Class10119]
-		[ontologia_Class0]
-		[ontologia_Class20006]
-		[ontologia_Class20007]
-		[ontologia_Class20009]
-		[ontologia_Class20014]
-		[ontologia_Class20015]
-		[ontologia_Class20018]
+		[ontologia_Class20010]
+		[ontologia_Class10077]
+		[ontologia_Class10069]
 		[ontologia_Class20021]
-		[ontologia_Class20024]
-		[ontologia_Class20028]
-		[ontologia_Class20031]
-		[ontologia_Class20037]
+		[ontologia_Class20033]
+		[ontologia_Class10018]
+		[ontologia_Class10078]
+		[ontologia_Class20015]
+		[ontologia_Class10046]
+		[ontologia_Class10052]
+		[ontologia_Class10057]
+		[ontologia_Class10092]
+		[ontologia_Class10025]
+		[ontologia_Class10081]
 		[ontologia_Class20039]
+		[ontologia_Class20007]
+		[ontologia_Class10103]
+		[ontologia_Class10033]
+		[ontologia_Class10071]
+		[ontologia_Class10084]
 		[ontologia_Class20040]
-		[ontologia_Class20041])
+		[ontologia_Class20038]
+		[ontologia_Class20009]
+		[ontologia_Class10112]
+		[ontologia_Class10109]
+		[ontologia_Class10117]
+		[ontologia_Class20024])
 	(nombreBebida "Zumo Natural")
 	(precioBebida 4))
 
 ([ontologia_Class10008] of  Bebida
 
 	(compatiblesBebidas
-		[ontologia_Class10040]
-		[ontologia_Class10010]
-		[ontologia_Class10018]
-		[ontologia_Class10046]
-		[ontologia_Class10025]
-		[ontologia_Class10033]
-		[ontologia_Class10052]
-		[ontologia_Class10061]
-		[ontologia_Class10065]
-		[ontologia_Class10069]
-		[ontologia_Class10071]
-		[ontologia_Class10074]
-		[ontologia_Class10078]
-		[ontologia_Class10081]
-		[ontologia_Class10084]
-		[ontologia_Class10092]
-		[ontologia_Class10096]
-		[ontologia_Class10100]
-		[ontologia_Class10103]
-		[ontologia_Class10106]
-		[ontologia_Class10109]
-		[ontologia_Class10112]
-		[ontologia_Class10117]
-		[ontologia_Class10118]
 		[ontologia_Class10119]
-		[ontologia_Class0]
-		[ontologia_Class20006]
-		[ontologia_Class20007]
-		[ontologia_Class20009]
 		[ontologia_Class20014]
-		[ontologia_Class20015]
+		[ontologia_Class20012]
 		[ontologia_Class20018]
-		[ontologia_Class20021]
-		[ontologia_Class20024]
-		[ontologia_Class20028]
-		[ontologia_Class20031]
-		[ontologia_Class20037]
-		[ontologia_Class20038]
+		[ontologia_Class10118]
+		[ontologia_Class10100]
+		[ontologia_Class10074]
+		[ontologia_Class10040]
+		[ontologia_Class10106]
+		[ontologia_Class10065]
+		[ontologia_Class20010]
+		[ontologia_Class10077]
+		[ontologia_Class10069]
+		[ontologia_Class10018]
+		[ontologia_Class10078]
+		[ontologia_Class10052]
+		[ontologia_Class10057]
+		[ontologia_Class10081]
 		[ontologia_Class20039]
+		[ontologia_Class10103]
+		[ontologia_Class10071]
 		[ontologia_Class20040]
-		[ontologia_Class20041])
+		[ontologia_Class20009]
+		[ontologia_Class10112]
+		[ontologia_Class10109]
+		[ontologia_Class10117]
+		[ontologia_Class20024])
 	(nombreBebida "Cava")
 	(precioBebida 6))
 
 ([ontologia_Class10009] of  Bebida
 
 	(compatiblesBebidas
+		[ontologia_Class10119]
+		[ontologia_Class20028]
+		[ontologia_Class10090]
+		[ontologia_Class0]
+		[ontologia_Class20014]
+		[ontologia_Class20012]
+		[ontologia_Class20018]
+		[ontologia_Class20006]
+		[ontologia_Class20031]
+		[ontologia_Class10118]
+		[ontologia_Class10100]
+		[ontologia_Class10074]
 		[ontologia_Class10040]
+		[ontologia_Class20037]
+		[ontologia_Class10106]
 		[ontologia_Class10010]
-		[ontologia_Class10018]
-		[ontologia_Class10046]
-		[ontologia_Class10025]
-		[ontologia_Class10033]
-		[ontologia_Class10052]
 		[ontologia_Class10061]
 		[ontologia_Class10065]
-		[ontologia_Class10069]
-		[ontologia_Class10071]
-		[ontologia_Class10074]
-		[ontologia_Class10078]
-		[ontologia_Class10081]
-		[ontologia_Class10084]
-		[ontologia_Class10092]
+		[ontologia_Class20041]
 		[ontologia_Class10096]
-		[ontologia_Class10100]
-		[ontologia_Class10103]
-		[ontologia_Class10106]
-		[ontologia_Class10109]
-		[ontologia_Class10112]
-		[ontologia_Class10117]
-		[ontologia_Class10118]
-		[ontologia_Class10119]
-		[ontologia_Class0]
-		[ontologia_Class20006]
-		[ontologia_Class20007]
-		[ontologia_Class20009]
-		[ontologia_Class20014]
-		[ontologia_Class20015]
-		[ontologia_Class20018]
+		[ontologia_Class20010]
+		[ontologia_Class10077]
+		[ontologia_Class10069]
 		[ontologia_Class20021]
-		[ontologia_Class20024]
-		[ontologia_Class20028]
-		[ontologia_Class20031]
-		[ontologia_Class20037]
-		[ontologia_Class20038]
+		[ontologia_Class20033]
+		[ontologia_Class10018]
+		[ontologia_Class10078]
+		[ontologia_Class20015]
+		[ontologia_Class10046]
+		[ontologia_Class10052]
+		[ontologia_Class10057]
+		[ontologia_Class10092]
+		[ontologia_Class10025]
+		[ontologia_Class10081]
 		[ontologia_Class20039]
+		[ontologia_Class20007]
+		[ontologia_Class10103]
+		[ontologia_Class10033]
+		[ontologia_Class10071]
+		[ontologia_Class10084]
 		[ontologia_Class20040]
-		[ontologia_Class20041])
+		[ontologia_Class20038]
+		[ontologia_Class20009]
+		[ontologia_Class10112]
+		[ontologia_Class10109]
+		[ontologia_Class10117]
+		[ontologia_Class20024])
 	(nombreBebida "Champagn")
 	(precioBebida 8))
 
@@ -366,14 +370,9 @@
 
 	(bebidaCompatible
 		[ontologia_Class10005]
-		[ontologia_Class10008]
 		[ontologia_Class10006]
 		[ontologia_Class10009]
 		[ontologia_Class10004]
-		[ontologia_Class2]
-		[ontologia_Class10051]
-		[ontologia_Class10003]
-		[ontologia_Class4]
 		[ontologia_Class10007])
 	(dificultad 2)
 	(disponible TodoElAno)
@@ -549,13 +548,10 @@
 
 	(bebidaCompatible
 		[ontologia_Class10005]
-		[ontologia_Class10008]
 		[ontologia_Class10006]
 		[ontologia_Class10009]
 		[ontologia_Class10004]
 		[ontologia_Class2]
-		[ontologia_Class10051]
-		[ontologia_Class10003]
 		[ontologia_Class4]
 		[ontologia_Class10007])
 	(dificultad 5)
@@ -647,14 +643,10 @@
 
 	(bebidaCompatible
 		[ontologia_Class10005]
-		[ontologia_Class10008]
 		[ontologia_Class10006]
 		[ontologia_Class10009]
 		[ontologia_Class10004]
-		[ontologia_Class2]
 		[ontologia_Class10051]
-		[ontologia_Class10003]
-		[ontologia_Class4]
 		[ontologia_Class10007])
 	(dificultad 4)
 	(disponible Primavera)
@@ -721,10 +713,6 @@
 		[ontologia_Class10006]
 		[ontologia_Class10009]
 		[ontologia_Class10004]
-		[ontologia_Class2]
-		[ontologia_Class10051]
-		[ontologia_Class10003]
-		[ontologia_Class4]
 		[ontologia_Class10007])
 	(dificultad 5)
 	(disponible Primavera)
@@ -778,14 +766,10 @@
 
 	(bebidaCompatible
 		[ontologia_Class10005]
-		[ontologia_Class10008]
 		[ontologia_Class10006]
 		[ontologia_Class10009]
 		[ontologia_Class10004]
 		[ontologia_Class2]
-		[ontologia_Class10051]
-		[ontologia_Class10003]
-		[ontologia_Class4]
 		[ontologia_Class10007])
 	(dificultad 10)
 	(disponible Primavera)
@@ -839,47 +823,29 @@
 ([ontologia_Class10051] of  Bebida
 
 	(compatiblesBebidas
-		[ontologia_Class10040]
-		[ontologia_Class10010]
-		[ontologia_Class10018]
-		[ontologia_Class10046]
-		[ontologia_Class10025]
-		[ontologia_Class10033]
-		[ontologia_Class10052]
+		[ontologia_Class10119]
+		[ontologia_Class20028]
+		[ontologia_Class10090]
+		[ontologia_Class20014]
+		[ontologia_Class20012]
+		[ontologia_Class20031]
+		[ontologia_Class10118]
+		[ontologia_Class10106]
 		[ontologia_Class10061]
 		[ontologia_Class10065]
+		[ontologia_Class20010]
+		[ontologia_Class10077]
 		[ontologia_Class10069]
+		[ontologia_Class10018]
+		[ontologia_Class10052]
+		[ontologia_Class10057]
+		[ontologia_Class10033]
 		[ontologia_Class10071]
-		[ontologia_Class10074]
-		[ontologia_Class10078]
-		[ontologia_Class10081]
-		[ontologia_Class10084]
-		[ontologia_Class10092]
-		[ontologia_Class10096]
-		[ontologia_Class10100]
-		[ontologia_Class10103]
-		[ontologia_Class10106]
-		[ontologia_Class10109]
-		[ontologia_Class10112]
-		[ontologia_Class10117]
-		[ontologia_Class10118]
-		[ontologia_Class10119]
-		[ontologia_Class0]
-		[ontologia_Class20006]
-		[ontologia_Class20007]
-		[ontologia_Class20009]
-		[ontologia_Class20014]
-		[ontologia_Class20015]
-		[ontologia_Class20018]
-		[ontologia_Class20021]
-		[ontologia_Class20024]
-		[ontologia_Class20028]
-		[ontologia_Class20031]
-		[ontologia_Class20037]
-		[ontologia_Class20038]
-		[ontologia_Class20039]
 		[ontologia_Class20040]
-		[ontologia_Class20041])
+		[ontologia_Class10112]
+		[ontologia_Class10109]
+		[ontologia_Class10117]
+		[ontologia_Class20024])
 	(esVino TRUE)
 	(nombreBebida "Vino Casero")
 	(precioBebida 2))
@@ -954,6 +920,17 @@
 
 ([ontologia_Class10057] of  Plato
 
+	(bebidaCompatible
+		[ontologia_Class10005]
+		[ontologia_Class10008]
+		[ontologia_Class10006]
+		[ontologia_Class10009]
+		[ontologia_Class10004]
+		[ontologia_Class2]
+		[ontologia_Class10051]
+		[ontologia_Class10003]
+		[ontologia_Class4]
+		[ontologia_Class10007])
 	(dificultad 2)
 	(disponible Primavera)
 	(ingredientes
@@ -997,14 +974,11 @@
 
 	(bebidaCompatible
 		[ontologia_Class10005]
-		[ontologia_Class10008]
 		[ontologia_Class10006]
 		[ontologia_Class10009]
 		[ontologia_Class10004]
 		[ontologia_Class2]
 		[ontologia_Class10051]
-		[ontologia_Class10003]
-		[ontologia_Class4]
 		[ontologia_Class10007])
 	(dificultad 5)
 	(disponible Verano)
@@ -1050,10 +1024,7 @@
 		[ontologia_Class10006]
 		[ontologia_Class10009]
 		[ontologia_Class10004]
-		[ontologia_Class2]
 		[ontologia_Class10051]
-		[ontologia_Class10003]
-		[ontologia_Class4]
 		[ontologia_Class10007])
 	(dificultad 2)
 	(disponible Verano)
@@ -1174,9 +1145,6 @@
 		[ontologia_Class10006]
 		[ontologia_Class10009]
 		[ontologia_Class10004]
-		[ontologia_Class2]
-		[ontologia_Class10051]
-		[ontologia_Class10003]
 		[ontologia_Class4]
 		[ontologia_Class10007])
 	(dificultad 10)
@@ -1210,6 +1178,14 @@
 
 ([ontologia_Class10077] of  Plato
 
+	(bebidaCompatible
+		[ontologia_Class10005]
+		[ontologia_Class10008]
+		[ontologia_Class10006]
+		[ontologia_Class10009]
+		[ontologia_Class10004]
+		[ontologia_Class10051]
+		[ontologia_Class10007])
 	(dificultad 4)
 	(nombrePlato "Fritura Sardinas")
 	(precioPlato 8)
@@ -1225,9 +1201,6 @@
 		[ontologia_Class10009]
 		[ontologia_Class10004]
 		[ontologia_Class2]
-		[ontologia_Class10051]
-		[ontologia_Class10003]
-		[ontologia_Class4]
 		[ontologia_Class10007])
 	(dificultad 10)
 	(disponible TodoElAno)
@@ -1263,10 +1236,6 @@
 		[ontologia_Class10006]
 		[ontologia_Class10009]
 		[ontologia_Class10004]
-		[ontologia_Class2]
-		[ontologia_Class10051]
-		[ontologia_Class10003]
-		[ontologia_Class4]
 		[ontologia_Class10007])
 	(dificultad 4)
 	(disponible TodoElAno)
@@ -1308,14 +1277,10 @@
 
 	(bebidaCompatible
 		[ontologia_Class10005]
-		[ontologia_Class10008]
 		[ontologia_Class10006]
 		[ontologia_Class10009]
 		[ontologia_Class10004]
-		[ontologia_Class2]
-		[ontologia_Class10051]
 		[ontologia_Class10003]
-		[ontologia_Class4]
 		[ontologia_Class10007])
 	(dificultad 8)
 	(disponible TodoElAno)
@@ -1374,6 +1339,13 @@
 
 ([ontologia_Class10090] of  Plato
 
+	(bebidaCompatible
+		[ontologia_Class10005]
+		[ontologia_Class10006]
+		[ontologia_Class10009]
+		[ontologia_Class10004]
+		[ontologia_Class10051]
+		[ontologia_Class10007])
 	(dificultad 3)
 	(disponible TodoElAno)
 	(ingredientes
@@ -1397,14 +1369,10 @@
 
 	(bebidaCompatible
 		[ontologia_Class10005]
-		[ontologia_Class10008]
 		[ontologia_Class10006]
 		[ontologia_Class10009]
 		[ontologia_Class10004]
 		[ontologia_Class2]
-		[ontologia_Class10051]
-		[ontologia_Class10003]
-		[ontologia_Class4]
 		[ontologia_Class10007])
 	(dificultad 8)
 	(disponible TodoElAno)
@@ -1452,13 +1420,9 @@
 
 	(bebidaCompatible
 		[ontologia_Class10005]
-		[ontologia_Class10008]
 		[ontologia_Class10006]
 		[ontologia_Class10009]
 		[ontologia_Class10004]
-		[ontologia_Class2]
-		[ontologia_Class10051]
-		[ontologia_Class10003]
 		[ontologia_Class4]
 		[ontologia_Class10007])
 	(dificultad 8)
@@ -1501,8 +1465,6 @@
 		[ontologia_Class10006]
 		[ontologia_Class10009]
 		[ontologia_Class10004]
-		[ontologia_Class2]
-		[ontologia_Class10051]
 		[ontologia_Class10003]
 		[ontologia_Class4]
 		[ontologia_Class10007])
@@ -1539,7 +1501,6 @@
 		[ontologia_Class10009]
 		[ontologia_Class10004]
 		[ontologia_Class2]
-		[ontologia_Class10051]
 		[ontologia_Class10003]
 		[ontologia_Class4]
 		[ontologia_Class10007])
@@ -1615,6 +1576,7 @@
 ([ontologia_Class10109] of  Plato
 
 	(bebidaCompatible
+		[ontologia_Class10000]
 		[ontologia_Class10005]
 		[ontologia_Class10008]
 		[ontologia_Class10006]
@@ -1656,6 +1618,7 @@
 ([ontologia_Class10112] of  Plato
 
 	(bebidaCompatible
+		[ontologia_Class10000]
 		[ontologia_Class10005]
 		[ontologia_Class10008]
 		[ontologia_Class10006]
@@ -1718,6 +1681,7 @@
 ([ontologia_Class10117] of  Plato
 
 	(bebidaCompatible
+		[ontologia_Class10000]
 		[ontologia_Class10005]
 		[ontologia_Class10008]
 		[ontologia_Class10006]
@@ -1799,47 +1763,30 @@
 ([ontologia_Class2] of  Bebida
 
 	(compatiblesBebidas
-		[ontologia_Class10040]
-		[ontologia_Class10010]
-		[ontologia_Class10018]
-		[ontologia_Class10046]
-		[ontologia_Class10025]
-		[ontologia_Class10033]
-		[ontologia_Class10052]
-		[ontologia_Class10061]
-		[ontologia_Class10065]
-		[ontologia_Class10069]
-		[ontologia_Class10071]
-		[ontologia_Class10074]
-		[ontologia_Class10078]
-		[ontologia_Class10081]
-		[ontologia_Class10084]
-		[ontologia_Class10092]
-		[ontologia_Class10096]
-		[ontologia_Class10100]
-		[ontologia_Class10103]
-		[ontologia_Class10106]
-		[ontologia_Class10109]
-		[ontologia_Class10112]
-		[ontologia_Class10117]
-		[ontologia_Class10118]
 		[ontologia_Class10119]
-		[ontologia_Class0]
-		[ontologia_Class20006]
-		[ontologia_Class20007]
-		[ontologia_Class20009]
-		[ontologia_Class20014]
-		[ontologia_Class20015]
+		[ontologia_Class20012]
 		[ontologia_Class20018]
+		[ontologia_Class10118]
+		[ontologia_Class10106]
+		[ontologia_Class10061]
+		[ontologia_Class20010]
+		[ontologia_Class10069]
 		[ontologia_Class20021]
-		[ontologia_Class20024]
-		[ontologia_Class20028]
-		[ontologia_Class20031]
-		[ontologia_Class20037]
-		[ontologia_Class20038]
-		[ontologia_Class20039]
+		[ontologia_Class10018]
+		[ontologia_Class10078]
+		[ontologia_Class10046]
+		[ontologia_Class10052]
+		[ontologia_Class10057]
+		[ontologia_Class10092]
+		[ontologia_Class10025]
+		[ontologia_Class20007]
+		[ontologia_Class10103]
+		[ontologia_Class10071]
 		[ontologia_Class20040]
-		[ontologia_Class20041])
+		[ontologia_Class10112]
+		[ontologia_Class10109]
+		[ontologia_Class10117]
+		[ontologia_Class20024])
 	(esVino TRUE)
 	(nombreBebida "Vino Blanco")
 	(precioBebida 7))
@@ -1863,14 +1810,9 @@
 
 	(bebidaCompatible
 		[ontologia_Class10005]
-		[ontologia_Class10008]
 		[ontologia_Class10006]
 		[ontologia_Class10009]
 		[ontologia_Class10004]
-		[ontologia_Class2]
-		[ontologia_Class10051]
-		[ontologia_Class10003]
-		[ontologia_Class4]
 		[ontologia_Class10007])
 	(dificultad 7)
 	(disponible Invierno)
@@ -1890,14 +1832,10 @@
 
 	(bebidaCompatible
 		[ontologia_Class10005]
-		[ontologia_Class10008]
 		[ontologia_Class10006]
 		[ontologia_Class10009]
 		[ontologia_Class10004]
 		[ontologia_Class2]
-		[ontologia_Class10051]
-		[ontologia_Class10003]
-		[ontologia_Class4]
 		[ontologia_Class10007])
 	(dificultad 6)
 	(disponible Invierno)
@@ -1920,10 +1858,6 @@
 		[ontologia_Class10006]
 		[ontologia_Class10009]
 		[ontologia_Class10004]
-		[ontologia_Class2]
-		[ontologia_Class10051]
-		[ontologia_Class10003]
-		[ontologia_Class4]
 		[ontologia_Class10007])
 	(dificultad 6)
 	(disponible Otono Invierno)
@@ -1939,6 +1873,17 @@
 
 ([ontologia_Class20010] of  Plato
 
+	(bebidaCompatible
+		[ontologia_Class10005]
+		[ontologia_Class10008]
+		[ontologia_Class10006]
+		[ontologia_Class10009]
+		[ontologia_Class10004]
+		[ontologia_Class2]
+		[ontologia_Class10051]
+		[ontologia_Class10003]
+		[ontologia_Class4]
+		[ontologia_Class10007])
 	(dificultad 4)
 	(disponible TodoElAno)
 	(ingredientes
@@ -1962,6 +1907,17 @@
 
 ([ontologia_Class20012] of  Plato
 
+	(bebidaCompatible
+		[ontologia_Class10005]
+		[ontologia_Class10008]
+		[ontologia_Class10006]
+		[ontologia_Class10009]
+		[ontologia_Class10004]
+		[ontologia_Class2]
+		[ontologia_Class10051]
+		[ontologia_Class10003]
+		[ontologia_Class4]
+		[ontologia_Class10007])
 	(dificultad 1)
 	(disponible TodoElAno)
 	(ingredientes
@@ -1989,10 +1945,7 @@
 		[ontologia_Class10006]
 		[ontologia_Class10009]
 		[ontologia_Class10004]
-		[ontologia_Class2]
 		[ontologia_Class10051]
-		[ontologia_Class10003]
-		[ontologia_Class4]
 		[ontologia_Class10007])
 	(dificultad 4)
 	(disponible Invierno)
@@ -2013,14 +1966,10 @@
 
 	(bebidaCompatible
 		[ontologia_Class10005]
-		[ontologia_Class10008]
 		[ontologia_Class10006]
 		[ontologia_Class10009]
 		[ontologia_Class10004]
-		[ontologia_Class2]
-		[ontologia_Class10051]
 		[ontologia_Class10003]
-		[ontologia_Class4]
 		[ontologia_Class10007])
 	(dificultad 8)
 	(disponible Invierno)
@@ -2061,9 +2010,6 @@
 		[ontologia_Class10009]
 		[ontologia_Class10004]
 		[ontologia_Class2]
-		[ontologia_Class10051]
-		[ontologia_Class10003]
-		[ontologia_Class4]
 		[ontologia_Class10007])
 	(dificultad 7)
 	(disponible Otono Invierno)
@@ -2089,14 +2035,10 @@
 
 	(bebidaCompatible
 		[ontologia_Class10005]
-		[ontologia_Class10008]
 		[ontologia_Class10006]
 		[ontologia_Class10009]
 		[ontologia_Class10004]
 		[ontologia_Class2]
-		[ontologia_Class10051]
-		[ontologia_Class10003]
-		[ontologia_Class4]
 		[ontologia_Class10007])
 	(dificultad 5)
 	(disponible TodoElAno)
@@ -2120,6 +2062,7 @@
 ([ontologia_Class20024] of  Plato
 
 	(bebidaCompatible
+		[ontologia_Class10000]
 		[ontologia_Class10005]
 		[ontologia_Class10008]
 		[ontologia_Class10006]
@@ -2167,14 +2110,10 @@
 
 	(bebidaCompatible
 		[ontologia_Class10005]
-		[ontologia_Class10008]
 		[ontologia_Class10006]
 		[ontologia_Class10009]
 		[ontologia_Class10004]
-		[ontologia_Class2]
 		[ontologia_Class10051]
-		[ontologia_Class10003]
-		[ontologia_Class4]
 		[ontologia_Class10007])
 	(dificultad 4)
 	(disponible TodoElAno)
@@ -2210,14 +2149,10 @@
 
 	(bebidaCompatible
 		[ontologia_Class10005]
-		[ontologia_Class10008]
 		[ontologia_Class10006]
 		[ontologia_Class10009]
 		[ontologia_Class10004]
-		[ontologia_Class2]
 		[ontologia_Class10051]
-		[ontologia_Class10003]
-		[ontologia_Class4]
 		[ontologia_Class10007])
 	(dificultad 1)
 	(disponible TodoElAno)
@@ -2240,6 +2175,12 @@
 
 ([ontologia_Class20033] of  Plato
 
+	(bebidaCompatible
+		[ontologia_Class10005]
+		[ontologia_Class10006]
+		[ontologia_Class10009]
+		[ontologia_Class10004]
+		[ontologia_Class10007])
 	(dificultad 3)
 	(disponible TodoElAno)
 	(ingredientes
@@ -2265,14 +2206,9 @@
 
 	(bebidaCompatible
 		[ontologia_Class10005]
-		[ontologia_Class10008]
 		[ontologia_Class10006]
 		[ontologia_Class10009]
 		[ontologia_Class10004]
-		[ontologia_Class2]
-		[ontologia_Class10051]
-		[ontologia_Class10003]
-		[ontologia_Class4]
 		[ontologia_Class10007])
 	(dificultad 3)
 	(disponible TodoElAno)
@@ -2286,12 +2222,13 @@
 ([ontologia_Class20038] of  Plato
 
 	(bebidaCompatible
-		[ontologia_Class10008]
+		[ontologia_Class10000]
+		[ontologia_Class10005]
+		[ontologia_Class10006]
 		[ontologia_Class10009]
-		[ontologia_Class2]
-		[ontologia_Class10051]
-		[ontologia_Class10003]
-		[ontologia_Class4])
+		[ontologia_Class10004]
+		[ontologia_Class4]
+		[ontologia_Class10007])
 	(dificultad 1)
 	(disponible TodoElAno)
 	(ingredientes [ontologia_Class10012])
@@ -2309,10 +2246,6 @@
 		[ontologia_Class10006]
 		[ontologia_Class10009]
 		[ontologia_Class10004]
-		[ontologia_Class2]
-		[ontologia_Class10051]
-		[ontologia_Class10003]
-		[ontologia_Class4]
 		[ontologia_Class10007])
 	(dificultad 3)
 	(disponible TodoElAno)
@@ -2332,6 +2265,8 @@
 ([ontologia_Class20040] of  Plato
 
 	(bebidaCompatible
+		[ontologia_Class10000]
+		[ontologia_Class10000]
 		[ontologia_Class10005]
 		[ontologia_Class10008]
 		[ontologia_Class10006]
@@ -2355,14 +2290,10 @@
 
 	(bebidaCompatible
 		[ontologia_Class10005]
-		[ontologia_Class10008]
 		[ontologia_Class10006]
 		[ontologia_Class10009]
 		[ontologia_Class10004]
-		[ontologia_Class2]
-		[ontologia_Class10051]
 		[ontologia_Class10003]
-		[ontologia_Class4]
 		[ontologia_Class10007])
 	(dificultad 3)
 	(disponible TodoElAno)
@@ -2385,47 +2316,27 @@
 ([ontologia_Class4] of  Bebida
 
 	(compatiblesBebidas
-		[ontologia_Class10040]
-		[ontologia_Class10010]
-		[ontologia_Class10018]
-		[ontologia_Class10046]
-		[ontologia_Class10025]
-		[ontologia_Class10033]
-		[ontologia_Class10052]
-		[ontologia_Class10061]
-		[ontologia_Class10065]
-		[ontologia_Class10069]
-		[ontologia_Class10071]
-		[ontologia_Class10074]
-		[ontologia_Class10078]
-		[ontologia_Class10081]
-		[ontologia_Class10084]
-		[ontologia_Class10092]
-		[ontologia_Class10096]
-		[ontologia_Class10100]
-		[ontologia_Class10103]
-		[ontologia_Class10106]
-		[ontologia_Class10109]
-		[ontologia_Class10112]
-		[ontologia_Class10117]
-		[ontologia_Class10118]
 		[ontologia_Class10119]
-		[ontologia_Class0]
-		[ontologia_Class20006]
-		[ontologia_Class20007]
-		[ontologia_Class20009]
-		[ontologia_Class20014]
-		[ontologia_Class20015]
-		[ontologia_Class20018]
-		[ontologia_Class20021]
-		[ontologia_Class20024]
-		[ontologia_Class20028]
-		[ontologia_Class20031]
-		[ontologia_Class20037]
-		[ontologia_Class20038]
-		[ontologia_Class20039]
+		[ontologia_Class20012]
+		[ontologia_Class10118]
+		[ontologia_Class10100]
+		[ontologia_Class10074]
+		[ontologia_Class10106]
+		[ontologia_Class10096]
+		[ontologia_Class20010]
+		[ontologia_Class10069]
+		[ontologia_Class10018]
+		[ontologia_Class10052]
+		[ontologia_Class10057]
+		[ontologia_Class10025]
+		[ontologia_Class10103]
+		[ontologia_Class10071]
 		[ontologia_Class20040]
-		[ontologia_Class20041])
+		[ontologia_Class20038]
+		[ontologia_Class10112]
+		[ontologia_Class10109]
+		[ontologia_Class10117]
+		[ontologia_Class20024])
 	(esVino TRUE)
 	(nombreBebida "Vino Tinto")
 	(precioBebida 7))
