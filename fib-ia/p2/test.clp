@@ -5048,7 +5048,7 @@
     => 
     (printout t crlf)
     (printout t "Creacion de los menus hecha" crlf)
-    (printout t "Modulo: Preferencias" crlf) 
+    (printout t "Modulo: Recomendaciones" crlf) 
     (focus recomendaciones) 
 )
 
@@ -5075,7 +5075,8 @@
         ; (printout t " "(send ?i imprime_sv) " " crlf)
         (bind ?pos (+ ?pos 1))      
     )  
-    (if(> ?pos 1) then (assert (PrimeraPos 1)) (assert (numeroR (- ?pos 1))) )
+    (if(> ?pos 1) then (assert (PrimeraPos 1)))
+    (assert (numeroR (- ?pos 1)))
 )
 
 (defrule ordenarRecomendaciones "regla para ordenar los menus descendentemente por el precio"
@@ -5112,6 +5113,17 @@
     (printout t "MENU 3: " crlf)
     (send ?rec3 imprime_svcp)
     (assert (FIN1))
+)
+
+(defrule noHayRecomendaciones  "regla para saber que no se obtuvieron menus"
+    (declare (salience -1))
+    (nuevo_usuario)
+    ?numRH <- (numeroR ?pos)
+    (test (eq ?pos 0))
+    =>  
+    (printout t "No tenemos menus para ti :[ " crlf)
+    (printout t "Intentalo otra vez ! :)" crlf)  
+    (assert (FIN))
 )
 
 
