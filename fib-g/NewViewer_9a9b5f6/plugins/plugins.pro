@@ -6,4 +6,5 @@ SUBDIRS += shaderLoader
 SUBDIRS += show-help
 SUBDIRS += alphablending
 
-# Afegiu a SUBDIRS els vostres plugins!
+# Afegiu a SUBDIRS els vostres plugins
+SUBDIRS += Template

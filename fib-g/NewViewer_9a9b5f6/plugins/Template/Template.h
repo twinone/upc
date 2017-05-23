@@ -3,7 +3,7 @@
 
 #include "basicplugin.h"
 
-class template : public QObject, BasicPlugin
+class Template : public QObject, BasicPlugin
  {
      Q_OBJECT
 #if QT_VERSION >= 0x050000

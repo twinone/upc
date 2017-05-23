@@ -1,16 +1,16 @@
-#include "template.h"
+#include "Template.h"
 #include "glwidget.h"
 #include <QPainter>
 
-void template::onPluginLoad()
+void Template::onPluginLoad()
 {
   glwidget()->makeCurrent();
     // Carregar shader, compile & link 
     vs = new QOpenGLShader(QOpenGLShader::Vertex, this);
-    vs->compileSourceFile("plugins/template/template.vert");
+    vs->compileSourceFile("plugins/Template/Template.vert");
 
     fs = new QOpenGLShader(QOpenGLShader::Fragment, this);
-    fs->compileSourceFile("plugins/template/template.frag");
+    fs->compileSourceFile("plugins/Template/Template.frag");
 
     program = new QOpenGLShaderProgram(this);
     program->addShader(vs);
@@ -54,7 +54,7 @@ void drawRect(GLWidget &g)
     g.glBindVertexArray(0);
 }
 
-void template::postFrame() 
+void Template::postFrame() 
 {
   GLWidget &g=*glwidget();
   g.makeCurrent();
@@ -108,5 +108,5 @@ void template::postFrame()
 
 
 #if QT_VERSION < 0x050000
-Q_EXPORT_PLUGIN2(template, template)   // plugin name, plugin class
+Q_EXPORT_PLUGIN2(Template, Template)   // plugin name, plugin class
 #endif
