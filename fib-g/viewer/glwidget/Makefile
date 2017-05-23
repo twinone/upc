@@ -33,7 +33,7 @@ MOVE          = mv -f
 TAR           = tar -cf
 COMPRESS      = gzip -9f
 DISTNAME      = glwidgetd1.0.0
-DISTDIR = /home2/users/alumnes/1193784/g/lab/NewViewer_9a9b5f6/viewer/glwidget/build/debug/glwidgetd1.0.0
+DISTDIR = /home2/users/alumnes/1193784/g/lab/viewer/glwidget/build/debug/glwidgetd1.0.0
 LINK          = g++
 LFLAGS        = -shared
 LIBS          = $(SUBLIBS) -Wl,--rpath-link=../bin -L../bin -lGLU -lcore -lQt5OpenGL -L/usr/lib64 -lQt5Widgets -lQt5Gui -lQt5Core -lGL -lpthread 
@@ -451,7 +451,7 @@ build/debug/moc_glwidget.cpp: ../core/include/scene.h \
 		../core/include/vector.h \
 		../core/include/camera.h \
 		include/glwidget.h
-	/usr/lib64/qt5/bin/moc $(DEFINES) -I/usr/lib64/qt5/mkspecs/linux-g++ -I/home2/users/alumnes/1193784/g/lab/NewViewer_9a9b5f6/viewer/glwidget -I/home2/users/alumnes/1193784/g/lab/NewViewer_9a9b5f6/viewer/glwidget/include -I/home2/users/alumnes/1193784/g/lab/NewViewer_9a9b5f6/viewer/core/include -I/home2/users/alumnes/1193784/g/lab/NewViewer_9a9b5f6/viewer/interfaces -I/usr/include/qt5 -I/usr/include/qt5/QtOpenGL -I/usr/include/qt5/QtWidgets -I/usr/include/qt5/QtGui -I/usr/include/qt5/QtCore -I/usr/include/c++/4.8 -I/usr/include/c++/4.8/x86_64-suse-linux -I/usr/include/c++/4.8/backward -I/usr/lib64/gcc/x86_64-suse-linux/4.8/include -I/usr/local/include -I/usr/lib64/gcc/x86_64-suse-linux/4.8/include-fixed -I/usr/x86_64-suse-linux/include -I/usr/include include/glwidget.h -o build/debug/moc_glwidget.cpp
+	/usr/lib64/qt5/bin/moc $(DEFINES) -I/usr/lib64/qt5/mkspecs/linux-g++ -I/home2/users/alumnes/1193784/g/lab/viewer/glwidget -I/home2/users/alumnes/1193784/g/lab/viewer/glwidget/include -I/home2/users/alumnes/1193784/g/lab/viewer/core/include -I/home2/users/alumnes/1193784/g/lab/viewer/interfaces -I/usr/include/qt5 -I/usr/include/qt5/QtOpenGL -I/usr/include/qt5/QtWidgets -I/usr/include/qt5/QtGui -I/usr/include/qt5/QtCore -I/usr/include/c++/4.8 -I/usr/include/c++/4.8/x86_64-suse-linux -I/usr/include/c++/4.8/backward -I/usr/lib64/gcc/x86_64-suse-linux/4.8/include -I/usr/local/include -I/usr/lib64/gcc/x86_64-suse-linux/4.8/include-fixed -I/usr/x86_64-suse-linux/include -I/usr/include include/glwidget.h -o build/debug/moc_glwidget.cpp
 
 compiler_moc_source_make_all:
 compiler_moc_source_clean:

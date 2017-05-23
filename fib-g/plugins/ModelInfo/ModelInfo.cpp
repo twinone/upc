@@ -21,8 +21,24 @@ void ModelInfo::onPluginLoad()
 
 void ModelInfo::onObjectAdd() {
         Scene *s = scene();
+        int numPoly = 0;
+        int numVertices = 0;
+        int numTriangles = 0;
+        for (uint i = 0; i < s->objects().size(); i++) {
+            auto o = s->objects()[i];
+            numPoly += o.faces().size();
+            int tri = 0;
+            for (uint j = 0; j < o.faces().size(); j++) {
+                tri += o.faces()[j].numVertices() == 3;
+            }
+            numTriangles += tri;
+            numVertices += o.vertices().size();
+        }
         int numObjects = s->objects().size();
-        cout << numObjects <<endl;
+        cout << "Num loaded objects: " << numObjects << endl;
+        cout << "Total faces " << numPoly << endl;
+        cout << "Total vert " << numVertices << endl;
+        cout << "Total triangles " << numTriangles << endl;
 }
 
 void drawRect(GLWidget &g)

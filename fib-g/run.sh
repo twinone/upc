@@ -3,4 +3,4 @@ set -e
 
 qmake-qt5
 make
-./GviewerSL
+./Gviewer

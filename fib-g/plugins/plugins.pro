@@ -9,3 +9,4 @@ SUBDIRS += alphablending
 # Afegiu a SUBDIRS els vostres plugins
 SUBDIRS += Template
 SUBDIRS += ModelInfo
+SUBDIRS += AnimateVertices

@@ -33,7 +33,7 @@ MOVE          = mv -f
 TAR           = tar -cf
 COMPRESS      = gzip -9f
 DISTNAME      = show-help1.0.0
-DISTDIR = /home2/users/alumnes/1193784/g/lab/NewViewer_9a9b5f6/plugins/show-help/build/release/show-help1.0.0
+DISTDIR = /home2/users/alumnes/1193784/g/lab/plugins/show-help/build/release/show-help1.0.0
 LINK          = g++
 LFLAGS        = -Wl,-O1 -shared
 LIBS          = $(SUBLIBS) -lGL -lQt5OpenGL -L/usr/lib64 -lQt5Widgets -lQt5Gui -lQt5Core -lpthread 
@@ -456,7 +456,7 @@ build/release/moc_show-help.cpp: ../../viewer/interfaces/basicplugin.h \
 		../../viewer/core/include/vector.h \
 		../../viewer/core/include/camera.h \
 		show-help.h
-	/usr/lib64/qt5/bin/moc $(DEFINES) -I/usr/lib64/qt5/mkspecs/linux-g++ -I/home2/users/alumnes/1193784/g/lab/NewViewer_9a9b5f6/plugins/show-help -I/home2/users/alumnes/1193784/g/lab/NewViewer_9a9b5f6/plugins/show-help/include -I/home2/users/alumnes/1193784/g/lab/NewViewer_9a9b5f6/viewer/glwidget/include -I/home2/users/alumnes/1193784/g/lab/NewViewer_9a9b5f6/viewer/interfaces -I/home2/users/alumnes/1193784/g/lab/NewViewer_9a9b5f6/viewer/core/include -I/usr/include/qt5 -I/usr/include/qt5/QtOpenGL -I/usr/include/qt5/QtWidgets -I/usr/include/qt5/QtGui -I/usr/include/qt5/QtCore -I/usr/include/c++/4.8 -I/usr/include/c++/4.8/x86_64-suse-linux -I/usr/include/c++/4.8/backward -I/usr/lib64/gcc/x86_64-suse-linux/4.8/include -I/usr/local/include -I/usr/lib64/gcc/x86_64-suse-linux/4.8/include-fixed -I/usr/x86_64-suse-linux/include -I/usr/include show-help.h -o build/release/moc_show-help.cpp
+	/usr/lib64/qt5/bin/moc $(DEFINES) -I/usr/lib64/qt5/mkspecs/linux-g++ -I/home2/users/alumnes/1193784/g/lab/plugins/show-help -I/home2/users/alumnes/1193784/g/lab/plugins/show-help/include -I/home2/users/alumnes/1193784/g/lab/viewer/glwidget/include -I/home2/users/alumnes/1193784/g/lab/viewer/interfaces -I/home2/users/alumnes/1193784/g/lab/viewer/core/include -I/usr/include/qt5 -I/usr/include/qt5/QtOpenGL -I/usr/include/qt5/QtWidgets -I/usr/include/qt5/QtGui -I/usr/include/qt5/QtCore -I/usr/include/c++/4.8 -I/usr/include/c++/4.8/x86_64-suse-linux -I/usr/include/c++/4.8/backward -I/usr/lib64/gcc/x86_64-suse-linux/4.8/include -I/usr/local/include -I/usr/lib64/gcc/x86_64-suse-linux/4.8/include-fixed -I/usr/x86_64-suse-linux/include -I/usr/include show-help.h -o build/release/moc_show-help.cpp
 
 compiler_moc_source_make_all:
 compiler_moc_source_clean:
@@ -492,12 +492,12 @@ build/release/moc_show-help.o: build/release/moc_show-help.cpp
 ####### Install
 
 install_target: all FORCE
-	@test -d $(INSTALL_ROOT)/home2/users/alumnes/1193784/g/lab/NewViewer_9a9b5f6/plugins/show-help/../bin/plugins || mkdir -p $(INSTALL_ROOT)/home2/users/alumnes/1193784/g/lab/NewViewer_9a9b5f6/plugins/show-help/../bin/plugins
-	-$(INSTALL_PROGRAM) ../bin/$(TARGET) $(INSTALL_ROOT)/home2/users/alumnes/1193784/g/lab/NewViewer_9a9b5f6/plugins/bin/plugins/$(TARGET)
+	@test -d $(INSTALL_ROOT)/home2/users/alumnes/1193784/g/lab/plugins/show-help/../bin/plugins || mkdir -p $(INSTALL_ROOT)/home2/users/alumnes/1193784/g/lab/plugins/show-help/../bin/plugins
+	-$(INSTALL_PROGRAM) ../bin/$(TARGET) $(INSTALL_ROOT)/home2/users/alumnes/1193784/g/lab/plugins/bin/plugins/$(TARGET)
 
 uninstall_target: FORCE
-	-$(DEL_FILE) $(INSTALL_ROOT)/home2/users/alumnes/1193784/g/lab/NewViewer_9a9b5f6/plugins/bin/plugins/$(TARGET)
-	-$(DEL_DIR) $(INSTALL_ROOT)/home2/users/alumnes/1193784/g/lab/NewViewer_9a9b5f6/plugins/show-help/../bin/plugins/ 
+	-$(DEL_FILE) $(INSTALL_ROOT)/home2/users/alumnes/1193784/g/lab/plugins/bin/plugins/$(TARGET)
+	-$(DEL_DIR) $(INSTALL_ROOT)/home2/users/alumnes/1193784/g/lab/plugins/show-help/../bin/plugins/ 
 
 
 install: install_target  FORCE
