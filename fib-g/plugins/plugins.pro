@@ -10,3 +10,4 @@ SUBDIRS += alphablending
 SUBDIRS += Template
 SUBDIRS += ModelInfo
 SUBDIRS += AnimateVertices
+SUBDIRS += ModelInfo2

@@ -1,21 +1,31 @@
-#include "show-help.h"
+#include "ModelInfo2.h"
 #include "glwidget.h"
 #include <QPainter>
 
-void ShowHelp::onPluginLoad()
-{
-  glwidget()->makeCurrent();
+#include <sstream>
+#include <string>
+
+void ModelInfo2::onPluginLoad() {
+    glwidget()->makeCurrent();
     // Carregar shader, compile & link 
     vs = new QOpenGLShader(QOpenGLShader::Vertex, this);
-    vs->compileSourceFile("plugins/show-help/show.vert");
+    vs->compileSourceFile("plugins/ModelInfo2/ModelInfo2.vert");
+    cout << "VS log:" << vs->log().toStdString() << endl;
+
 
     fs = new QOpenGLShader(QOpenGLShader::Fragment, this);
-    fs->compileSourceFile("plugins/show-help/show.frag");
+    fs->compileSourceFile("plugins/ModelInfo2/ModelInfo2.frag");
+    cout << "FS log:" << fs->log().toStdString() << endl;
 
     program = new QOpenGLShaderProgram(this);
     program->addShader(vs);
     program->addShader(fs);
     program->link();
+    
+    
+    cout << "Link log:" << program->log().toStdString() << endl;
+  
+    std::cout << "Loaded ModelInfo2 plugin!" << std::endl;
 }
 
 void drawRect(GLWidget &g)
@@ -54,10 +64,43 @@ void drawRect(GLWidget &g)
     g.glBindVertexArray(0);
 }
 
-void ShowHelp::postFrame() 
+void ModelInfo2::postFrame() 
 {
+    
+    
+    // WRITE TEXT STRING
   GLWidget &g=*glwidget();
   g.makeCurrent();
+  
+  /** Get the data */
+   Scene *s = scene();
+        int numPoly = 0;
+        int numVertices = 0;
+        int numTriangles = 0;
+        for (uint i = 0; i < s->objects().size(); i++) {
+            auto o = s->objects()[i];
+            numPoly += o.faces().size();
+            int tri = 0;
+            for (uint j = 0; j < o.faces().size(); j++) {
+                tri += o.faces()[j].numVertices() == 3;
+            }
+            numTriangles += tri;
+            numVertices += o.vertices().size();
+        }
+        int numObjects = s->objects().size();
+        
+        stringstream ss;
+        ss << "obj:" << numObjects;
+        ss << "..fcs:" << numPoly;
+        ss << "..vert:" << numVertices;
+        ss << "..triang:" << numTriangles;
+        
+        
+        string out;
+        ss>>out;
+        /** write on screen */
+  
+  
     const int SIZE = 1024;
     // 1. Create image with text
     QImage image(SIZE,SIZE,QImage::Format_RGB32);
@@ -70,7 +113,7 @@ void ShowHelp::postFrame()
     painter.setPen(QColor(50,50,50));
     int x = 15;
     int y = 50;
-    painter.drawText(x, y, QString("L - Load object     A - Add plugin"));    
+    painter.drawText(x, y, QString(out.c_str()));    
     painter.end();
 
     // 2. Create texture
@@ -105,13 +148,14 @@ void ShowHelp::postFrame()
 
 
 
-
-
-
-
+void ModelInfo2::preFrame() {}
+void ModelInfo2::onObjectAdd() {}
+void ModelInfo2::onSceneClear() {}
+void ModelInfo2::keyPressEvent() {}
+void ModelInfo2::mouseMoveEvent() {}
 
 
 
 #if QT_VERSION < 0x050000
-Q_EXPORT_PLUGIN2(show-help, ShowHelp)   // plugin name, plugin class
+Q_EXPORT_PLUGIN2(ModelInfo2, ModelInfo2)   // plugin name, plugin class
 #endif
