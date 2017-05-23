@@ -1,106 +1,112 @@
 #include "template.h"
-#include <cstdlib>
+#include "glwidget.h"
+#include <QPainter>
 
-// Documentation: http://www.cs.upc.edu/~virtual/Gdocs/interfaces/html/class_basic_plugin.html
-
-void Template::onPluginLoad()
+void template::onPluginLoad()
 {
-    // Load & compile VS 
+  glwidget()->makeCurrent();
+    // Carregar shader, compile & link 
     vs = new QOpenGLShader(QOpenGLShader::Vertex, this);
-    vs->compileSourceFile(QString(getenv ("VIEWER"))+"/plugins/template/template.vert");
-    qDebug() << vs->log() << endl;
+    vs->compileSourceFile("plugins/template/template.vert");
 
-    // Load & compile FS 
     fs = new QOpenGLShader(QOpenGLShader::Fragment, this);
-    fs->compileSourceFile(QString(getenv ("VIEWER"))+"/plugins/template/template.frag");
-    qDebug() << fs->log() << endl;
+    fs->compileSourceFile("plugins/template/template.frag");
 
-    // Link program
     program = new QOpenGLShaderProgram(this);
     program->addShader(vs);
     program->addShader(fs);
     program->link();
-    qDebug() << program->log() << endl;
-
-    // Timers
-    connect(&timer, SIGNAL(timeout()), glwidget(), SLOT(updateGL()));
-    timer.start();
-    elapsedTimer.start();
 }
 
-
-void Template::onObjectAdd()
+void drawRect(GLWidget &g)
 {
-    unsigned int numObjects = scene()->objects().size();
-    qDebug() << "Added new object " << endl;
-    qDebug() << " Current scene has " << numObjects << " objects" << endl;
-    unsigned int numFaces = scene()->objects()[numObjects-1].faces().size();
-    unsigned int numVertices = scene()->objects()[numObjects-1].vertices().size();
-    qDebug() << " Last object has " << numFaces << " faces and " << numVertices << " vertices" << endl;
+    static bool created = false;
+    static GLuint VAO_rect;
+
+    // 1. Create VBO Buffers
+    if (!created)
+    {
+        created = true;
+        
+        // Create & bind empty VAO
+        g.glGenVertexArrays(1, &VAO_rect);
+        g.glBindVertexArray(VAO_rect);
+
+        float z = -0.99999;
+        // Create VBO with (x,y,z) coordinates
+        float coords[] = { -1, -1, z, 
+                            1, -1, z, 
+                           -1,  1, z, 
+                            1,  1, z};
+
+        GLuint VBO_coords;
+        g.glGenBuffers(1, &VBO_coords);
+        g.glBindBuffer(GL_ARRAY_BUFFER, VBO_coords);
+        g.glBufferData(GL_ARRAY_BUFFER, sizeof(coords), coords, GL_STATIC_DRAW);
+        g.glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
+        g.glEnableVertexAttribArray(0);
+        g.glBindVertexArray(0);
+    }
+
+    // 2. Draw
+    g.glBindVertexArray (VAO_rect);
+    g.glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+    g.glBindVertexArray(0);
 }
 
-void Template::preFrame()
+void template::postFrame() 
 {
-}
+  GLWidget &g=*glwidget();
+  g.makeCurrent();
+    const int SIZE = 1024;
+    // 1. Create image with text
+    QImage image(SIZE,SIZE,QImage::Format_RGB32);
+    image.fill(Qt::white);    
+    QPainter painter;
+    painter.begin(&image);
+    QFont font;
+    font.setPixelSize(32);
+    painter.setFont(font);
+    painter.setPen(QColor(50,50,50));
+    int x = 15;
+    int y = 50;
+    painter.drawText(x, y, QString("L - Load object     A - Add plugin"));    
+    painter.end();
 
-void Template::postFrame()
-{
-    glColor3f(0.0, 0.0, 0.0);
-	int x = 5;
-	int y = 15;
-	glwidget()->renderText(x,y, QString("[Template plugin] "));
-    
-}
-
-bool Template::drawScene()
-{
-    // See example DrawImmediate and DrawVBO examples
-    // If you draw the scene here, you should return true
-    return false;
-}
+    // 2. Create texture
+    const int textureUnit = 5;
+    g.glActiveTexture(GL_TEXTURE0+textureUnit);
+    QImage im0 = image.mirrored(false, true).convertToFormat(QImage::Format_RGBA8888, Qt::ColorOnly);
+	g.glGenTextures( 1, &textureID);
+	g.glBindTexture(GL_TEXTURE_2D, textureID);
+	g.glTexImage2D( GL_TEXTURE_2D, 0, GL_RGBA, im0.width(), im0.height(), 0, GL_RGBA, GL_UNSIGNED_BYTE, im0.bits());
+	g.glGenerateMipmap(GL_TEXTURE_2D);
+	glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR );
+	g.glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
+	g.glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT );
+	g.glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT );
 	
-void Template::keyPressEvent (QKeyEvent *e)
-{
-    // if (e->key() == Qt::Key_C) ...
-    qDebug() << "User pressed key " << e->key() << endl; 
-    glwidget()->updateGL();
-}
-
-void Template::keyReleaseEvent (QKeyEvent *)
-{}
-
-void Template::mouseMoveEvent (QMouseEvent *) 
-{}
-
-void Template::mousePressEvent (QMouseEvent *e)
-{   
-    qDebug() << "Mouse (x,y) = " << e->x() << ", " << e->y() << endl;
-}
-
-void Template::mouseReleaseEvent (QMouseEvent *)
-{}
-
-void Template::wheelEvent (QWheelEvent *)
-{}
-
-
-bool Template::paintGL()
-{
-    // clear buffers
-    glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
-    // setup matrices
-    camera()->setOpenGLModelviewMatrix();
-    camera()->setOpenGLProjectionMatrix();
-    // draw axes
-    glwidget()->drawAxes();
-    // draw scene with shaders
+    // Pass 2. Draw quad using texture
     program->bind();
-    program->setUniformValue("time", float(elapsedTimer.elapsed()/1000.));
-    drawPlugin()->drawScene();
+    program->setUniformValue("colorMap", textureUnit);
+    program->setUniformValue("WIDTH", float(glwidget()->width()));
+    program->setUniformValue("HEIGHT", float(glwidget()->height()));    
+ 
+    // quad covering viewport 
+    drawRect(g);
     program->release();
+    g.glBindTexture(GL_TEXTURE_2D, 0);
 
-    return true;
+    
+    g.glDeleteTextures(1, &textureID);
+
+
 }
 
-Q_EXPORT_PLUGIN2(templatep, Template)   // plugin name, plugin class
 
+
+
+
+#if QT_VERSION < 0x050000
+Q_EXPORT_PLUGIN2(template, template)   // plugin name, plugin class
+#endif
