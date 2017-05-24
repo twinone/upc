@@ -11,3 +11,4 @@ SUBDIRS += Template
 SUBDIRS += ModelInfo
 SUBDIRS += AnimateVertices
 SUBDIRS += ModelInfo2
+SUBDIRS += FrameRate

@@ -2,6 +2,7 @@
 #include "glwidget.h"
 #include <QPainter>
 
+
 void AnimateVertices::onPluginLoad() {
   glwidget()->makeCurrent();
     // Carregar shader, compile & link 
@@ -23,9 +24,10 @@ void AnimateVertices::onPluginLoad() {
     cout << "Link log:" << program->log().toStdString() << endl;
     elapsedTimer.start();
     // keep repainting
-    QTimer *timer = new QTimer(this);
-    connect(timer, SIGNAL(timeout()), glwidget(), SLOT(updateGL()));
-    timer->start();
+    
+	QTimer *timer = new QTimer(this);
+	connect(timer, SIGNAL(timeout()), glwidget(), SLOT(update()));
+	timer->start();
     
     std::cout << "Loaded AnimateVertices plugin!" << std::endl;
     

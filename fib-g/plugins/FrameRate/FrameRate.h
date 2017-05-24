@@ -2,13 +2,9 @@
 #define _SHOWHELP_H
 
 #include "basicplugin.h"
-#include <QGLShader>
-
-#include <QGLShaderProgram>
-
 #include <QElapsedTimer>
 
-class AnimateVertices : public QObject, BasicPlugin
+class FrameRate : public QObject, BasicPlugin
  {
      Q_OBJECT
 #if QT_VERSION >= 0x050000
@@ -27,11 +23,20 @@ class AnimateVertices : public QObject, BasicPlugin
     
     
     // void paintGL() Q_DECL_OVERRIDE;
+    
  private:
+    GLuint textureID;
     QOpenGLShaderProgram* program;
     QOpenGLShader* vs;
     QOpenGLShader* fs;
     QElapsedTimer elapsedTimer;
+
+    float startTime;
+    int numFrames;
+    int fps;
+
+
+    
  };
  
  #endif
