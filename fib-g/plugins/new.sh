@@ -10,9 +10,9 @@ echo "Copying from template $ORIG"
 
 NAME="$1"
 
+rm -rf $ORIG/Makefile $ORIG/build
 cp -r $ORIG $NAME
 for i in {cpp,frag,h,pro,vert}; do 
-	rm $ORIG/Makefile -f
 	mv $NAME/$ORIG.$i $NAME/$NAME.$i
 	sed -i "s/$ORIG/$NAME/g" $NAME/$NAME.$i
 	cp plugins.pro plugins.pro.bak
