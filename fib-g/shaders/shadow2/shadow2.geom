@@ -6,10 +6,16 @@ layout(triangle_strip, max_vertices = 36) out;
 in vec4 vfrontColor[];
 out vec4 gfrontColor;
 uniform vec3 boundingBoxMin;
+uniform vec3 boundingBoxMax;
 
 uniform mat4 modelViewProjectionMatrix;
 uniform mat4 modelViewProjectionMatrixInverse;
 
+
+void emit(vec3 C, float x, float z) {
+	gl_Position = modelViewProjectionMatrix*vec4(C.x+x, boundingBoxMin.y-0.1, C.z+z, 1);
+	EmitVertex();
+}
 void main( void )
 {
 	for( int i = 0 ; i < 3 ; i++ )
@@ -30,4 +36,29 @@ void main( void )
 		EmitVertex();
 	}
     	EndPrimitive();
+
+
+	if (gl_PrimitiveIDIn != 0) return;
+
+	vec3 C = (boundingBoxMax-boundingBoxMin)/2+boundingBoxMin;
+	float R = length(boundingBoxMax-boundingBoxMin)/2;
+
+	gfrontColor = vec4(0,1,1,1); // cyan
+	
+
+	emit(C, -R, -R); emit(C, -R, R); emit(C, R, -R); EndPrimitive();
+	emit(C, -R, R); emit(C, R, -R); emit(C, R, R); EndPrimitive();
+	
 }
+
+
+
+
+
+
+
+
+
+
+
+
