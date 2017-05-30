@@ -64,11 +64,11 @@ available(G,H):- hour(H), gangster(G), \+blocked(G,H).
 
 writeClauses(K):-
     initClauseGeneration,
-    allTasksAreDone, % TODO
+    allTasksAreDone,
     noDifferentTasksInConsecutiveHours,
-    eachHourEachGangsterAtMostOneTask,% TODO
-    eachGangsterAtMostKConsecutiveHours(K), % TODO
-    respectGangsterNotAvailableRestrictions, % TODO
+    eachHourEachGangsterAtMostOneTask,
+    eachGangsterAtMostKConsecutiveHours(K),
+    respectGangsterNotAvailableRestrictions,
     !.
 
 
@@ -96,6 +96,8 @@ noDifferentTasksInConsecutiveHours.
 % list of Size S starting at N
 listOf(S, N, R) :- M is S+N-1, findall(X, between(N, M, X), R).
 
+
+
 eachGangsterAtMostKConsecutiveHours(K):-
   KK is K+1,
   task(T), gangster(G),
@@ -115,11 +117,22 @@ respectGangsterNotAvailableRestrictions:-
   fail.
 respectGangsterNotAvailableRestrictions.
 
+
+sublists(L, S) :-
+  append(_,L1,L),
+  append(S,_,L1).
+
 % count the consecutive hours
 maxConsecutiveHours(M,K):-
-  gangster(G),
-
-  K = 70.
+  between(0,71,N), K is 72 - N,
+  gangster(G), task(T),
+  findall(H, member(does-G-T-H, M), L), sort(L, Lsorted),
+  sublists(Lsorted, S),
+  length(S, K),
+  S = [Hini|_], last(S, Hfin),
+  Hfin is Hini + K - 1, !,
+  %nl,nl,nl,nl,write("max consecutive:"),write(K),nl,nl,nl
+  .
 
 
 
