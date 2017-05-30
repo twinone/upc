@@ -130,7 +130,7 @@ maxConsecutiveHours(M,K):-
   sublists(Lsorted, S),
   length(S, K),
   S = [Hini|_], last(S, Hfin),
-  Hfin is Hini + K - 1, !,
+  Hfin is Hini + K - 1, !
   %nl,nl,nl,nl,write("max consecutive:"),write(K),nl,nl,nl
   .
 
