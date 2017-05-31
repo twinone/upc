@@ -25,17 +25,34 @@ ejemplo2( [10,4,8,5,6], [5,3,4,0,5,0,5,2,2,0,1,5,1] ).
 ejemplo3( [11,5,4], [3,2,3,1,1,1,1,2,3,2,1] ).
 
 
-p:-	ejemplo1(RowSums,ColSums),
+p:-	ejemplo3(RowSums,ColSums),
 	length(RowSums,NumRows),
 	length(ColSums,NumCols),
 	NVars is NumRows*NumCols,
-	listVars(NVars,L),  % generate a list of Prolog vars (their names do not matter)
-	...
+	listVars(NVars,L),  % generate a list of Prolog vars (var-(1-N)),
 	matrixByRows(L,NumCols,MatrixByRows),
-	transpose(...
-	declareConstraints(...
-	...
-	pretty_print(RowSums,ColSums,MatrixByRows).
+	transpose(MatrixByRows, MatrixByColumns),
+	%declare constraints
+	
+	%pretty_print(RowSums,ColSums,MatrixByRows).
+	.
+
+    
+    
+rows(L, NumCols, R) :-
+    length(L, Len),
+    NumRows is Len / NumCols,
+    between(1, NumRows, CurrRow),
+    End is NumCols * CurrRow,
+    Start is End - NumCols+1,
+    findall(X, (between(Start,End,Y),nth1(Y,L,X)), R).
+	
+matrixByRows(L, NumCols, MatrixByRows) :-
+    findall(R, rows(L, NumCols, R), MatrixByRows). 
+    
+    
+
+listVars(NVars, L) :- findall(var-N, between(1,NVars, N), L).
 
 
 pretty_print(_,ColSums,_):- write('     '), member(S,ColSums), writef('%2r ',[S]), fail.
