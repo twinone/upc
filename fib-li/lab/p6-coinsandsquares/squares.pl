@@ -9,37 +9,37 @@ ejemplo(4,112,[50,42,37,35,33,29,27,25,24,19,18,17,16,15,11,9,8,7,6,4,2]).
 ejemplo(5,175,[81,64,56,55,51,43,39,38,35,33,31,30,29,20,18,16,14,9,8,5,4,3,2,1]).
 
 main:-
-    ejemplo(3,Big,Sides),
+    ejemplo(0,Big,Sides),
     nl, write('Fitting all squares of size '), write(Sides), write(' into big square of size '), write(Big), nl,nl,
     length(Sides,N),
     length(RowVars,N), % get list of N prolog vars: Row coordinates of each small square
     length(ColVars, N),
     insideBigSquare(N,Big,Sides,RowVars),
     insideBigSquare(N,Big,Sides,ColVars),
-    nonoverlapping(N,Sides,RowVars),
-    nonoverlapping(N,Sides,ColVars),
+    nonoverlapping(N,Sides,RowVars,ColVars),
     %...
 
-    label(Vars),
+    label(RowVars), label(ColVars),
     displaySol(N,Sides,RowVars,ColVars), halt.
 
-nonoverlapping(N,Sides,Vars) :-
-  % for each pair of sides, they cannot be closer than X
-  nth1(K, Vars, X), nth1(L, Vars, Y), K \= L,
-  nth1(K, Sides, XSize),
-  % K, X means square K goes at position X
-  % L, Y should be either > X+size or <X
-  Y #< X #\/ Y #>= X + XSize - 1.
+nonoverlapping(N, [S|SS], [R|RS], [C|CS]) :-
+  nonoverlap(S,R,C,SS,RS,CS),
+  nonoverlapping(N,SS,RS,CS).
+nonoverlapping(_,[],[],[]).
+
+nonoverlap(S,R,C,[S2|SS],[R2|RS],[C2|CS]) :-
+  R2 #=< R - S2 #\/ R2 #>= R + S
+  #\/
+  C2 #=< C - S2 #\/ C2 #>= C + S,
+  nonoverlap(S,R,C,SS,RS,CS).
+  nonoverlap(_,_,_,[],[],[]).
 
 
-
-insideBigSquare(N,Big,Sides,Vars) :-
-  %% for each coord of a square
-  nth1(K, Sides, Size),
-  nth1(K, Vars, Pos),
-  Pos #>= 1,
-  Pos #=< Big - Size + 1.
-
+insideBigSquare(N, Big, [S|TS], [X|TX]) :-
+  End is Big - S + 1,
+  X in 1..End,
+  insideBigSquare(N, Big, TS, TX).
+insideBigSquare(_,_,[],[]).
 
 
 
