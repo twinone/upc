@@ -1,12 +1,15 @@
 import random
+import subprocess
 
-plats = 100
-primers = 50
+plats = 50
+primers = 25
+mincal = 300
+maxcal = 1200
 cal = []
 
 tipus = ["peix", "sopa", "carn", "pasta", "arroz", "fruta", "vegetales", "pure", "pan"]
 
-f = open('test2.pddl', 'w')
+f = open('test.pddl', 'w')
 f.write("(define (problem menu1)\n")
 f.write("(:domain menu)\n")
 f.write("(:objects lu ma mi ju vi - dia ")
@@ -15,11 +18,11 @@ for item in tipus:
 f.write("- tipus ")
 for i in range(primers):
   f.write("p"+str(i)+" ")
-  cal.append(str(random.randint(300, 1200)))
+  cal.append(str(random.randint(mincal, maxcal)))
 f.write("- primer ")
 for i in range(plats-primers):
   f.write("p"+str(i+primers)+" ")
-  cal.append(str(random.randint(300, 1200)))
+  cal.append(str(random.randint(mincal, maxcal)))
 f.write("- segon)\n")
 f.write("(:init ")
 for i in range(plats):
