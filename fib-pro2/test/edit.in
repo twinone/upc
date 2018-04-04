@@ -1,0 +1,28 @@
++ 30.05.20 10:30 hi
++ 31.05.20 00:00 ciao
+?
+1 01.06.20 00:05 new name
+1 #important
+?
+rellotge 01.06.20 00:06
+1 #bla
+sortir
+
+
+######################################################
+#
+# Author: Twinone
+#
+# Tests:
+#
+# delete from calendar doesn't delete from menu
+# 
+# modify element that was future when the menu was
+# created but is now in the past
+#
+# move a task to the past
+#
+# conflict with existing task
+#
+######################################################
+

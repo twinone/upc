@@ -1,0 +1,180 @@
+
++ anar al cine 10.05.15 18:00 #lleure #art
+
++ 11.05.15 18:00 #art #lleure anar al teatre 
+
++ 08:00 anar a classe #docencia 
+
++ anar a conferencia 13.05.15 08:00 #docencia #recerca
+
++ viatge Berlin 09.05.15 08:00 #feina #viatges #recerca
+
++ 12.05.15 anar a la platja 12:00 
+
+?
+1 anar a classe 20.04.15 08:00 #docencia
+2 viatge Berlin 09.05.15 08:00 #feina #recerca #viatges
+3 anar al cine 10.05.15 18:00 #art #lleure
+4 anar al teatre 11.05.15 18:00 #art #lleure
+5 anar a la platja 12.05.15 12:00
+6 anar a conferencia 13.05.15 08:00 #docencia #recerca
+
+2 viatge a Berlin 08.05.15 14:30
+
+4 #amics 19:30
+
+5 11.05.15 #esport
+
+? #lleure
+1 anar al cine 10.05.15 18:00 #art #lleure
+2 anar al teatre 11.05.15 19:30 #amics #art #lleure
+
+? ((#recerca.#docencia),#art)
+1 anar al cine 10.05.15 18:00 #art #lleure
+2 anar al teatre 11.05.15 19:30 #amics #art #lleure
+3 anar a conferencia 13.05.15 08:00 #docencia #recerca
+
+passat?
+
+? 11.05.15
+1 anar a la platja 11.05.15 12:00 #esport
+2 anar al teatre 11.05.15 19:30 #amics #art #lleure
+
+? 08.05.15 12.05.15
+1 viatge a Berlin 08.05.15 14:30 #feina #recerca #viatges
+2 anar al cine 10.05.15 18:00 #art #lleure
+3 anar a la platja 11.05.15 12:00 #esport
+4 anar al teatre 11.05.15 19:30 #amics #art #lleure
+
+? 12.05.15 08.05.15
+
+? 10.05.15 12.05.15 #lleure
+1 anar al cine 10.05.15 18:00 #art #lleure
+2 anar al teatre 11.05.15 19:30 #amics #art #lleure
+
+? 11.05.15 #esport
+1 anar a la platja 11.05.15 12:00 #esport
+
+? #sport
+
+? #lleure 10.05.15 12.05.15
+1 anar al cine 10.05.15 18:00 #art #lleure
+2 anar al teatre 11.05.15 19:30 #amics #art #lleure
+
+? 11.05.15 (#sport,#lleure)
+1 anar al teatre 11.05.15 19:30 #amics #art #lleure
+
+? 11.05.15 (#esport,#lleure)
+1 anar a la platja 11.05.15 12:00 #esport
+2 anar al teatre 11.05.15 19:30 #amics #art #lleure
+
+? (#sport.#lleure)
+
+? (#esport.#lleure)
+
+? (#art.#lleure)
+1 anar al cine 10.05.15 18:00 #art #lleure
+2 anar al teatre 11.05.15 19:30 #amics #art #lleure
+
+? ((#feina.#esport).(#docencia,#recerca)) 20.04.15 13.05.15
+
+?
+1 anar a classe 20.04.15 08:00 #docencia
+2 viatge a Berlin 08.05.15 14:30 #feina #recerca #viatges
+3 anar al cine 10.05.15 18:00 #art #lleure
+4 anar a la platja 11.05.15 12:00 #esport
+5 anar al teatre 11.05.15 19:30 #amics #art #lleure
+6 anar a conferencia 13.05.15 08:00 #docencia #recerca
+
+-3
+
+?
+1 anar a classe 20.04.15 08:00 #docencia
+2 viatge a Berlin 08.05.15 14:30 #feina #recerca #viatges
+3 anar a la platja 11.05.15 12:00 #esport
+4 anar al teatre 11.05.15 19:30 #amics #art #lleure
+5 anar a conferencia 13.05.15 08:00 #docencia #recerca
+
+1 -etiquetes
+
+?
+1 anar a classe 20.04.15 08:00
+2 viatge a Berlin 08.05.15 14:30 #feina #recerca #viatges
+3 anar a la platja 11.05.15 12:00 #esport
+4 anar al teatre 11.05.15 19:30 #amics #art #lleure
+5 anar a conferencia 13.05.15 08:00 #docencia #recerca
+
+rellotge 11.05.15 22:00
+
+passat?
+1 anar a classe 20.04.15 08:00
+2 viatge a Berlin 08.05.15 14:30 #feina #recerca #viatges
+3 anar a la platja 11.05.15 12:00 #esport
+4 anar al teatre 11.05.15 19:30 #amics #art #lleure
+
+?
+1 anar a conferencia 13.05.15 08:00 #docencia #recerca
+
+1 anar a reunio
+
+?
+1 anar a reunio 13.05.15 08:00 #docencia #recerca
+
+-6
+No s'ha realitzat
+
+?
+1 anar a reunio 13.05.15 08:00 #docencia #recerca
+
+rellotge?
+11.05.15 22:00
+
+rellotge 22:00
+
+rellotge 13.05.15 08:00
+
+passat?
+1 anar a classe 20.04.15 08:00
+2 viatge a Berlin 08.05.15 14:30 #feina #recerca #viatges
+3 anar a la platja 11.05.15 12:00 #esport
+4 anar al teatre 11.05.15 19:30 #amics #art #lleure
+
+rellotge 13.05.15 08:01
+
+passat?
+1 anar a classe 20.04.15 08:00
+2 viatge a Berlin 08.05.15 14:30 #feina #recerca #viatges
+3 anar a la platja 11.05.15 12:00 #esport
+4 anar al teatre 11.05.15 19:30 #amics #art #lleure
+5 anar a reunio 13.05.15 08:00 #docencia #recerca
+
+?
+
++ anar al cine 14.05.15 18:00 #lleure #art
+
+?
+1 anar al cine 14.05.15 18:00 #art #lleure
+
+rellotge 01.05.15 22:00
+No s'ha realitzat
+
+rellotge 09:00 02.05.15
+No s'ha realitzat
+
+rellotge 03.05.15
+No s'ha realitzat
+
+rellotge 02.05.15
+No s'ha realitzat
+
+1 -#art
+
+?
+1 anar al cine 14.05.15 18:00 #lleure
+
+1 #amics
+
+?
+1 anar al cine 14.05.15 18:00 #amics #lleure
+
+sortir

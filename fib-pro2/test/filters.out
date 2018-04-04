@@ -1,0 +1,32 @@
+
++ 10:30 hi #true #unused
+
++ 10:31 bye #asd
+
++ 10:32 ok #asd #twinone_rocks
+
+? #true
+1 hi 20.04.15 10:30 #true #unused
+
+? #false
+
+? (#true.#true)
+1 hi 20.04.15 10:30 #true #unused
+
+? (#true.#false)
+
+? (#false,#true)
+1 hi 20.04.15 10:30 #true #unused
+
+? (#false,#false)
+
+? (#true,(#false,(#false,(#false,#true))))
+1 hi 20.04.15 10:30 #true #unused
+
+? (#false.((#true.#false),(#false,#true)))
+
+? ((#true.#unused),(#asd.#twinone_rocks))
+1 hi 20.04.15 10:30 #true #unused
+2 ok 20.04.15 10:32 #asd #twinone_rocks
+
+sortir

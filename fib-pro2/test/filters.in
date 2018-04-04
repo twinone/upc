@@ -1,0 +1,40 @@
++ 10:30 hi #true #unused
++ 10:31 bye #asd
++ 10:32 ok #asd #twinone_rocks
+? #true
+? #false
+? (#true.#true)
+? (#true.#false)
+? (#false,#true)
+? (#false,#false)
+? (#true,(#false,(#false,(#false,#true))))
+? (#false.((#true.#false),(#false,#true)))
+? ((#true.#unused),(#asd.#twinone_rocks))
+sortir
+
+######################################################
+#
+# Author: Twinone
+#
+# Tests tags for the following:
+#
+# A filter that matches a task
+#
+# A filter that doesn't match any task
+#
+# Simple AND filter: True
+#
+# Simple AND filter: False
+#
+# Simple OR filter: True
+#
+# Simple OR filter: False
+#
+# OR skip test (true or x doesn't evaluate x)
+#
+# AND skip test (false or x doesn't evaluate x)
+#
+# OR of ANDS matching multiple tasks
+#
+######################################################
+
