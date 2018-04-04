@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <EditText
+        android:id="@+id/et_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/newfilm_title" />
+
+    <EditText
+        android:id="@+id/et_director"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/newfilm_director" />
+
+    <EditText
+        android:id="@+id/et_country"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/newfilm_country" />
+
+    <EditText
+        android:id="@+id/et_year"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/newfilm_year"
+        android:inputType="number" />
+
+    <EditText
+        android:id="@+id/et_protagonist"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/newfilm_protagonist" />
+
+    <RatingBar
+        android:layout_width="240dp"
+        android:layout_height="50dp"
+        android:id="@+id/ratingBar"
+        android:stepSize="0.5"
+        android:rating="0.0"
+        android:scaleX="0.5"
+        android:scaleY="0.5"
+        android:transformPivotX="0dp"
+        android:transformPivotY="20dp"/>
+
+</LinearLayout>
