@@ -1,0 +1,31 @@
+resize 800 600
+loadObject /assig/grau-g/models/glass.obj
+solid
+noaxes
+clearColor 1 1 1
+resetCamera
+resetLightPosition
+
+dist 1.6
+float time 0.0
+grab 1
+grab 1
+
+float time 1.5
+pitch 20
+grab 2
+grab 2
+
+float time 4.4
+pitch -20
+grab 3
+grab 3
+
+loadObject /assig/grau-g/models/cube.obj
+float time 4.6
+yaw 45
+pitch 40
+grab 4
+grab 4
+
+resetCamera
