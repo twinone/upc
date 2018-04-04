@@ -1,0 +1,150 @@
+<html>
+<body>
+<style>
+
+table {
+    border-collapse: collapse;
+    width: 1000px;
+    border: 2px solid #4CAF50;
+    margin: 0 auto;
+}
+
+th, td {
+    width: 400px;
+    margin: auto;
+    text-align: left;
+    padding: 8px;
+    border-left: 1px solid #4CAF50;
+    vertical-align: top;
+}
+
+
+td span.name {
+    font-weight: bold;
+    margin-bottom: 1em;
+    display: inline-block;
+}
+
+td .tooltip {
+    font-style: italic;
+    font-size: .9em;
+}
+
+.small {
+    font-size: .9em;
+    color: #888888;
+}
+
+
+.green {
+    font-size: .9em;
+    font-weight: bold;
+    color: #4CAF50;
+}
+
+
+tr:nth-child(even){background-color: #f2f2f2}
+
+th {
+    background-color: #4CAF50;
+    color: white;
+    text-align: center;
+}
+
+
+.tooltip {
+    position: relative;
+    display: inline-block;
+    border-bottom: 1px dotted black;
+}
+
+.framecont {
+  position: fixed;
+  top:0;
+  left:0;
+  bottom: 0;
+  right: 0;
+  text-align: center;
+  width: 100%;
+  vertical-align: middle !important;
+  height: 100%;
+}
+
+.inner {
+    background-color: #4CAF50;
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px 5px;
+    position: absolute;
+    top: 20%;
+    left: 20%;
+    width: 60%;
+    height: 60%;
+    z-index: 1;
+}
+
+.tooltip .inner::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    right: 100%;
+    margin-top: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: transparent black transparent transparent;
+}
+
+
+</style>
+<table><tr><th>Details</th><th>Bicing Stations<br>with free slots</th><th>Bicing Stations<br>with available bikes</th><th>Public Parkings<br>with free spots</th></tr>
+
+<!-- [[CONTENT]] -->
+</table>
+<script>
+
+function query(q) {
+  return 'https://www.google.com/maps/embed/v1/place?key=AIzaSyBNIp87_yb-HNAdRnd-XTH5kWH0Xz0eDss&q=' + q
+}
+function onClick(ev) {
+  ev.preventDefault()
+  var el = ev.target
+  if (el.tooltip) {
+    setTimeout(function() {el.tooltip.focus()} , 0)
+    el.tooltip.parentNode.style.visibility = 'visible'
+    return
+  }
+
+  console.log("hover over", el)
+  var div = document.createElement('div')
+  div.setAttribute('class', 'framecont')
+
+  var child = document.createElement('iframe')
+  child.setAttribute('class', 'inner')
+  // AIzaSyBNIp87_yb-HNAdRnd-XTH5kWH0Xz0eDss
+//  child.setAttribute('width', 480)
+  //child.setAttribute('height', 320)
+  child.setAttribute('frameborder', "0")
+  child.setAttribute('style', "border:0;")
+  var latlong = el.parentNode.getAttribute('data-lat') + "," + el.parentNode.getAttribute('data-long')
+  child.setAttribute('src', query(latlong))
+  child.addEventListener('blur', function() {
+    console.log("blurring")
+    div.style.visibility = 'hidden'
+  })
+  div.appendChild(child)
+  // delay until appended
+  setTimeout(function() {child.focus()} , 0)
+  document.body.appendChild(div)
+  el.tooltip = child
+}
+function onLoaded() {
+  document.querySelectorAll('.tooltip').forEach(function(el) {
+    console.log("el:", el)
+    el.addEventListener('click', onClick)
+  })
+}
+document.addEventListener("DOMContentLoaded", onLoaded)
+
+</script>
+</body>
+</html>

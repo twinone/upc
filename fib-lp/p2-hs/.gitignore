@@ -1,0 +1,6 @@
+programhs.txt
+*.o
+*.bak
+*.hi
+program
+reader

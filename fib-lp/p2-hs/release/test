@@ -1,0 +1,14 @@
+#!/bin/bash
+
+if [[ -z "$1" ]]; then
+	echo "Usage: ./test <file>"
+	exit 1
+fi
+
+PROG="$1"
+OUT="programhs.txt"
+
+
+./reader < $PROG > $OUT
+
+./program

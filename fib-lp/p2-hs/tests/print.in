@@ -1,0 +1,4 @@
+X := 0
+PRINT X
+PRINT X
+PRINT X + 1
